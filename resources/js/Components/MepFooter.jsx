@@ -55,7 +55,17 @@ export default function MepFooter() {
           <div className="flex gap-4">
             <a
               href="https://web.facebook.com/profile.php?id=61586431983798"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Facebook"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  "https://web.facebook.com/profile.php?id=61586431983798",
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
               className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
             >
               <FontAwesomeIcon icon={faFacebookF} />
@@ -63,15 +73,25 @@ export default function MepFooter() {
 
             <a
               href="https://t.me/+85586656674"
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label="Telegram"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  "https://t.me/+85586656674",
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
               className="w-11 h-11 rounded-full bg-[#229ED9] flex items-center justify-center hover:scale-110 transition"
             >
               <FontAwesomeIcon icon={faTelegram} />
             </a>
 
-     
 
-        
+
+
           </div>
         </div>
 
