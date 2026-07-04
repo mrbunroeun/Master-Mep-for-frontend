@@ -2,6 +2,7 @@ import { Link } from "@inertiajs/react";
 import {
   Building2, Hospital, Landmark, UtensilsCrossed, Fuel
 } from "lucide-react";
+import { cloneElement } from "react";
 import FadeIn from "@/Components/FadeIn";
 
 const CATEGORIES = [
@@ -12,10 +13,47 @@ const CATEGORIES = [
   { label: "Fuel & Industrial Projects", icon: <Fuel size={26} /> },
 ];
 
+// Strip each icon's own fixed pixel size and make it inherit
+// from its wrapper's font-size instead, so every icon scales identically.
+function CategoryIcon({ icon }) {
+  return cloneElement(icon, {
+    size: undefined,
+    width: "1em",
+    height: "1em",
+  });
+}
+
 export default function Projects({ projects = [] }) {
+  const renderCard = (cat, delay) => (
+    <FadeIn key={cat.label} direction="up" delay={delay}>
+      <Link
+        href={`/projects?category=${encodeURIComponent(cat.label)}`}
+        className="flex flex-col items-center justify-center gap-2 bg-blue-50 hover:bg-blue-100 rounded-xl text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md group"
+        style={{
+          width: "clamp(80px, 20vw, 140px)",
+          height: "clamp(88px, 19vw, 112px)", // increased so 2-line labels no longer get clipped
+          padding: "clamp(0.5rem, 2vw, 1rem)",
+        }}
+      >
+        <div
+          className="text-[#1A3A5C] transition-transform duration-300 group-hover:scale-110 flex items-center justify-center shrink-0"
+          style={{ fontSize: "clamp(20px, 5vw, 32px)" }} // icon's em-based size follows this
+        >
+          <CategoryIcon icon={cat.icon} />
+        </div>
+        <span
+          className="font-medium text-[#1A3A5C] leading-tight line-clamp-2"
+          style={{ fontSize: "clamp(0.625rem, 1.8vw, 0.75rem)" }}
+        >
+          {cat.label}
+        </span>
+      </Link>
+    </FadeIn>
+  );
+
   return (
     <section className="py-16 md:py-20 px-4 sm:px-6 max-w-5xl mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+      <div className="grid grid-cols-1 min-[950px]:grid-cols-2 gap-10 items-start">
 
         {/* LEFT — Title, description, CTA */}
         <FadeIn direction="up">
@@ -37,40 +75,12 @@ export default function Projects({ projects = [] }) {
 
         {/* RIGHT — Category icon grid */}
         <div>
-          <div className="grid grid-cols-3 gap-6">
-            {CATEGORIES.slice(0, 3).map((cat, i) => (
-              <FadeIn key={cat.label} direction="up" delay={120 + i * 100}>
-                <Link
-                  href={`/projects?category=${encodeURIComponent(cat.label)}`}
-                  className="flex flex-col items-center justify-center gap-2 bg-blue-50 hover:bg-blue-100 rounded-xl p-4 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md group w-[140px] min-h-[96px]"
-                >
-                  <div className="text-[#1A3A5C] transition-transform duration-300 group-hover:scale-110">
-                    {cat.icon}
-                  </div>
-                  <span className="text-xs font-medium text-[#1A3A5C] leading-tight">
-                    {cat.label}
-                  </span>
-                </Link>
-              </FadeIn>
-            ))}
+          <div className="flex justify-center gap-6">
+            {CATEGORIES.slice(0, 3).map((cat, i) => renderCard(cat, 120 + i * 100))}
           </div>
 
           <div className="flex justify-center gap-6 mt-6">
-            {CATEGORIES.slice(3, 5).map((cat, i) => (
-              <FadeIn key={cat.label} direction="up" delay={420 + i * 100}>
-                <Link
-                  href={`/projects?category=${encodeURIComponent(cat.label)}`}
-                  className="flex flex-col items-center justify-center gap-2 bg-blue-50 hover:bg-blue-100 rounded-xl p-4 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md group w-[140px] min-h-[96px]"
-                >
-                  <div className="text-[#1A3A5C] transition-transform duration-300 group-hover:scale-110">
-                    {cat.icon}
-                  </div>
-                  <span className="text-xs font-medium text-[#1A3A5C] leading-tight">
-                    {cat.label}
-                  </span>
-                </Link>
-              </FadeIn>
-            ))}
+            {CATEGORIES.slice(3, 5).map((cat, i) => renderCard(cat, 420 + i * 100))}
           </div>
         </div>
 

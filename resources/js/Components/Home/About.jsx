@@ -5,7 +5,8 @@ export default function About() {
     <section className="relative max-w-[1300px] mx-auto z-20 -mt-24 px-4">
       <div className="max-w-6xl mx-auto">
         <FadeIn>
-          <div className="bg-blue-900 rounded-2xl px-8 md:px-16 py-12 md:py-16 text-center text-white shadow-xl transition-shadow duration-300 hover:shadow-2xl">
+          <div className="rounded-2xl px-8 md:px-16 py-12 md:py-16 text-center text-white shadow-xl transition-shadow duration-300 hover:shadow-2xl"
+          style={{ background: "linear-gradient(to right, #0C2D4F, #1E5BA8)" }}>
             <p className="text-sm uppercase tracking-[0.3em] opacity-80 mb-2">About</p>
             <h2 className="text-3xl md:text-5xl font-bold">MASTER MEP</h2>
             <p className="text-xs tracking-[1em] text-[#96DCFF] mb-8">SOLUTION</p>
