@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookF, faTelegram} from "@fortawesome/free-brands-svg-icons";
+import { faFacebookF, faTelegram } from "@fortawesome/free-brands-svg-icons";
+
+const MOBILE_DEFAULT_OPEN = "Services";
 
 export default function MepHeader() {
   const { url } = usePage();
@@ -31,10 +33,19 @@ export default function MepHeader() {
   const navRef = useRef(null);
   const hoverTimeout = useRef(null);
 
+  // Close everything on navigation
   useEffect(() => {
     setOpenDropdown(null);
     setMenuOpen(false);
   }, [url]);
+
+  // Whenever the mobile menu opens, expand "Services" by default
+  // so it doesn't require an extra tap on phone widths.
+  useEffect(() => {
+    if (menuOpen) {
+      setOpenDropdown(MOBILE_DEFAULT_OPEN);
+    }
+  }, [menuOpen]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -42,8 +53,14 @@ export default function MepHeader() {
         setOpenDropdown(null);
       }
     }
+    // touchstart added alongside mousedown so this behaves correctly
+    // on phones, where click/mousedown can fire late or get swallowed.
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   const isActive = (href) => (href === "/" ? url === "/" : url.startsWith(href));
@@ -74,51 +91,58 @@ export default function MepHeader() {
         </div>
 
         <div className="hidden md:flex gap-4">
-          <a  href="https://web.facebook.com/profile.php?id=61586431983798"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  "https://web.facebook.com/profile.php?id=61586431983798",
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }} className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition">
+          <a
+            href="https://web.facebook.com/profile.php?id=61586431983798"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open(
+                "https://web.facebook.com/profile.php?id=61586431983798",
+                "_blank",
+                "noopener,noreferrer"
+              );
+            }}
+            className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
+          >
             <FontAwesomeIcon icon={faFacebookF} className="text-white" />
           </a>
-           <a
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=lensamoun68@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Email"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4b7ce4] flex items-center justify-center hover:scale-110 transition shrink-0"
-            >
-              <img src="/emailIcon.svg" alt="" className="w-5 h-5" />
-            </a>
-            
-          <a  href="https://t.me/+85586656674"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Telegram"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  "https://t.me/+85586656674",
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }} className="w-11 h-11 rounded-full bg-[#179cda] flex items-center justify-center hover:scale-110 transition">
+
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=lensamoun68@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Email"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4b7ce4] flex items-center justify-center hover:scale-110 transition shrink-0"
+          >
+            <img src="/emailIcon.svg" alt="" className="w-5 h-5" />
+          </a>
+
+          <a
+            href="https://t.me/+85586656674"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Telegram"
+            onClick={(e) => {
+              e.preventDefault();
+              window.open(
+                "https://t.me/+85586656674",
+                "_blank",
+                "noopener,noreferrer"
+              );
+            }}
+            className="w-11 h-11 rounded-full bg-[#179cda] flex items-center justify-center hover:scale-110 transition"
+          >
             <FontAwesomeIcon icon={faTelegram} className="text-white" />
           </a>
-         
         </div>
 
         <button
           className="md:hidden flex flex-col justify-center items-center gap-1.5 p-2 text-[#1A3A5C]"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => !prev)}
           aria-label="Toggle menu"
+          aria-expanded={menuOpen}
         >
           {menuOpen ? (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -212,14 +236,32 @@ export default function MepHeader() {
                 {item.dropdown ? (
                   <div>
                     <button
+                      type="button"
                       onClick={() => toggleDropdown(item.label)}
-                      className={`w-full flex items-center px-4 py-2.5 rounded-full text-white text-sm font-medium border transition-all duration-200 ${
+                      aria-expanded={openDropdown === item.label}
+                      className={`w-full flex items-center justify-between px-4 py-2.5 rounded-full text-white text-sm font-medium border transition-all duration-200 ${
                         openDropdown === item.label
                           ? "border-white bg-white/10"
                           : "border-transparent hover:bg-white/20"
                       }`}
                     >
-                      {item.label}
+                      <span>{item.label}</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        viewBox="0 0 24 24"
+                        className={`shrink-0 transition-transform duration-200 ${
+                          openDropdown === item.label ? "rotate-180" : ""
+                        }`}
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
                     </button>
 
                     <div
@@ -260,51 +302,51 @@ export default function MepHeader() {
             ))}
 
             <li className="flex items-center gap-4 px-4 py-3 text-white text-lg">
-                <a
-              href="https://web.facebook.com/profile.php?id=61586431983798"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  "https://web.facebook.com/profile.php?id=61586431983798",
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
-            >
-              <FontAwesomeIcon icon={faFacebookF} />
-            </a>
-             <a
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=lensamoun68@gmail.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Email"
-              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4b7ce4] flex items-center justify-center hover:scale-110 transition shrink-0"
-            >
-              <img src="/emailIcon.svg" alt="" className="w-5 h-5" />
-            </a>
+              <a
+                href="https://web.facebook.com/profile.php?id=61586431983798"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(
+                    "https://web.facebook.com/profile.php?id=61586431983798",
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+                }}
+                className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
+              >
+                <FontAwesomeIcon icon={faFacebookF} />
+              </a>
 
-            <a
-              href="https://t.me/+85586656674"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Telegram"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(
-                  "https://t.me/+85586656674",
-                  "_blank",
-                  "noopener,noreferrer"
-                );
-              }}
-              className="w-11 h-11 rounded-full bg-[#229ED9] flex items-center justify-center hover:scale-110 transition"
-            >
-              <FontAwesomeIcon icon={faTelegram} />
-            </a>
-              
+              <a
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=lensamoun68@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Email"
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4b7ce4] flex items-center justify-center hover:scale-110 transition shrink-0"
+              >
+                <img src="/emailIcon.svg" alt="" className="w-5 h-5" />
+              </a>
+
+              <a
+                href="https://t.me/+85586656674"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Telegram"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.open(
+                    "https://t.me/+85586656674",
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+                }}
+                className="w-11 h-11 rounded-full bg-[#229ED9] flex items-center justify-center hover:scale-110 transition"
+              >
+                <FontAwesomeIcon icon={faTelegram} />
+              </a>
             </li>
           </ul>
         </nav>

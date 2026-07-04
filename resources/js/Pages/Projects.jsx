@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import MepLayout from "@/Layouts/MepLayout";
 import { Head, Link } from "@inertiajs/react";
 import {
@@ -133,12 +133,155 @@ function VideoModal({ videoUrl, onClose }) {
   );
 }
 
-function ProjectCard({ project, onPlayVideo }) {
-  const [imgError, setImgError] = useState(false);
+/* Distinct background color per slide so scrolling is obvious even
+   before/without a real image loaded in that slot. */
+const SLIDE_COLORS = ["#DCE8F5", "#E7DCF2", "#DCF2E4"];
 
-  const hasVideo =
-    project.video_url &&
-    project.video_url.trim() !== "";
+/* Scrollable image carousel — supports up to 3 images per project, drag/swipe + arrow buttons + dot indicators */
+function ProjectImageCarousel({ images = [], title }) {
+  const scrollRef = useRef(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollStart = useRef(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const displayImages = images.length > 0 ? images : [null];
+
+  const scrollToIndex = (index) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: el.clientWidth * index, behavior: "smooth" });
+  };
+
+  const scroll = (direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const next =
+      direction === "left"
+        ? Math.max(activeIndex - 1, 0)
+        : Math.min(activeIndex + 1, displayImages.length - 1);
+    scrollToIndex(next);
+  };
+
+  // Keep the dots in sync whenever the user scrolls or drags the carousel
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const width = el.clientWidth || 1;
+      const index = Math.round(el.scrollLeft / width);
+      setActiveIndex(index);
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [displayImages.length]);
+
+  const handlePointerDown = (e) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDragging.current = true;
+    startX.current = e.clientX;
+    scrollStart.current = el.scrollLeft;
+    el.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    const el = scrollRef.current;
+    if (!isDragging.current || !el) return;
+    const walk = e.clientX - startX.current;
+    el.scrollLeft = scrollStart.current - walk;
+  };
+
+  const stopDragging = (e) => {
+    isDragging.current = false;
+    const el = scrollRef.current;
+    if (el && e?.pointerId != null) {
+      try { el.releasePointerCapture(e.pointerId); } catch {}
+    }
+  };
+
+  return (
+    <div className="relative w-full h-full min-h-[220px]">
+      <div
+        ref={scrollRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={stopDragging}
+        onPointerCancel={stopDragging}
+        className="flex h-full overflow-x-auto scroll-smooth snap-x snap-mandatory rounded-2xl cursor-grab active:cursor-grabbing select-none touch-pan-y [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+      >
+        {displayImages.map((img, i) => (
+          <div
+            key={i}
+            className="snap-start shrink-0 w-full h-full min-h-[220px] flex items-center justify-center"
+            style={{ backgroundColor: SLIDE_COLORS[i % SLIDE_COLORS.length] }}
+          >
+            {img ? (
+              <img
+                src={img}
+                alt={`${title} - image ${i + 1}`}
+                className="w-full h-full object-cover object-center pointer-events-none"
+                draggable={false}
+              />
+            ) : (
+              <span className="text-sm font-medium text-[#1A3A5C]/50">
+                Image {i + 1}
+              </span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {displayImages.length > 1 && (
+        <>
+          <button
+            onClick={() => scroll("left")}
+            aria-label="Previous image"
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-colors"
+          >
+            <svg className="w-4 h-4 text-[#1A3A5C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            aria-label="Next image"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow-md transition-colors"
+          >
+            <svg className="w-4 h-4 text-[#1A3A5C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          {/* Dot indicators — click to jump straight to that image */}
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2">
+            {displayImages.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToIndex(i)}
+                aria-label={`Go to image ${i + 1}`}
+                className="p-1"
+              >
+                <span
+                  className="block rounded-full transition-all duration-200"
+                  style={{
+                    width: activeIndex === i ? "18px" : "6px",
+                    height: "6px",
+                    backgroundColor:
+                      activeIndex === i ? "#FFFFFF" : "rgba(255,255,255,0.55)",
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function ProjectCard({ project, onPlayVideo }) {
+  const hasVideo = project.video_url && project.video_url.trim() !== "";
 
   const scopeItems = Array.isArray(project.scope)
     ? project.scope
@@ -146,6 +289,13 @@ function ProjectCard({ project, onPlayVideo }) {
         .split("\n")
         .map((s) => s.trim())
         .filter(Boolean);
+
+  // Supports project.images (array of up to 3) or falls back to single project.image
+  const projectImages = Array.isArray(project.images) && project.images.length > 0
+    ? project.images.slice(0, 3)
+    : project.image
+    ? [project.image]
+    : [];
 
   return (
     <div
@@ -163,19 +313,10 @@ function ProjectCard({ project, onPlayVideo }) {
           "linear-gradient(90deg,#063A72 0%,#0E67D1 100%)",
       }}
     >
-      {/* LEFT IMAGE — cropped */}
+      {/* LEFT IMAGE — scrollable carousel */}
       <div className="w-full md:w-[46%] p-8">
-        <div className="w-full h-full min-h-[220px] rounded-2xl bg-gray-300 overflow-hidden">
-          {!imgError && project.image ? (
-            <img
-              src={project.image}
-              alt={project.title}
-              onError={() => setImgError(true)}
-              className="w-full h-full object-cover object-center"
-            />
-          ) : (
-            <div className="w-full h-full bg-gray-300" />
-          )}
+        <div className="w-full h-full min-h-[220px] rounded-2xl overflow-hidden">
+          <ProjectImageCarousel images={projectImages} title={project.title} />
         </div>
       </div>
 
