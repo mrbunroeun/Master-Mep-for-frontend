@@ -452,9 +452,9 @@ export default function Projects({ projects = [], heroImage = null }) {
         <div className="relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 md:px-16 py-12 sm:py-16">
           <div className="text-white text-center mx-auto">
             <FadeIn delay={0}>
-              <p className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-blue-300 mb-2 sm:mb-3 font-medium">
-                MASTER MEP SOLUTION
-              </p>
+              <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
+                    <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
+              
             </FadeIn>
             <FadeIn delay={150}>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight mb-3 sm:mb-4">

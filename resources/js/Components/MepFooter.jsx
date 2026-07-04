@@ -44,7 +44,7 @@ export default function MepFooter() {
                 MASTER MEP
               </h2>
 
-              <p className="mt-2 sm:mt-3 text-xs sm:text-sm tracking-[0.4em] sm:tracking-[0.8em] text-white/70 uppercase">
+              <p className="mt-2 sm:mt-3 text-xs sm:text-sm tracking-[0.4em] sm:tracking-[0.8em] text-[#96DCFF] uppercase">
                 SOLUTION
               </p>
             </div>
@@ -129,7 +129,7 @@ export default function MepFooter() {
               </ul>
             </li>
             <li><Link href="/projects" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Projects</Link></li>
-            <li><Link href="/latestactivities" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Latest Activity</Link></li>
+            <li><Link href="/latestactivities" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Latest Activities </Link></li>
             <li><Link href="/insights/hvac-system-installation" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Insights</Link></li>
             <li><Link href="/contact" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Contact</Link></li>
           </ul>
@@ -157,7 +157,7 @@ export default function MepFooter() {
             </div>
 
             
-            <div>
+            <div className="min-w-[300px] ">
               <p className="font-bold mb-2">Business Hours</p>
               <p>
                 Mon- Sat 8:00 AM - 5:00 PM

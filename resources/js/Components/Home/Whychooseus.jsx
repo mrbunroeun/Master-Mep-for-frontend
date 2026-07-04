@@ -1,5 +1,5 @@
 export default function Whychooseus() {
-    const sectionTitle = "Why Choose Master MEP";
+    const sectionTitle = "Why Choose Us";
     const mainDesc =
         "Master MEP Solution Co., Ltd combines technical expertise, reliable project delivery, and a client-first approach to bring your mechanical, electrical, and plumbing projects to life — on time and to the highest standard.";
     const sectionImage = "/image/whychoos.jpg";
@@ -14,7 +14,7 @@ export default function Whychooseus() {
                             <div className="overflow-hidden rounded-xl w-full h-full shadow-lg">
                                 <img
                                     src={sectionImage}
-                                    alt="Why Choose Master MEP"
+                                    alt="Why Choose Us"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
