@@ -129,7 +129,7 @@ export default function MepFooter() {
               </ul>
             </li>
             <li><Link href="/projects" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Projects</Link></li>
-            <li><Link href="/ " className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Latest Activity</Link></li>
+            <li><Link href="/latestactivities" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Latest Activity</Link></li>
             <li><Link href="/insights/hvac-system-installation" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Insights</Link></li>
             <li><Link href="/contact" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Contact</Link></li>
           </ul>

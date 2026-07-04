@@ -16,7 +16,7 @@ export default function Insights({ insights = [] }) {
 
       {/* Hero */}
       <section
-        className="relative min-h-[35vh] bg-cover bg-no-repeat flex items-center"
+        className="relative min-h-[70vh] bg-cover bg-no-repeat flex items-center"
         style={{ backgroundImage: "url('/images/hero.jpg')", backgroundPosition: "center 15%" }}
       >
         <div
@@ -26,12 +26,18 @@ export default function Insights({ insights = [] }) {
           }}
         />
         <FadeIn direction="up" className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
-          <p className="text-xs tracking-widest uppercase opacity-70 mb-2">MASTER MEP</p>
+          <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
+          <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
           <h1 className="text-3xl md:text-5xl font-bold mb-4">MEP Insights & Resources</h1>
           <p className="text-sm opacity-80 max-w-xl mx-auto">
-            Expert guides and technical articles on HVAC, electrical, plumbing, and MEP engineering in Cambodia.
+            Master MEP Solution Co., Ltd provides professional Mechanical, Electrical, Plumbing (MEP), HVAC, ELV, Fire Protection, and Maintenance Services for commercial buildings, villas, banks, restaurants, hospitals, and industrial projects across Cambodia.
           </p>
+          <div className="flex flex-row mt-[2rem] sm:flex-row gap-4 justify-center">
+                            <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Request Quotation</a>
+                            <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Book Site Inspection</a>
+                        </div>
         </FadeIn>
+        
       </section>
 
       {/* Insights List — card design, image alternating left/right */}
@@ -46,9 +52,8 @@ export default function Insights({ insights = [] }) {
             return (
               <FadeIn key={item.slug} direction={isEven ? "left" : "right"}>
                 <div
-                  className={`flex flex-col md:flex-row ${
-                    !isEven ? "md:flex-row-reverse" : ""
-                  } bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden`}
+                  className={`flex flex-col md:flex-row ${!isEven ? "md:flex-row-reverse" : ""
+                    } bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden`}
                 >
                   {/* Image side */}
                   <Link
@@ -88,7 +93,7 @@ export default function Insights({ insights = [] }) {
                         <span className="text-xs text-orange-500 font-medium uppercase tracking-wider">
                           {item.category}
                         </span>
-                    )}
+                      )}
                     <h3 className="text-lg font-bold text-[#1A3A5C] mt-1 mb-2 leading-snug">
                       {item.title}
                     </h3>

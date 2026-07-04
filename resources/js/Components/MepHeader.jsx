@@ -21,7 +21,7 @@ export default function MepHeader() {
       ],
     },
     { label: "Projects", href: "/projects" },
-    { label: "Latest Activities", href: "/latestactiviy" },
+    { label: "Latest Activities", href: "/latestactivities" },
     { label: "Insights", href: "/insights" },
     { label: "Contact", href: "/contact" },
   ];

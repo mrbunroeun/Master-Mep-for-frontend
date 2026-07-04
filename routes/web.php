@@ -120,7 +120,12 @@ Route::get('/services/solasystem', function () {
 
 Route::get('/services/{type}', [ServiceController::class, 'show'])->name('services.show');
 
-// Insights
+Route::get('/latestactivities', function () {
+    return Inertia::render('LatestActivities', [
+        'heroImage' => heroImageFor('/latestactivities'),
+    ]);
+})->name('latestactivities');
+
 Route::get('/insights',        [InsightController::class, 'index'])->name('insights');
 Route::get('/insights/{slug}', [InsightController::class, 'show'])->name('insights.show');
 
