@@ -54,7 +54,7 @@ export default function MepFooter() {
 
           <div className="flex gap-4">
             <a
-              href="#"
+              href="https://web.facebook.com/profile.php?id=61586431983798"
               aria-label="Facebook"
               className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
             >
@@ -62,32 +62,16 @@ export default function MepFooter() {
             </a>
 
             <a
-              href="#"
+              href="https://t.me/+85586656674"
               aria-label="Telegram"
               className="w-11 h-11 rounded-full bg-[#229ED9] flex items-center justify-center hover:scale-110 transition"
             >
               <FontAwesomeIcon icon={faTelegram} />
             </a>
 
-            <a
-              href="#"
-              aria-label="WhatsApp"
-              className="w-11 h-11 rounded-full bg-[#25D366] flex items-center justify-center hover:scale-110 transition"
-            >
-              <FontAwesomeIcon icon={faWhatsapp} />
-            </a>
+     
 
-            <a
-              href="#"
-              aria-label="Instagram"
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:scale-110 transition"
-              style={{
-                background:
-                  "radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)",
-              }}
-            >
-              <FontAwesomeIcon icon={faInstagram} />
-            </a>
+        
           </div>
         </div>
 
@@ -131,26 +115,69 @@ export default function MepFooter() {
               </p>
             </div>
             <div className="flex flex-row gap-2">
-              <p>GoogleMap:</p><p className="underline">https://maps.app.goo.gl/xF2SgUfAHaqupcco9?g_st=ic</p>
+              <p>GoogleMap:</p>
+              <a
+                href="https://maps.app.goo.gl/xF2SgUfAHaqupcco9?g_st=ic"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[#96DCFF] transition"
+              >
+                https://maps.app.goo.gl/xF2SgUfAHaqupcco9?g_st=ic
+              </a>
             </div>
             <div className="flex flex-row gap-2">
-              <p>Email:</p><p className="underline">lensamoun68@gmail.com</p>
+              <p>Email:</p>
+              <a
+                href="mailto:lensamoun68@gmail.com"
+                className="underline hover:text-[#96DCFF] transition"
+              >
+                lensamoun68@gmail.com
+              </a>
             </div>
             <div className="flex flex-row gap-2">
-              <p>Facebook:</p><p className="underline">https://web.facebook.com/profile.php?id=61586431983798</p>
+              <p>Facebook:</p>
+              <a
+                href="https://web.facebook.com/profile.php?id=61586431983798"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[#96DCFF] transition"
+              >
+                https://web.facebook.com/profile.php?id=61586431983798
+              </a>
             </div>
             <div className="flex flex-row gap-2">
               <p> Phone Number:</p><p>017 55 22 38</p>
             </div>
             <div className="flex flex-row gap-2">
-              <p> Telegram:</p><p className="underline">https://t.me/+85586656674</p>
+              <p> Telegram:</p>
+              <a
+                href="https://t.me/+85586656674"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[#96DCFF] transition"
+              >
+                https://t.me/+85586656674
+              </a>
             </div>
             <div className="flex flex-row gap-2">
-              <img src="emailicon.svg" /><p className="underline">: lensamoun68@gmail.com</p>
+              <img src="emailicon.svg" />
+              <a
+                href="mailto:lensamoun68@gmail.com"
+                className="underline hover:text-[#96DCFF] transition"
+              >
+                : lensamoun68@gmail.com
+              </a>
             </div>
             <div className="flex flex-row gap-2 items-center">
               <img src="logo.png" className="ml-[-8px] w-[40px] h-[30px]" alt="logo" />
-              <p className="underline">: lensamoun68@gmail.com</p>
+              <a
+                href="https://www.mastermepsolution.com.kh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-[#96DCFF] transition"
+              >
+                : www.mastermepsolution.com.kh
+              </a>
             </div>
             <div>
               <p className="font-bold mb-2">Business Hours</p>
@@ -167,10 +194,10 @@ export default function MepFooter() {
             Find Us
           </h3>
 
-          <div className="overflow-hidden rounded-xl border border-white/20 shadow-lg">
+          <div className="overflow-hidden rounded-xl min-w-[200px] border border-white/20 shadow-lg">
             <iframe
               title="Master MEP Solution Location"
-              src="https://maps.google.com/maps?q=159A%20Street%202011%20Phnom%20Penh%20Cambodia&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              src="https://maps.google.com/maps?q=11.5062721,104.8756371&t=&z=17&ie=UTF8&iwloc=&output=embed"
               width="100%"
               height="260"
               style={{ border: 0 }}

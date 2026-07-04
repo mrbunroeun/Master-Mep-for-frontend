@@ -80,19 +80,7 @@ export default function MepHeader() {
           <a href="#" aria-label="Telegram" className="w-11 h-11 rounded-full bg-[#179cda] flex items-center justify-center hover:scale-110 transition">
             <FontAwesomeIcon icon={faTelegram} className="text-white" />
           </a>
-          <a href="#" aria-label="WhatsApp" className="w-11 h-11 rounded-full bg-[#0fd658] flex items-center justify-center hover:scale-110 transition">
-            <FontAwesomeIcon icon={faWhatsapp} className="text-white" />
-          </a>
-          <a
-            href="#"
-            aria-label="Instagram"
-            className="w-11 h-11 rounded-full flex items-center justify-center hover:scale-110 transition"
-            style={{
-              background: "radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)",
-            }}
-          >
-            <FontAwesomeIcon icon={faInstagram} className="text-white" />
-          </a>
+         
         </div>
 
         <button
