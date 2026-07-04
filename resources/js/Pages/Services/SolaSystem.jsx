@@ -10,6 +10,129 @@ function getYouTubeId(url) {
     );
     return match ? match[1] : null;
 }
+function SolarServicesCarousel() {
+    const scrollRef = useRef(null);
+    const isDragging = useRef(false);
+    const startX = useRef(0);
+    const scrollStart = useRef(0);
+
+    const solarServices = [
+        {
+            title: "Solar System Design",
+            points: ["Energy consumption analysis", "Site assessment", "System sizing", "ROI calculation"],
+        },
+        {
+            title: "Engineering & Installation",
+            points: ["Solar panel installation", "Inverter installation", "Battery installation", "Mounting structure installation", "Electrical wiring", "Grid connection"],
+        },
+        {
+            title: "Testing & Commissioning",
+            points: ["Performance testing", "System verification", "Safety inspection", "Operational training"],
+        },
+        {
+            title: "Maintenance & Support",
+            points: ["Solar panel cleaning", "Performance inspection", "Inverter testing", "Battery health monitoring", "Preventive maintenance"],
+        },
+    ];
+
+    const scroll = (direction) => {
+        if (!scrollRef.current) return;
+        const { clientWidth } = scrollRef.current;
+        scrollRef.current.scrollBy({
+            left: direction === "left" ? -clientWidth * 0.8 : clientWidth * 0.8,
+            behavior: "smooth",
+        });
+    };
+
+    const handlePointerDown = (e) => {
+        const el = scrollRef.current;
+        if (!el) return;
+        isDragging.current = true;
+        startX.current = e.clientX;
+        scrollStart.current = el.scrollLeft;
+        el.setPointerCapture(e.pointerId);
+        el.classList.add("cursor-grabbing");
+        el.classList.remove("cursor-grab");
+    };
+
+    const handlePointerMove = (e) => {
+        const el = scrollRef.current;
+        if (!isDragging.current || !el) return;
+        const walk = e.clientX - startX.current;
+        el.scrollLeft = scrollStart.current - walk;
+    };
+
+    const stopDragging = (e) => {
+        const el = scrollRef.current;
+        isDragging.current = false;
+        if (!el) return;
+        if (e?.pointerId != null) {
+            try { el.releasePointerCapture(e.pointerId); } catch { }
+        }
+        el.classList.remove("cursor-grabbing");
+        el.classList.add("cursor-grab");
+    };
+
+    return (
+        <div className="max-w-6xl mx-auto relative">
+            {/* Left arrow */}
+            {/* Left arrow */}
+            <button
+                onClick={() => scroll("left")}
+                aria-label="Scroll left"
+                className="flex absolute left-1 sm:left-0 top-1/2 -translate-y-1/2 sm:-translate-x-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full items-center justify-center transition-colors hover:brightness-95"
+                style={{ backgroundColor: "#70B7DE" }}
+            >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            {/* Scrollable cards */}
+            <div
+                ref={scrollRef}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={stopDragging}
+                onPointerCancel={stopDragging}
+                className="flex gap-4 sm:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory px-10 sm:px-12 pb-2 cursor-grab select-none touch-pan-y [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+                {solarServices.map((service, i) => (
+                    <div
+                        key={i}
+                        className="snap-start shrink-0 w-[75%] sm:w-[45%] md:w-[31%] bg-[#EAF3FC] rounded-2xl p-3 sm:p-4"
+                    >
+                        <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
+                            {/* Replace with actual image */}
+                            {/* <img src="/image/solar-design.jpg" alt={service.title} className="w-full h-full object-cover" draggable={false} /> */}
+                        </div>
+                        <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
+                            {service.title}
+                        </h3>
+                        <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5">
+                            {service.points.map((p, j) => (
+                                <li key={j}>• {p}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
+
+            {/* Right arrow */}
+            {/* Right arrow */}
+            <button
+                onClick={() => scroll("right")}
+                aria-label="Scroll right"
+                className="flex absolute right-1 sm:right-0 top-1/2 -translate-y-1/2 sm:translate-x-1/2 z-10 w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full items-center justify-center transition-colors hover:brightness-95"
+                style={{ backgroundColor: "#70B7DE" }}
+            >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    );
+}
 
 const STATIC_ITEMS = [
     { icon: <Zap className="w-10 h-10 text-white" />, title: "Electrical Systems (LV)", points: ["Main power supply (MV/LV)", "Transformer installation", "MDB / SMDB / DB", "Cable tray & wiring", "Generator & UPS", "Battery backup systems"] },
@@ -60,8 +183,8 @@ const DEFAULTS = {
     overviewButton: "Request HVAC Consultation",
     benefitsTitle: "Benefits of Professional Electrical Systems",
     benefitsPoints: "Improve operational safety\nReliable power distribution\nBetter security systems\nEnergy-efficient lighting\nReduced downtime risks\nLong-term building reliability",
-    ctaTitle: "Looking for Reliable Electrical & ELV Installation?",
-    ctaDescription: "Contact Master MEP today for professional electrical engineering and maintenance services in Cambodia.",
+    ctaTitle: "Start Saving Energy with Solar Power",
+    ctaDescription: "Whether you're planning a residential installation, commercial rooftop system, or industrial solar project, Master MEP Solution is ready to deliver reliable, high-performance solar solutions tailored to your needs.",
     ctaButton: "Request Electrical Consultation",
 };
 
@@ -152,7 +275,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     <Reveal delay={100}><h1 className="text-3xl md:text-5xl font-bold mb-4">{heroTitle}</h1></Reveal>
                     <Reveal delay={260}><p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">{heroDesc}</p></Reveal>
                     <Reveal delay={340}>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex flex-row sm:flex-row gap-4 justify-center">
                             <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Request Free Site Survey</a>
                             <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Get Solar Quotation</a>
                         </div>
@@ -167,7 +290,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     <p className="text-sm opacity-90 max-w-3xl mx-auto leading-relaxed">{DEFAULTS.bannerDescription}</p>
                     <Link
                         href="/contact"
-                        className="inline-block px-6 text-black mt-[1rem] sm:px-8 py-2.5 sm:py-3 bg-white rounded-xl hover:bg-blue-800 hover:text-white transition font-medium text-xs sm:text-sm"
+                        className="inline-block px-6 text-[#1d4984] mt-[1rem] sm:px-8 py-2.5 sm:py-3 bg-white rounded-xl hover:bg-blue-800 hover:text-white transition font-medium text-xs sm:text-sm"
                     >
                         Talk to Our Solar Engineer
                     </Link>
@@ -333,199 +456,404 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     </div>
                 </Reveal>
             </section>
-         
-          
+            {/* Our Solar Installation Services */}
+            <section
+                className="py-12 sm:py-16 px-4 md:px-6 relative overflow-hidden"
+                style={{ background: "linear-gradient(90deg, #0C2D4F 0%, #1E5BA8 100%)" }}
+            >
+                <div className="max-w-6xl mx-auto text-center mb-8 sm:mb-10">
+                    <Reveal>
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">
+                            Our Solar Installation Services
+                        </h2>
+                        <p className="text-xs sm:text-sm text-white/80">
+                            Master MEP Solution provides complete turnkey solar solutions, including:
+                        </p>
+                    </Reveal>
+                </div>
 
-            {/* Benefits — static image */}
-            <section className="bg-[#1A3A5C]/5 py-16 px-4 md:px-6">
-                <Reveal>
-                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-center">
-                        <div className="w-full md:w-[380px] shrink-0 bg-gray-100 rounded-2xl p-3">
-                            <img
-                                src="/image/whychoos1.jpg"
-                                alt={heroTitle}
-                                className="hover-lift w-full aspect-[4/3] object-cover rounded-xl"
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4">{benefitsTitle}</h2>
-                            <ul className="text-sm text-gray-600 space-y-2">
-                                {benefitsPoints.map((p, i) => <li key={i}>• {p}</li>)}
-                            </ul>
-                        </div>
-                    </div>
-                </Reveal>
+                <SolarServicesCarousel />
             </section>
+            {/* Applications */}
+            <section className="py-16 px-4 md:px-6 bg-white">
+                <div className="max-w-5xl mx-auto text-center">
+                    <Reveal>
+                        <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-1">Applications</h2>
+                        <p className="text-orange-500 text-sm sm:text-base font-medium mb-10">
+                            Our solar systems are suitable for:
+                        </p>
+                    </Reveal>
 
-            {/* Why Choose Us — dynamic from DB (key_highlights table, type=electrical) */}
-            <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
-                <Reveal>
-                    <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-1 text-center">Why Choose Us</h2>
-                    <p className="text-orange-500 text-sm font-medium mb-8 text-center">Why Choose Master MEP for Electrical Engineering?</p>
-                </Reveal>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {displayHighlights.map((item, i) => (
-                        <Reveal key={item.id ?? item.number} delay={i * 70}>
-                            <div className="hover-lift border-2 border-[#2E5C8A] rounded-xl p-6 text-center">
-                                <p className="text-4xl font-extrabold text-orange-500 mb-2">{item.number}</p>
-                                <p className="text-sm font-medium text-[#1A3A5C]">{item.title ?? item.label}</p>
+                    <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
+                        <Reveal delay={0}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Residential Homes</p>
                             </div>
                         </Reveal>
-                    ))}
-                </div>
-            </section>
 
-            {/* Featured Projects */}
-            {featuredProjects.length > 0 && (
-                <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
-                    <Reveal>
-                        <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-1">Featured Projects</h2>
-                        <p className="text-orange-500 text-sm font-medium mb-8">Banks & Fuel Industrial Projects</p>
-                    </Reveal>
-
-                    {/* Group by category */}
-                    {(() => {
-                        const grouped = featuredProjects.reduce((acc, p) => {
-                            const cat = p.category || "General";
-                            if (!acc[cat]) acc[cat] = [];
-                            acc[cat].push(p);
-                            return acc;
-                        }, {});
-
-                        return Object.entries(grouped).map(([category, items], groupIdx) => (
-                            <div key={category} className={groupIdx > 0 ? "mt-12" : ""}>
-                                <Reveal>
-                                    <h3 className="text-base font-bold text-[#1A3A5C] mb-1">{category}</h3>
-                                    <div className="w-8 h-0.5 bg-orange-500 mb-6" />
-                                </Reveal>
-
-                                <div className="space-y-5">
-                                    {items.map((project, idx) => {
-                                        const { ytId, bg, scopeItems } = getFeaturedDisplay(project);
-                                        return (
-                                            <Reveal key={project.id || idx} delay={idx * 80}>
-                                                <div
-                                                    className="text-white rounded-2xl overflow-hidden shadow-md flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-                                                    style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}
-                                                >
-                                                    {/* Image — full height, no padding */}
-                                                    <div className="w-full md:w-2/5 flex-shrink-0 min-h-[240px] md:min-h-[260px] overflow-hidden">
-                                                        {bg ? (
-                                                            <img
-                                                                src={bg}
-                                                                alt={project.title}
-                                                                className="w-full h-full object-cover"
-                                                                style={{ minHeight: "240px" }}
-                                                            />
-                                                        ) : (
-                                                            <div className="w-full h-full min-h-[240px] flex flex-col items-center justify-center gap-3"
-                                                                style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
-                                                                <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
-                                                                    <Zap size={32} className="text-white/40" />
-                                                                </div>
-                                                                <p className="text-white/30 text-xs font-medium tracking-wide uppercase">No Image Yet</p>
-                                                            </div>
-                                                        )}
-                                                        {ytId && (
-                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                                                                <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center">
-                                                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="ml-0.5"><path d="M8 5v14l11-7z" /></svg>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </div>
-
-                                                    {/* Content */}
-                                                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
-                                                        <div>
-                                                            <h3 className="text-base md:text-lg font-bold mb-4 leading-snug">
-                                                                {project.title}
-                                                            </h3>
-                                                            {scopeItems.length > 0 && (
-                                                                <>
-                                                                    <p className="text-sm font-semibold mb-2">Scope of work:</p>
-                                                                    <div className="text-xs md:text-sm opacity-85 space-y-1 mb-5">
-                                                                        {scopeItems.map((s, i) => (
-                                                                            <p key={i}>{s}</p>
-                                                                        ))}
-                                                                    </div>
-                                                                </>
-                                                            )}
-                                                            <div className="flex flex-col gap-1 text-xs opacity-70">
-                                                                {project.location && <p>Location : {project.location}</p>}
-                                                                {project.timeline && <p>Timeline: {project.timeline}</p>}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Reveal>
-                                        );
-                                    })}
-                                </div>
+                        <Reveal delay={60}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Office Buildings</p>
                             </div>
-                        ));
-                    })()}
+                        </Reveal>
 
-                    <Reveal>
-                        <div className="text-center mt-10">
-                            <Link
-                                href="/projects"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A3A5C] hover:bg-[#0C2D4F] text-white rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
-                            >
-                                View All Projects →
-                            </Link>
-                        </div>
-                    </Reveal>
-                </section>
-            )}
+                        <Reveal delay={120}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Factories & Industrial Facilities</p>
+                            </div>
+                        </Reveal>
 
-            {/* Process */}
-            <section className="py-16 px-4 md:px-6 bg-gray-50">
-                <div className="max-w-5xl mx-auto">
-                    <Reveal>
-                        <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-1">Process / Workflow</h2>
-                        <p className="text-orange-500 text-base font-bold leading-snug mb-12">Our Electrical<br />Engineering Process</p>
-                    </Reveal>
+                        <Reveal delay={180}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Hotels & Resorts</p>
+                            </div>
+                        </Reveal>
 
-                    <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
-                        {steps.map((step, i) => (
-                            <Reveal key={step.number} delay={i * 60}>
-                                <div
-                                    className="relative bg-[#CFE7F6] rounded-2xl pt-10 pb-6 px-3 text-center hover-lift
-                                                w-[160px] sm:w-[190px] md:w-[200px]"
-                                >
-                                    <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0C2D4F] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
-                                        {step.number}
-                                    </div>
-                                    <p className="text-sm font-medium text-[#1A3A5C]">{step.label}</p>
-                                </div>
-                            </Reveal>
-                        ))}
+                        <Reveal delay={240}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Hospitals & Clinics</p>
+                            </div>
+                        </Reveal>
+
+                        <Reveal delay={300}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Schools & Universities</p>
+                            </div>
+                        </Reveal>
+
+                        <Reveal delay={360}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Shopping Malls</p>
+                            </div>
+                        </Reveal>
+
+                        <Reveal delay={420}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Religious Buildings</p>
+                            </div>
+                        </Reveal>
+
+                        <Reveal delay={480}>
+                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Farms & Agricultural Facilities</p>
+                            </div>
+                        </Reveal>
                     </div>
                 </div>
             </section>
 
+            {/* Why Choose Master MEP Solution */}
+            <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
+                <Reveal>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] text-center mb-10">
+                        Why Choose Master MEP Solution?
+                    </h2>
+                </Reveal>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+                    <Reveal delay={0}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">01</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Experienced solar engineers</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={60}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">02</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Customized system design</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={120}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">03</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">High-quality solar components</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={180}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">04</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Professional installation team</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={240}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">05</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Compliance with electrical safety standards</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={300}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">06</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">After-sales maintenance and technical support</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={360}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">07</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Energy-efficient and cost-effective solutions</p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={420}>
+                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">08</p>
+                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">One-stop engineering, procurement, and installation services</p>
+                        </div>
+                    </Reveal>
+                </div>
+            </section>
+            {/* Our Installation Process */}
+            <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
+                <Reveal>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] text-center mb-10">
+                        Our Installation Process
+                    </h2>
+                </Reveal>
+
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-10">
+                    <Reveal delay={0}>
+                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 1</p>
+                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Free Site Survey</p>
+                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
+                                Our engineers assess your roof, electrical system, and energy consumption.
+                            </p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={80}>
+                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 2</p>
+                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">System Design & Proposal</p>
+                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
+                                We recommend the most suitable On-Grid, Off-Grid, or Hybrid solution based on your requirements.
+                            </p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={160}>
+                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 3</p>
+                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Quotation & Approval</p>
+                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
+                                Receive a detailed proposal outlining equipment, installation scope, estimated energy savings, and project timeline.
+                            </p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={240}>
+                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 4</p>
+                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Professional Installation</p>
+                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
+                                Our certified technicians install the complete solar system safely and efficiently.
+                            </p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={320}>
+                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 5</p>
+                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Testing & Commissioning</p>
+                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
+                                We test system performance, verify electrical safety, and provide user training.
+                            </p>
+                        </div>
+                    </Reveal>
+
+                    <Reveal delay={400}>
+                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 6</p>
+                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Maintenance & Technical Support</p>
+                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
+                                Ongoing maintenance services ensure your solar system operates at maximum efficiency for years to come.
+                            </p>
+                        </div>
+                    </Reveal>
+                </div>
+            </section>
             {/* FAQs */}
             <section className="py-16 px-4 md:px-6">
                 <div className="max-w-5xl mx-auto">
-                    <Reveal><h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8">FAQs</h2></Reveal>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        {staticFaqs.map((faq, i) => (
-                            <Reveal key={i} delay={i * 60}>
-                                <div className="hover-lift bg-white rounded-xl border border-gray-200 overflow-hidden">
-                                    <button onClick={() => setOpen(open === i ? null : i)}
-                                        className="w-full flex justify-between items-center px-5 py-4 text-sm font-medium text-gray-800 text-left">
-                                        <span>{faq.q}</span>
-                                        <span className="text-[#2E5C8A] ml-2 shrink-0">{open === i ? "▲" : "▶"}</span>
-                                    </button>
-                                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === i ? "300px" : "0px" }}>
-                                        <div className="px-5 pb-4 text-sm text-gray-600">{faq.a}</div>
+                    <div className="bg-[#CFE7F6] rounded-3xl p-6 sm:p-8 md:p-10">
+                        <Reveal>
+                            <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-6 sm:mb-8">FAQs</h2>
+                        </Reveal>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-start">
+                            {/* Column 1 */}
+                            <div className="flex flex-col gap-3 sm:gap-4">
+                                <Reveal delay={0}>
+                                    <div className="bg-white rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setOpen(open === "s1" ? null : "s1")}
+                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                        >
+                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
+                                                Which solar system is best for my home or business?
+                                            </span>
+                                            <span className="text-[#1A3A5C] shrink-0">{open === "s1" ? "▼" : "▶"}</span>
+                                        </button>
+                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s1" ? "300px" : "0px" }}>
+                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                                                It depends on your electricity usage and whether you have reliable access to the national grid. On-Grid systems are ideal for reducing electricity bills, Off-Grid systems are suitable for locations without grid access, and Hybrid systems provide both savings and backup power during outages.
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </Reveal>
-                        ))}
+                                </Reveal>
+
+                                <Reveal delay={80}>
+                                    <div className="bg-white rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setOpen(open === "s2" ? null : "s2")}
+                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                        >
+                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
+                                                How much can I reduce my monthly electricity bill with solar?
+                                            </span>
+                                            <span className="text-[#1A3A5C] shrink-0">{open === "s2" ? "▼" : "▶"}</span>
+                                        </button>
+                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s2" ? "300px" : "0px" }}>
+                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                                                Savings depend on your system size, energy consumption, and sunlight exposure, but most customers see a significant reduction in their monthly bills, with some achieving up to 70-90% savings after installation.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal delay={160}>
+                                    <div className="bg-white rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setOpen(open === "s3" ? null : "s3")}
+                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                        >
+                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
+                                                How long does a solar installation project take?
+                                            </span>
+                                            <span className="text-[#1A3A5C] shrink-0">{open === "s3" ? "▼" : "▶"}</span>
+                                        </button>
+                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s3" ? "300px" : "0px" }}>
+                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                                                Most residential installations are completed within 3-7 days, while larger commercial or industrial projects may take a few weeks depending on system size and site complexity.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Reveal>
+                            </div>
+
+                            {/* Column 2 */}
+                            <div className="flex flex-col gap-3 sm:gap-4">
+                                <Reveal delay={240}>
+                                    <div className="bg-white rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setOpen(open === "s4" ? null : "s4")}
+                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                        >
+                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
+                                                Can the solar system still generate electricity on cloudy or rainy days?
+                                            </span>
+                                            <span className="text-[#1A3A5C] shrink-0">{open === "s4" ? "▼" : "▶"}</span>
+                                        </button>
+                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s4" ? "300px" : "0px" }}>
+                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                                                Yes, solar panels can still generate electricity on cloudy or rainy days, though at reduced efficiency compared to direct sunlight. Battery storage or grid connection helps maintain consistent power supply.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal delay={320}>
+                                    <div className="bg-white rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setOpen(open === "s5" ? null : "s5")}
+                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                        >
+                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
+                                                Does Master MEP Solution provide maintenance after installation?
+                                            </span>
+                                            <span className="text-[#1A3A5C] shrink-0">{open === "s5" ? "▼" : "▶"}</span>
+                                        </button>
+                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s5" ? "300px" : "0px" }}>
+                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                                                Yes, we offer ongoing maintenance and technical support packages to ensure your solar system continues to operate at peak efficiency for years after installation.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Reveal>
+
+                                <Reveal delay={400}>
+                                    <div className="bg-white rounded-xl overflow-hidden">
+                                        <button
+                                            onClick={() => setOpen(open === "s6" ? null : "s6")}
+                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                        >
+                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
+                                                Can an existing building be upgraded with a solar system?
+                                            </span>
+                                            <span className="text-[#1A3A5C] shrink-0">{open === "s6" ? "▼" : "▶"}</span>
+                                        </button>
+                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s6" ? "300px" : "0px" }}>
+                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                                                Yes, most existing buildings can be retrofitted with a solar system after a site assessment confirms roof condition, structural capacity, and available space for panel installation.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Reveal>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </section>
+
+            {/* Related Services */}
+            <section className="py-12 sm:py-16 px-4 md:px-6 max-w-5xl mx-auto">
+                <Reveal>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-2">
+                        Related Services
+                    </h2>
+                    <p className="text-orange-500 text-xs sm:text-sm font-medium mb-4 sm:mb-5">
+                        To strengthen SEO and improve user navigation, add links to related services.
+                    </p>
+
+                    <ul className="text-xs sm:text-sm text-[#2E5C8A] space-y-1.5 sm:space-y-2 list-disc list-inside">
+                        <li>
+                            <Link href="/services/electrical" className="hover:underline">
+                                Electrical Engineering Services
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services/maintenance" className="hover:underline">
+                                Annual Electrical Maintenance
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services/mechanical" className="hover:underline">
+                                Air Conditioning Installation
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services/maintenance" className="hover:underline">
+                                Air Conditioning Annual Maintenance Service (AMS)
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services" className="hover:underline">
+                                MEP Design & Build solutions
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/services/solasystem" className="hover:underline">
+                                Energy Efficiency Consulting
+                            </Link>
+                        </li>
+                    </ul>
+                </Reveal>
             </section>
 
             {/* CTA */}
@@ -538,12 +866,25 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                 <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
                     <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
                     <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
+
+                    <div className="flex flex-row gap-2 "><Link
+                        href="/contact"
+                        className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                    >
+                        Request Maintenance Service
+                    </Link>
                     <Link
                         href="/contact"
-                        className="btn-animate inline-block px-8 py-3 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                        className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
                     >
-                        {ctaButton}
+                        Contact Maintenance Team
                     </Link>
+                    <Link
+                        href="/contact"
+                        className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                    >
+                        Book Site Inspection
+                    </Link></div>
                 </Reveal>
             </section>
         </MepLayout>
