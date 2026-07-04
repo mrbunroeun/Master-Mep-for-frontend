@@ -6,7 +6,7 @@ export default function Hero({ hero }) {
 
   return (
     <section
-      className="relative min-h-[70vh] bg-cover bg-no-repeat flex items-center justify-center text-white"
+      className="relative min-h-[90vh] bg-cover bg-no-repeat flex items-center justify-center text-white"
       style={{
         backgroundImage: `url('${image}')`,
         backgroundPosition: "center center"
@@ -21,12 +21,12 @@ export default function Hero({ hero }) {
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto w-full">
 
         <FadeIn delay={0}>
-          <p className="text-xs tracking-[0.4em] font-semibold text-white mb-1">MASTER MEP</p>
-          <p className="text-xs tracking-[0.5em] text-gray-300 mb-8">SOLUTION</p>
+          <p className="text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
+          <p className="text-xs tracking-[1em] text-[#96DCFF] mb-8">SOLUTION</p>
         </FadeIn>
 
         <FadeIn delay={150}>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight text-white mb-6">
+          <h1 className="text-4xl max-w-[600px] md:text-5xl font-bold leading-tight text-white mb-6">
             Professional MEP Engineering & Installation Company in Cambodia
           </h1>
         </FadeIn>
