@@ -36,6 +36,28 @@ const staticServices = [
         type: "plumbing",
         align: "right",
     },
+    {
+        title: "Electrical & ELV Services",
+        eyebrow: "Electrical & ELV\nSystem Services",
+        icon: <Zap size={42} className="text-white/90" />,
+        gradient: "linear-gradient(135deg, #1A3A5C 0%, #2E6BAA 100%)",
+        description: "Complete LV & ELV systems including CCTV, fire alarm, LAN, WiFi, solar, automation, and smart lighting.",
+        button: "Explore Electrical\nServices",
+        href: "/services/electrical",
+        type: "electrical",
+        align: "left",
+    },
+    {
+        title: "Plumbing Services",
+        eyebrow: "Plumbing\nSystem Services",
+        icon: <Droplets size={42} className="text-white/90" />,
+        gradient: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)",
+        description: "Water supply, drainage, sewage, rainwater systems, water treatment, and tank installation services.",
+        button: "View Plumbing\nSolutions",
+        href: "/services/plumbing",
+        type: "plumbing",
+        align: "right",
+    },
 ];
 
 export default function Services({ services = [], pageHeader = null }) {

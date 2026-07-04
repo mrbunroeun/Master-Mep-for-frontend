@@ -26,7 +26,7 @@ export default function Hero({ hero }) {
         </FadeIn>
 
         <FadeIn delay={150}>
-          <h1 className="text-4xl max-w-[600px] md:text-5xl font-bold leading-tight text-white mb-6">
+          <h1 className="text-4xl max-w-[600px] mx-auto md:text-5xl font-bold leading-tight text-white mb-6">
             Professional MEP Engineering & Installation Company in Cambodia
           </h1>
         </FadeIn>
