@@ -249,55 +249,62 @@ export default function About({ hero, about }) {
                   // { name: "Mr. Moeu Sokleap", position: "Electrical Designer", image: "/assets/images/photo/Sarout.png" },
                   // { name: "Ms. Home Sreynoy", position: "Accountant", image: "/assets/images/photo/sreymech.png" },
 
-                ].map((member) => (
-                  <div key={member.name} className="flex flex-col items-center text-center">
-                    <div className="w-40 h-40 rounded-full overflow-hidden bg-white shadow-md mb-4 border-4 border-white">
-                      <img
-                        src={member.image}
-                        alt={member.name}
-                        className="w-full h-full object-cover object-top"
-                        onError={(e) => { e.target.style.display = "none"; }}
-                      />
+                ].map((member, i) => (
+                  <FadeIn key={member.name} delay={i * 100}>
+                    <div className="flex flex-col items-center text-center">
+                      <div className="w-40 h-40 rounded-full overflow-hidden bg-white shadow-md mb-4 border-4 border-white">
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          className="w-full h-full object-cover object-top"
+                          onError={(e) => { e.target.style.display = "none"; }}
+                        />
+                      </div>
+                      <h3 className="font-bold text-sm md:text-base" style={{ color: "#2a5c92" }}>
+                        {member.name}
+                      </h3>
+                      <p className=" text-[#758290] text-xs md:text-sm mt-1">{member.position}</p>
                     </div>
-                    <h3 className="font-bold text-sm md:text-base" style={{ color: "#2a5c92" }}>
-                      {member.name}
-                    </h3>
-                    <p className=" text-[#758290] text-xs md:text-sm mt-1">{member.position}</p>
-                  </div>
+                  </FadeIn>
                 ))}
               </div>
             </div>
           </section>
 
           {/* Business Registration Certifications */}
-          <div className="w-full max-w-7xl mx-auto overflow-hidden px-4 mt-10">
-            <h1 className="flex justify-center text-start text-[20px] md:text-[30px] text-[#2C3E50] leading-none font-[700]">
-              Business Registration Certifications
-            </h1>
-
-            <div className="flex justify-center items-center py-12">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-6 place-items-center w-full">
-                <div className="bg-white p-4 w-[70%] sm:w-[85%] lg:w-full max-w-[300px]">
-                  <img
-                    src="/assets/images/catificate/3.png"
-                    className="w-full aspect-square object-cover"
-                  />
-                </div>
-                <div className="bg-white p-4 w-[70%] sm:w-[85%] lg:w-full max-w-[300px]">
-                  <img
-                    src="/assets/images/catificate/2.png"
-                    className="w-full aspect-square object-cover"
-                  />
-                </div>
-                <div className="bg-white p-4 w-[70%] sm:w-[85%] lg:w-full max-w-[300px]">
-                  <img
-                    src="/assets/images/catificate/1.png"
-                    className="w-full aspect-square object-cover"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+<div className="w-full max-w-7xl mx-auto overflow-hidden px-4 mt-10">
+  <h1 className="flex justify-center text-start text-[20px] md:text-[30px] text-[#2C3E50] leading-none font-[700]">
+    Business Registration Certifications
+  </h1>
+  <div className="flex justify-center items-center py-12">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-6 place-items-center w-full">
+      <FadeIn delay={0} className="w-full flex justify-center">
+        <div className="bg-white p-4 w-full max-w-[300px]">
+          <img
+            src="/assets/images/catificate/3.png"
+            className="w-full aspect-square object-cover"
+          />
+        </div>
+      </FadeIn>
+      <FadeIn delay={100} className="w-full flex justify-center">
+        <div className="bg-white p-4 w-full max-w-[300px]">
+          <img
+            src="/assets/images/catificate/2.png"
+            className="w-full aspect-square object-cover"
+          />
+        </div>
+      </FadeIn>
+      <FadeIn delay={200} className="w-full flex justify-center">
+        <div className="bg-white p-4 w-full max-w-[300px]">
+          <img
+            src="/assets/images/catificate/1.png"
+            className="w-full aspect-square object-cover"
+          />
+        </div>
+      </FadeIn>
+    </div>
+  </div>
+</div>
         </div>
       </section>
 
