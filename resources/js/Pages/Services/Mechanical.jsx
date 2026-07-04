@@ -87,9 +87,9 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
 
     const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
     const heroTitle = service?.title ?? DEFAULTS.title;
-    const heroDesc  = service?.description ?? DEFAULTS.description;
+    const heroDesc = service?.description ?? DEFAULTS.description;
     const ctaButton = service?.button_text ?? DEFAULTS.ctaButton;
-    const ctaLink   = service?.button_link ?? "/contact";
+    const ctaLink = service?.button_link ?? "/contact";
     const displayItems = serviceItems.length > 0 ? serviceItems : STATIC_ITEMS;
 
     const displayHighlights = keyHighlights.length > 0 ? keyHighlights : highlights;
@@ -133,15 +133,27 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
             `}</style>
 
             {/* Hero */}
-            <section className="relative min-h-[70vh] flex items-center" style={heroStyle}>
+            <section
+                className="relative min-h-[90vh] flex items-center"
+                style={{ background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" }}
+            >
                 <div className="absolute inset-0 bg-black/55" />
                 <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
-                    <Reveal><p className="text-xs tracking-widest uppercase opacity-70 mb-2">Mechanical / HVAC System</p></Reveal>
-                    <Reveal delay={100}><h1 className="text-3xl md:text-5xl font-bold mb-4">{heroTitle}</h1></Reveal>
-                    <Reveal delay={180}><p className="text-sm opacity-70 mb-2">Professional HVAC & Mechanical Engineering Services in Cambodia</p></Reveal>
-                    <Reveal delay={260}><p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">{heroDesc}</p></Reveal>
+                    <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
+                    <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
+                    <Reveal delay={100}>
+                        <h1 className="text-3xl md:text-5xl font-bold mb-4">Mechanical / HVAC System</h1>
+                    </Reveal>
+                    <Reveal delay={260}>
+                        <p className="text-[15px] font-semibold opacity-100 mb-8 max-w-xl mx-auto">
+                            Professional HVAC & Mechanical Engineering Services in Cambodia
+                        </p>
+                        <p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">
+                            Master MEP Solution Co., Ltd provides professional HVAC installation, ventilation systems, VRV/VRF systems, chilled water systems, ducting systems, and mechanical engineering solutions for commercial buildings, villas, restaurants, hospitals, and industrial facilities across Cambodia.
+                        </p>
+                    </Reveal>
                     <Reveal delay={340}>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex flex-row sm:flex-row gap-4 justify-center">
                             <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Request Quotation</a>
                             <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Book Site Inspection</a>
                         </div>
@@ -170,8 +182,8 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                         const points = item.points
                             ? (
                                 Array.isArray(item.points)
-                                ? item.points
-                                : item.points.split("\n").map(p => p.trim()).filter(Boolean)
+                                    ? item.points
+                                    : item.points.split("\n").map(p => p.trim()).filter(Boolean)
                             )
                             : [];
 
@@ -206,27 +218,27 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                 </div>
             </section>
 
-         {/* Benefits — static image */}
-{/* Benefits — static image */}
-<section className="bg-[#1A3A5C]/5 py-16 px-4 md:px-6">
-    <Reveal>
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-center">
-            <div className="w-full md:w-[380px] shrink-0 bg-gray-100 rounded-2xl p-3">
-                <img
-                    src="/image/whychoos.jpg"
-                    alt={heroTitle}
-                    className="hover-lift w-full aspect-[4/3] object-cover rounded-xl"
-                />
-            </div>
-            <div className="flex-1">
-                <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4">{benefitsTitle}</h2>
-                <ul className="text-sm text-gray-600 space-y-2">
-                    {benefitsPoints.map((p, i) => <li key={i}>• {p}</li>)}
-                </ul>
-            </div>
-        </div>
-    </Reveal>
-</section>
+            {/* Benefits — static image */}
+            {/* Benefits — static image */}
+            <section className="bg-[#1A3A5C]/5 py-16 px-4 md:px-6">
+                <Reveal>
+                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                        <div className="w-full md:w-[380px] shrink-0 bg-gray-100 rounded-2xl p-3">
+                            <img
+                                src="/image/whychoos.jpg"
+                                alt={heroTitle}
+                                className="hover-lift w-full aspect-[4/3] object-cover rounded-xl"
+                            />
+                        </div>
+                        <div className="flex-1">
+                            <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4">{benefitsTitle}</h2>
+                            <ul className="text-sm text-gray-600 space-y-2">
+                                {benefitsPoints.map((p, i) => <li key={i}>• {p}</li>)}
+                            </ul>
+                        </div>
+                    </div>
+                </Reveal>
+            </section>
 
             {/* Why Choose Us — dynamic from DB (key_highlights table, type=mechanical) */}
             <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
@@ -275,7 +287,7 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                                     {featuredYtId && (
                                         <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                                             <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center">
-                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="ml-0.5"><path d="M8 5v14l11-7z"/></svg>
+                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="ml-0.5"><path d="M8 5v14l11-7z" /></svg>
                                             </div>
                                         </div>
                                     )}
@@ -363,15 +375,15 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                 }>
                 <div className="absolute inset-0 bg-black/55" />
                 <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
-                <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
-                <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
-                <Link
-                    href="/contact"
-                    className="btn-animate inline-block px-8 py-3 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                >
-                    {ctaButton}
-                </Link>
-            </Reveal>
+                    <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
+                    <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
+                    <Link
+                        href="/contact"
+                        className="btn-animate inline-block px-8 py-3 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                    >
+                        {ctaButton}
+                    </Link>
+                </Reveal>
             </section>
         </MepLayout>
     );

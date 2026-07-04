@@ -192,6 +192,7 @@ const DEFAULTS = {
   ctaDescription: "Master MEP provides preventive maintenance, troubleshooting, and emergency support services for HVAC, electrical, plumbing, and ELV systems across Cambodia.",
 };
 
+
 function Reveal({ children, className = "", delay = 0 }) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -216,6 +217,10 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
   const [open, setOpen] = useState(null);
   const [contractOpen, setContractOpen] = useState(false);
   const [openField, setOpenField] = useState(null);
+  const [openLocation, setOpenLocation] = useState(null);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+  const [selectedContract, setSelectedContract] = useState(null);
+
 
   const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
   const heroTitle = service?.title ?? DEFAULTS.title;
@@ -691,44 +696,25 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                 Customer Information
               </p>
 
-              <div className="grid grid-cols-2 gap-2 sm:gap-3 items-start">
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
                 {[
-                  { field: "Company Name", example: "Master MEP Solution Co., Ltd." },
-                  { field: "Contact Person", example: "Sokha Chan" },
-                  { field: "Position", example: "Facilities Manager" },
-                  { field: "Phone Number", example: "+855 12 345 678" },
-                  { field: "Email Address", example: "sokha@example.com" },
-                  { field: "Office Address", example: "St. 271, Phnom Penh" },
-                  { field: "Billing Address", example: "Same as office address" },
+                  { field: "Company Name", placeholder: "e.g. Master MEP Solution Co., Ltd." },
+                  { field: "Contact Person", placeholder: "e.g. Sokha Chan" },
+                  { field: "Position", placeholder: "e.g. Facilities Manager" },
+                  { field: "Phone Number", placeholder: "e.g. +855 12 345 678" },
+                  { field: "Email Address", placeholder: "e.g. name@example.com" },
+                  { field: "Office Address", placeholder: "e.g. St. 271, Phnom Penh" },
+                  { field: "Billing Address", placeholder: "e.g. Same as office address" },
                 ].map((item, i) => (
-                  <div key={i} className="bg-white rounded-2xl overflow-hidden self-start">
-                    <button
-                      onClick={() => setOpenField(openField === i ? null : i)}
-                      className="w-full flex justify-between items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5"
-                    >
-                      <span className="text-[10px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] truncate">
-                        {item.field}
-                      </span>
-                      <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#1A3A5C] flex items-center justify-center shrink-0">
-                        <svg
-                          className={`w-2 h-2 sm:w-2.5 sm:h-2.5 text-white transition-transform duration-300 ${openField === i ? "rotate-90" : ""
-                            }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </span>
-                    </button>
-                    <div
-                      className="overflow-hidden transition-all duration-300 ease-out"
-                      style={{ maxHeight: openField === i ? "60px" : "0px" }}
-                    >
-                      <p className="px-3 sm:px-4 pb-2 sm:pb-2.5 text-[9px] sm:text-[11px] text-[#1A3A5C]/70 leading-relaxed">
-                        {item.example}
-                      </p>
-                    </div>
+                  <div key={i} className="bg-white rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5">
+                    <label className="text-[10px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-1">
+                      {item.field}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={item.placeholder}
+                      className="w-full text-[9px] sm:text-[11px] text-[#1A3A5C] placeholder-[#1A3A5C]/40 bg-transparent border-0 border-b border-[#CFE7F6] focus:outline-none focus:border-[#1A3A5C] pb-1"
+                    />
                   </div>
                 ))}
               </div>
@@ -743,31 +729,28 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
         {/* Top row: Service Location + Equipment Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 mb-8 sm:mb-12">
           {/* Service Location */}
+          {/* Service Location */}
           <Reveal delay={0}>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
                 Service Location
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 max-w-md">
-                {["Site Name", "Site Address", "Operating Hours"].map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex justify-between items-center gap-2 bg-[#CFE7F6] rounded-full px-4 sm:px-5 py-2.5 sm:py-3"
-                  >
-                    <span className="text-xs sm:text-sm font-medium text-[#1A3A5C] truncate">
-                      {item}
-                    </span>
-                    <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#1A3A5C] flex items-center justify-center shrink-0">
-                      <svg
-                        className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-md">
+                {[
+                  { field: "Site Name", placeholder: "e.g. Riverside Office Tower" },
+                  { field: "Site Address", placeholder: "e.g. St. 271, Phnom Penh" },
+                  { field: "Operating Hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
+                ].map((item, i) => (
+                  <div key={i} className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4">
+                    <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-2">
+                      {item.field}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={item.placeholder}
+                      className="w-full text-[11px] sm:text-xs text-[#1A3A5C] placeholder-[#1A3A5C]/40 bg-transparent border-0 focus:outline-none"
+                    />
                   </div>
                 ))}
               </div>
@@ -803,9 +786,23 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
               </h3>
               <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
                 {["Basic", "Standard", "Premium"].map((pkg, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0" />
-                    {pkg}
+                  <li key={i}>
+                    <button
+                      onClick={() => setSelectedPackage(selectedPackage === pkg ? null : pkg)}
+                      className="flex items-center gap-2"
+                    >
+                      <span
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === pkg ? "bg-[#1A3A5C]" : "bg-transparent"
+                          }`}
+                      >
+                        {selectedPackage === pkg && (
+                          <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </span>
+                      {pkg}
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -819,9 +816,23 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
               </h3>
               <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
                 {["1 Year", "2 Year", "3 Year"].map((term, i) => (
-                  <li key={i} className="flex items-center gap-2">
-                    <span className="w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0" />
-                    {term}
+                  <li key={i}>
+                    <button
+                      onClick={() => setSelectedContract(selectedContract === term ? null : term)}
+                      className="flex items-center gap-2"
+                    >
+                      <span
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedContract === term ? "bg-[#1A3A5C]" : "bg-transparent"
+                          }`}
+                      >
+                        {selectedContract === term && (
+                          <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </span>
+                      {term}
+                    </button>
                   </li>
                 ))}
               </ul>
