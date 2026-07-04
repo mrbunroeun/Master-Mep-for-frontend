@@ -3,7 +3,7 @@ import { Link, usePage } from "@inertiajs/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faTelegram } from "@fortawesome/free-brands-svg-icons";
 
-const MOBILE_DEFAULT_OPEN = "Services";
+const MOBILE_DEFAULT_OPEN = null;
 
 export default function MepHeader() {
   const { url } = usePage();
@@ -39,14 +39,6 @@ export default function MepHeader() {
     setMenuOpen(false);
   }, [url]);
 
-  // Whenever the mobile menu opens, expand "Services" by default
-  // so it doesn't require an extra tap on phone widths.
-  useEffect(() => {
-    if (menuOpen) {
-      setOpenDropdown(MOBILE_DEFAULT_OPEN);
-    }
-  }, [menuOpen]);
-
   useEffect(() => {
     function handleClickOutside(e) {
       if (navRef.current && !navRef.current.contains(e.target)) {
@@ -63,7 +55,15 @@ export default function MepHeader() {
     };
   }, []);
 
-  const isActive = (href) => (href === "/" ? url === "/" : url.startsWith(href));
+  const isActive = (href) => {
+    if (!url) return false;
+    if (href === "/") return url === "/";
+    if (href === "/services/mechanical") return url.startsWith("/services/");
+    return url === href || url.startsWith(`${href}/`);
+  };
+
+  const isChildActive = (item) =>
+    item.dropdown?.some((sub) => isActive(sub.href));
   const toggleDropdown = (label) => setOpenDropdown((prev) => (prev === label ? null : label));
 
   const handleMouseEnter = (label) => {
@@ -174,16 +174,16 @@ export default function MepHeader() {
             >
               {item.dropdown ? (
                 <div>
-                  <button
-                    onClick={() => toggleDropdown(item.label)}
-                    className={`flex items-center px-4 py-1.5 rounded-full transition-all duration-200 text-sm font-medium border ${
-                      openDropdown === item.label || isActive(item.href)
-                        ? "border-white text-white font-bold bg-white/10"
-                        : "border-transparent text-white hover:bg-white/20"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
+                    <button
+                      onClick={() => toggleDropdown(item.label)}
+                      className={`w-full flex items-center px-4 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                        openDropdown === item.label || isActive(item.href) || isChildActive(item)
+                          ? "border-white bg-white text-[#1A3A5C] font-bold"
+                          : "border-transparent text-white hover:bg-white/20"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
 
                   <div
                     className={`absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl overflow-hidden z-50 border border-gray-100 transition-all duration-200 origin-top ${
@@ -212,8 +212,8 @@ export default function MepHeader() {
                   href={item.href}
                   className={`px-4 py-1.5 rounded-full transition-all duration-200 text-sm font-medium border ${
                     isActive(item.href)
-                      ? "border-white text-white font-bold bg-white/10"
-                      : "border-transparent text-white hover:bg-white/20"
+                      ? "border-white bg-white text-[#1A3A5C] font-bold"
+                      : "border-transparent text-white hover:bg-white/20 hover:text-white"
                   }`}
                 >
                   {item.label}
@@ -227,7 +227,7 @@ export default function MepHeader() {
       {/* Mobile nav */}
       {menuOpen && (
         <nav
-          className="md:hidden"
+          className="md:hidden fixed inset-0 top-[56px] z-40 overflow-y-auto"
           style={{ background: "linear-gradient(to right, #0C2D4F, #1E5BA8)" }}
         >
           <ul className="flex flex-col px-4 py-3 gap-1">
@@ -291,7 +291,7 @@ export default function MepHeader() {
                     href={item.href}
                     className={`block px-4 py-2.5 rounded-full transition-all duration-200 text-sm font-medium border ${
                       isActive(item.href)
-                        ? "border-white text-white font-bold bg-white/10"
+                        ? "border-white bg-white text-[#1A3A5C] font-bold"
                         : "border-transparent text-white hover:bg-white/20"
                     }`}
                   >
