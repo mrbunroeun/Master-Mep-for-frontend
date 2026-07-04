@@ -16,10 +16,12 @@ export default function MepHeader() {
         { label: "Mechanical / HVAC", href: "/services/mechanical" },
         { label: "Electrical & ELV", href: "/services/electrical" },
         { label: "Plumbing", href: "/services/plumbing" },
+        { label: "Maintenance", href: "/services/maintenance" },
+        { label: "Solar System", href: "/services/solasystem" },
       ],
     },
     { label: "Projects", href: "/projects" },
-    { label: "Maintenance", href: "/maintenance" },
+    { label: "Latest Activities", href: "/latestactiviy" },
     { label: "Insights", href: "/insights" },
     { label: "Contact", href: "/contact" },
   ];

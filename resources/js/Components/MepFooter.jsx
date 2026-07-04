@@ -113,34 +113,40 @@ export default function MepFooter() {
             <div>
               <p className="font-bold mb-2">Head Office Address</p>
               <p>
-                #159A, Street No. 2011,
+                Borey Long Ny Chamkardoung,
                 <br />
-                Phum Lorem, Sangkat Lorem,
+                #40, Street 01, Prakar Village,
                 <br />
-                Khan Lorem, Phnom Penh,
-                <br />
-                Cambodia.
+                Preysar Commune, Dangkor District, Phnom Penh
               </p>
             </div>
-
-            <p>
-              089 911 988 Lorem
-              <br />
-              081 688 880 Lorem
-            </p>
-
-            <p>lorem@gmail.com</p>
-
-            <p className="underline">
-              www.Lorem.com.kh
-            </p>
-
+            <div className="flex flex-row gap-2">
+              <p>GoogleMap:</p><p className="underline">https://maps.app.goo.gl/xF2SgUfAHaqupcco9?g_st=ic</p>
+            </div>
+            <div className="flex flex-row gap-2">
+              <p>Email:</p><p className="underline">lensamoun68@gmail.com</p>
+            </div>
+            <div className="flex flex-row gap-2">
+              <p>Facebook:</p><p className="underline">https://web.facebook.com/profile.php?id=61586431983798</p>
+            </div>
+            <div className="flex flex-row gap-2">
+              <p> Phone Number:</p><p>017 55 22 38</p>
+            </div>
+            <div className="flex flex-row gap-2">
+              <p> Telegram:</p><p className="underline">https://t.me/+85586656674</p>
+            </div>
+            <div className="flex flex-row gap-2">
+              <img src="emailicon.svg" /><p className="underline">: lensamoun68@gmail.com</p>
+            </div>
+            <div className="flex flex-row gap-2 items-center">
+              <img src="logo.png" className="ml-[-8px] w-[40px] h-[30px]" alt="logo" />
+              <p className="underline">: lensamoun68@gmail.com</p>
+            </div>
             <div>
               <p className="font-bold mb-2">Business Hours</p>
               <p>
-                Monday – Saturday
-                <br />
-                8:00 AM – 5:30 PM
+                Mon- Sat 8:00 AM - 5:00 PM
+
               </p>
             </div>
           </div>

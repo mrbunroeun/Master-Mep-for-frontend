@@ -83,18 +83,9 @@ Route::get('/about', function () {
 })->name('about');
 
 
-Route::get('/services/{type}', [ServiceController::class, 'show'])->name('services.show');
-// Services — TEMPORARILY DISABLED, rebuilding fresh
-// Route::get('/services', ...);
-// Route::get('/services/mechanical', ...);
-// Route::get('/services/electrical', ...);
-// Route::get('/services/plumbing', ...);
-
-// Projects — public page
 Route::get('/projects', [PublicProjectController::class, 'index'])->name('projects');
 
-// Maintenance
-Route::get('/maintenance', function () {
+Route::get('/services/maintenance', function () {
     $maintenanceCategories = \App\Models\MaintenanceCategory::where('is_active', true)
         ->orderBy('sort_order')
         ->orderBy('id')
@@ -108,14 +99,26 @@ Route::get('/maintenance', function () {
         ->latest()
         ->first();
 
-    return Inertia::render('Maintenance', [
+    return Inertia::render('Services/Maintenance', [
         'maintenanceFeatures'   => \App\Models\MaintenanceFeature::where('is_active', true)->latest()->get(),
-        'heroImage'             => heroImageFor('/maintenance'),
+        'heroImage'             => heroImageFor('/services/maintenance'),
         'maintenanceCategories' => $maintenanceCategories,
         'maintenanceBenefit'    => $maintenanceBenefit,
         'maintenanceContract'   => $maintenanceContract,
     ]);
 })->name('maintenance');
+
+Route::get('/services/solasystem', function () {
+    return Inertia::render('Services/SolaSystem', [
+        'service'       => null,
+        'serviceItems'  => [],
+        'projects'      => [],
+        'heroImage'     => null,
+        'keyHighlights' => [],
+    ]);
+})->name('solasystem');
+
+Route::get('/services/{type}', [ServiceController::class, 'show'])->name('services.show');
 
 // Insights
 Route::get('/insights',        [InsightController::class, 'index'])->name('insights');
@@ -138,7 +141,8 @@ Route::get('/generate-sitemap', function () {
         ->add(Url::create('/services/mechanical')->setPriority(0.9))
         ->add(Url::create('/services/electrical')->setPriority(0.9))
         ->add(Url::create('/services/plumbing')->setPriority(0.9))
-        ->add(Url::create('/maintenance')->setPriority(0.7))
+        ->add(Url::create('/services/maintenance')->setPriority(0.7))
+        ->add(Url::create('/services/solasystem')->setPriority(0.7))
         ->add(Url::create('/projects')->setPriority(0.7))
         ->add(Url::create('/insights')->setPriority(0.6))
         ->add(Url::create('/contact')->setPriority(0.8));
