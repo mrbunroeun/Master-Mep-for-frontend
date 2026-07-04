@@ -1,4 +1,5 @@
 import { Link } from "@inertiajs/react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,
@@ -97,9 +98,18 @@ export default function MepFooter() {
           <ul className="flex flex-col gap-4 text-base">
             <li><Link href="/">Home</Link></li>
             <li><Link href="/about">About Us</Link></li>
-            <li><Link href="/services/mechanical">Services</Link></li>
+            <li>
+              <Link href="/services/mechanical">Services</Link>
+              <ul className="flex flex-col gap-3 mt-3 pl-4 text-sm text-white/85">
+                <li><Link href="/services/mechanical">Mechanical / HVAC</Link></li>
+                <li><Link href="/services/electrical">Electrical & ELV</Link></li>
+                <li><Link href="/services/plumbing">Plumbing</Link></li>
+                <li><Link href="/services/maintenance">Maintenance</Link></li>
+                <li><Link href="/services/solasystem">Solar System</Link></li>
+              </ul>
+            </li>
             <li><Link href="/projects">Projects</Link></li>
-            <li><Link href="/maintenance">Maintenance</Link></li>
+            <li><Link href="/ ">Latest Activity</Link></li>
             <li><Link href="/insights/hvac-system-installation">Insights</Link></li>
             <li><Link href="/contact">Contact</Link></li>
           </ul>
@@ -146,7 +156,6 @@ export default function MepFooter() {
               <p className="font-bold mb-2">Business Hours</p>
               <p>
                 Mon- Sat 8:00 AM - 5:00 PM
-
               </p>
             </div>
           </div>

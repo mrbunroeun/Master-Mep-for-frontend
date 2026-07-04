@@ -32,8 +32,8 @@ export default function About({ hero, about }) {
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 text-center px-6 max-w-3xl mx-auto w-full">
           <FadeIn delay={0}>
-            <p className="text-xs tracking-[0.4em] font-semibold text-white mb-1">MASTER MEP</p>
-            <p className="text-xs tracking-[0.5em] text-gray-300 mb-8">SOLUTION</p>
+            <p className="text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
+          <p className="text-xs tracking-[1em] text-[#96DCFF] mb-8">SOLUTION</p>
           </FadeIn>
           <FadeIn delay={150}>
             <h1 className="text-3xl md:text-5xl font-bold leading-tight text-white mb-6">

@@ -2,7 +2,7 @@ import FadeIn from "@/Components/FadeIn";
 
 export default function About() {
   return (
-    <section className="relative z-20 -mt-24 px-4">
+    <section className="relative max-w-[1300px] mx-auto z-20 -mt-24 px-4">
       <div className="max-w-6xl mx-auto">
         <FadeIn>
           <div className="bg-blue-900 rounded-2xl px-8 md:px-16 py-12 md:py-16 text-center text-white shadow-xl transition-shadow duration-300 hover:shadow-2xl">
