@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookF, faTelegram, faWhatsapp, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faFacebookF, faTelegram} from "@fortawesome/free-brands-svg-icons";
 
 export default function MepHeader() {
   const { url } = usePage();
@@ -74,10 +74,33 @@ export default function MepHeader() {
         </div>
 
         <div className="hidden md:flex gap-4">
-          <a href="#" aria-label="Facebook" className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition">
+          <a  href="https://web.facebook.com/profile.php?id=61586431983798"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  "https://web.facebook.com/profile.php?id=61586431983798",
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }} className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition">
             <FontAwesomeIcon icon={faFacebookF} className="text-white" />
           </a>
-          <a href="#" aria-label="Telegram" className="w-11 h-11 rounded-full bg-[#179cda] flex items-center justify-center hover:scale-110 transition">
+            
+          <a  href="https://t.me/+85586656674"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  "https://t.me/+85586656674",
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }} className="w-11 h-11 rounded-full bg-[#179cda] flex items-center justify-center hover:scale-110 transition">
             <FontAwesomeIcon icon={faTelegram} className="text-white" />
           </a>
          
@@ -228,18 +251,42 @@ export default function MepHeader() {
             ))}
 
             <li className="flex items-center gap-4 px-4 py-3 text-white text-lg">
-              <a href="#" aria-label="Facebook" className="hover:opacity-70 transition-opacity">
-                <FontAwesomeIcon icon={faFacebookF} />
-              </a>
-              <a href="#" aria-label="Telegram" className="hover:opacity-70 transition-opacity">
-                <FontAwesomeIcon icon={faTelegram} />
-              </a>
-              <a href="#" aria-label="WhatsApp" className="hover:opacity-70 transition-opacity">
-                <FontAwesomeIcon icon={faWhatsapp} />
-              </a>
-              <a href="#" aria-label="Instagram" className="hover:opacity-70 transition-opacity">
-                <FontAwesomeIcon icon={faInstagram} />
-              </a>
+                <a
+              href="https://web.facebook.com/profile.php?id=61586431983798"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  "https://web.facebook.com/profile.php?id=61586431983798",
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
+              className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
+            >
+              <FontAwesomeIcon icon={faFacebookF} />
+            </a>
+
+            <a
+              href="https://t.me/+85586656674"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Telegram"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  "https://t.me/+85586656674",
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+              }}
+              className="w-11 h-11 rounded-full bg-[#229ED9] flex items-center justify-center hover:scale-110 transition"
+            >
+              <FontAwesomeIcon icon={faTelegram} />
+            </a>
+              
             </li>
           </ul>
         </nav>
