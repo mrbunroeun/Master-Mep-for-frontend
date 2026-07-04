@@ -5,6 +5,7 @@ import FadeIn from "@/Components/FadeIn";
 
 export default function About({ hero, about }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [activeValue, setActiveValue] = useState(null);
   const videoRef = useRef(null);
 
   const handlePlay = () => {
@@ -13,13 +14,56 @@ export default function About({ hero, about }) {
   };
 
   const heroImage = hero?.image ? `/storage/${hero.image}` : '/images/hero.jpg';
+
   const values = [
-    { label: "Integrity", icon: "/image/integrity.svg" },
-    { label: "Reliability", icon: "/image/reliability.svg" },
-    { label: "Innovation", icon: "/image/innovation.svg" },
-    { label: "People First", icon: "/image/peopleFirst.svg" },
-    { label: "Excellence", icon: "/image/excellence.svg" },
-    { label: "Success", icon: "/image/success.svg" },
+    {
+      label: "Integrity",
+      icon: "/image/integrity.svg",
+      number: "01",
+      title: "Integrity & Accountability",
+      description:
+        "We conduct business with honesty, transparency, and professionalism. We take ownership of our commitments and deliver on every promise with responsibility and ethical practices.",
+    },
+    {
+      label: "Reliability",
+      icon: "/image/reliability.svg",
+      number: "02",
+      title: "Safety & Sustainability",
+      description:
+        "We prioritize the health and safety of our people while protecting the environment. Through responsible engineering and compliance, we create sustainable value for future generations.",
+    },
+    {
+      label: "Innovation",
+      icon: "/image/innovation.svg",
+      number: "03",
+      title: "Innovation & Continuous Growth",
+      description:
+        "We embrace innovation, value engineering, and continuous learning to create smarter solutions, improve efficiency, and achieve sustainable growth for our company, clients, and stakeholders.",
+    },
+    {
+      label: "People First",
+      icon: "/image/peopleFirst.svg",
+      number: "04",
+      title: "People First",
+      description:
+        "Our employees are our greatest asset. We foster a safe, respectful, and empowering workplace where every team member is encouraged to grow, collaborate, and reach their full potential.",
+    },
+    {
+      label: "Excellence",
+      icon: "/image/excellence.svg",
+      number: "05",
+      title: "Excellence in Quality",
+      description:
+        "We are committed to delivering engineering solutions with exceptional quality, precision, and workmanship. Every project is executed to meet international standards and exceed customer expectations.",
+    },
+    {
+      label: "Success",
+      icon: "/image/success.svg",
+      number: "06",
+      title: "Customer Success",
+      description:
+        "Our clients' success is our success. We listen, respond, and continuously improve our services to build long-term partnerships founded on trust, reliability, and outstanding customer satisfaction.",
+    },
   ];
 
   return (
@@ -40,7 +84,7 @@ export default function About({ hero, about }) {
             background: "linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%)"
           }}
         />
-        <div className="relative z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto w-full">
+        <div className="relative  z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto w-full">
 
           <FadeIn delay={0}>
             <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
@@ -81,7 +125,7 @@ export default function About({ hero, about }) {
       {/* Introduction Banner */}
       <FadeIn>
         <section
-          className="text-white text-center px-6 py-12 mx-4 md:mx-16 rounded-2xl -mt-16 relative transition-shadow duration-300 hover:shadow-2xl"
+          className="text-white text-center px-6 py-12 max-w-[980px] mx-4 md:mx-auto rounded-2xl -mt-16 relative transition-shadow duration-300 hover:shadow-2xl"
           style={{ background: "linear-gradient(to right, #0C2D4F, #1E5BA8)" }}
         >
           <p className="text-sm uppercase tracking-widest mb-2 opacity-70">Company</p>
@@ -165,9 +209,12 @@ export default function About({ hero, about }) {
                 Values
               </p>
               <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                {values.map(({ label, icon }, i) => (
+                {values.map(({ label, icon, number, title, description }, i) => (
                   <FadeIn key={`${label}-${i}`} delay={i * 80}>
-                    <div className="group bg-white hover:bg-[#396fa8] rounded-xl p-3 sm:p-4 flex flex-col items-center justify-center gap-2 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-lift cursor-pointer">
+                    <div
+                      onClick={() => setActiveValue({ label, icon, number, title, description })}
+                      className="group bg-white hover:bg-[#396fa8] rounded-xl p-3 sm:p-4 flex flex-col items-center justify-center gap-2 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card-lift cursor-pointer"
+                    >
                       <img
                         src={icon}
                         alt={label}
@@ -193,10 +240,14 @@ export default function About({ hero, about }) {
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-14">
                 {[
-                  { name: "Len Somoun Founder/CEO ", position: "Managing Director", image: "/assets/images/photo/Phan Tola.png" },
-                  { name: "Mr. Cheup Toley ", position: "MVAC Designer", image: "/assets/images/photo/Somphon.png" },
-                  { name: "Mr. Moeu Sokleap", position: "Electrical Designer", image: "/assets/images/photo/Sarout.png" },
-                  { name: "Ms. Home Sreynoy", position: "Accountant", image: "/assets/images/photo/sreymech.png" },
+                  { name: "Len Somoun Founder/CEO ", image: "/assets/images/photo/Phan Tola.png" },
+                  { name: "Mr. Cheup Toley ", image: "/assets/images/photo/Somphon.png" },
+                  { name: "Mr. Moeu Sokleap", image: "/assets/images/photo/Sarout.png" },
+                  { name: "Ms. Home Sreynoy", image: "/assets/images/photo/sreymech.png" },
+                  // { name: "Len Somoun Founder/CEO ", position: "Managing Director", image: "/assets/images/photo/Phan Tola.png" },
+                  // { name: "Mr. Cheup Toley ", position: "MVAC Designer", image: "/assets/images/photo/Somphon.png" },
+                  // { name: "Mr. Moeu Sokleap", position: "Electrical Designer", image: "/assets/images/photo/Sarout.png" },
+                  // { name: "Ms. Home Sreynoy", position: "Accountant", image: "/assets/images/photo/sreymech.png" },
 
                 ].map((member) => (
                   <div key={member.name} className="flex flex-col items-center text-center">
@@ -266,6 +317,39 @@ export default function About({ hero, about }) {
           </p>
         </FadeIn>
       </section>
+
+      {/* Value Detail Modal */}
+      {activeValue && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+          onClick={() => setActiveValue(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 relative"
+          >
+            <button
+              onClick={() => setActiveValue(null)}
+              aria-label="Close"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <p className="text-[#2a5c92] font-bold text-sm tracking-widest mb-1">
+              {activeValue.number}
+            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-3">
+              {activeValue.title}
+            </h3>
+            <p className="text-sm sm:text-base text-[#758290] leading-relaxed">
+              {activeValue.description}
+            </p>
+          </div>
+        </div>
+      )}
     </MepLayout>
   );
 }
