@@ -26,7 +26,7 @@ export default function About({ hero, about }) {
 
       {/* Hero */}
       <section
-        className="relative min-h-[70vh] bg-cover bg-center flex items-center justify-center text-white"
+        className="relative min-h-[90vh] bg-cover bg-center flex items-center justify-center text-white"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         <div className="absolute inset-0 bg-black/55" />

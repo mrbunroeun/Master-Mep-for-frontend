@@ -47,7 +47,7 @@ const staticServices = [
         type: "electrical",
         align: "left",
     },
-    {
+        {
         title: "Plumbing Services",
         eyebrow: "Plumbing\nSystem Services",
         icon: <Droplets size={42} className="text-white/90" />,
