@@ -696,13 +696,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                             className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
                                         >
                                             <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Which solar system is best for my home or business?
+                                                What types of air conditioners are covered under the AMS program?
                                             </span>
                                             <span className="text-[#1A3A5C] shrink-0">{open === "s1" ? "▼" : "▶"}</span>
                                         </button>
                                         <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s1" ? "300px" : "0px" }}>
                                             <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                It depends on your electricity usage and whether you have reliable access to the national grid. On-Grid systems are ideal for reducing electricity bills, Off-Grid systems are suitable for locations without grid access, and Hybrid systems provide both savings and backup power during outages.
+                                                We maintain wall-mounted split units, cassette units, ceiling concealed units, ducted systems, floor-standing units, VRF/VRV systems, packaged units, and central chilled water air conditioning systems.
                                             </div>
                                         </div>
                                     </div>
@@ -715,13 +715,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                             className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
                                         >
                                             <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                How much can I reduce my monthly electricity bill with solar?
+                                                Can I include multiple buildings under one maintenance contract?
                                             </span>
                                             <span className="text-[#1A3A5C] shrink-0">{open === "s2" ? "▼" : "▶"}</span>
                                         </button>
                                         <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s2" ? "300px" : "0px" }}>
                                             <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Savings depend on your system size, energy consumption, and sunlight exposure, but most customers see a significant reduction in their monthly bills, with some achieving up to 70-90% savings after installation.
+                                                Yes, our AMS program can cover multiple buildings or sites under a single contract, with a consolidated maintenance schedule and unified reporting across all locations.
                                             </div>
                                         </div>
                                     </div>
@@ -734,13 +734,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                             className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
                                         >
                                             <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                How long does a solar installation project take?
+                                                What happens if an air conditioner breaks down between scheduled maintenance visits?
                                             </span>
                                             <span className="text-[#1A3A5C] shrink-0">{open === "s3" ? "▼" : "▶"}</span>
                                         </button>
                                         <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s3" ? "300px" : "0px" }}>
                                             <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Most residential installations are completed within 3-7 days, while larger commercial or industrial projects may take a few weeks depending on system size and site complexity.
+                                                AMS customers can request emergency repair support outside of scheduled visits. Our technicians will assess the issue and carry out the necessary repairs as quickly as possible.
                                             </div>
                                         </div>
                                     </div>
@@ -756,13 +756,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                             className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
                                         >
                                             <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Can the solar system still generate electricity on cloudy or rainy days?
+                                                Do you provide maintenance reports after each visit?
                                             </span>
                                             <span className="text-[#1A3A5C] shrink-0">{open === "s4" ? "▼" : "▶"}</span>
                                         </button>
                                         <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s4" ? "300px" : "0px" }}>
                                             <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Yes, solar panels can still generate electricity on cloudy or rainy days, though at reduced efficiency compared to direct sunlight. Battery storage or grid connection helps maintain consistent power supply.
+                                                Yes, after every service visit we provide a detailed report covering the inspection checklist, work performed, system condition, and any recommended follow-up actions.
                                             </div>
                                         </div>
                                     </div>
@@ -775,13 +775,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                             className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
                                         >
                                             <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Does Master MEP Solution provide maintenance after installation?
+                                                Can the maintenance schedule be arranged outside normal office hours?
                                             </span>
                                             <span className="text-[#1A3A5C] shrink-0">{open === "s5" ? "▼" : "▶"}</span>
                                         </button>
                                         <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s5" ? "300px" : "0px" }}>
                                             <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Yes, we offer ongoing maintenance and technical support packages to ensure your solar system continues to operate at peak efficiency for years after installation.
+                                                Yes, we can schedule maintenance visits during evenings, weekends, or other off-hours to minimize disruption to your business operations.
                                             </div>
                                         </div>
                                     </div>
@@ -794,13 +794,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                             className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
                                         >
                                             <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Can an existing building be upgraded with a solar system?
+                                                How do I know which AMS package is right for my business?
                                             </span>
                                             <span className="text-[#1A3A5C] shrink-0">{open === "s6" ? "▼" : "▶"}</span>
                                         </button>
                                         <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s6" ? "300px" : "0px" }}>
                                             <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Yes, most existing buildings can be retrofitted with a solar system after a site assessment confirms roof condition, structural capacity, and available space for panel installation.
+                                                During your free site survey, our engineers assess your equipment type, quantity, and operating conditions, then recommend the Basic, Standard, or Premium package that best fits your maintenance needs and budget.
                                             </div>
                                         </div>
                                     </div>
@@ -873,18 +873,18 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     >
                         Request Maintenance Service
                     </Link>
-                    <Link
-                        href="/contact"
-                        className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                    >
-                        Contact Maintenance Team
-                    </Link>
-                    <Link
-                        href="/contact"
-                        className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                    >
-                        Book Site Inspection
-                    </Link></div>
+                        <Link
+                            href="/contact"
+                            className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                        >
+                            Contact Maintenance Team
+                        </Link>
+                        <Link
+                            href="/contact"
+                            className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                        >
+                            Book Site Inspection
+                        </Link></div>
                 </Reveal>
             </section>
         </MepLayout>

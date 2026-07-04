@@ -88,6 +88,15 @@ export default function MepHeader() {
               }} className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition">
             <FontAwesomeIcon icon={faFacebookF} className="text-white" />
           </a>
+           <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=lensamoun68@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Email"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4b7ce4] flex items-center justify-center hover:scale-110 transition shrink-0"
+            >
+              <img src="/emailIcon.svg" alt="" className="w-5 h-5" />
+            </a>
             
           <a  href="https://t.me/+85586656674"
               target="_blank"
@@ -267,6 +276,15 @@ export default function MepHeader() {
               className="w-11 h-11 rounded-full bg-[#1877F2] flex items-center justify-center hover:scale-110 transition"
             >
               <FontAwesomeIcon icon={faFacebookF} />
+            </a>
+             <a
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=lensamoun68@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Email"
+              className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#4b7ce4] flex items-center justify-center hover:scale-110 transition shrink-0"
+            >
+              <img src="/emailIcon.svg" alt="" className="w-5 h-5" />
             </a>
 
             <a

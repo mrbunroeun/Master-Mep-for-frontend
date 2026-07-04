@@ -156,28 +156,7 @@ export default function MepFooter() {
               <p className="shrink-0 font-bold">Phone Number:</p><p>017 55 22 38</p>
             </div>
 
-            {/* <div className="flex flex-wrap flex-row gap-2 items-center">
-              <img src="emailicon.svg" className="shrink-0 font-bold" />
-              <a
-                href="mailto:lensamoun68@gmail.com"
-                className="underline hover:text-[#96DCFF] transition break-all"
-              >
-                : lensamoun68@gmail.com
-              </a>
-            </div> */}
-
-
-            {/* <div className="flex  flex-row gap-2 items-center">
-              <img src="logo.png" className="ml-[-8px] w-[40px] h-[30px] shrink-0" alt="logo" />
-              <a
-                href="https://www.mastermepsolution.com.kh"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-[#96DCFF] min-w-[400px] transition break-all"
-              >
-                : www.mastermepsolution.com.kh
-              </a>
-            </div> */}
+            
             <div>
               <p className="font-bold mb-2">Business Hours</p>
               <p>
