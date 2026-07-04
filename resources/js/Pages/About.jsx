@@ -17,20 +17,20 @@ export default function About({ hero, about }) {
 
   const values = [
     {
-      label: "Integrity",
-      icon: "/image/integrity.svg",
+      label: "Excellence",
+      icon: "/image/excellence.svg",
       number: "01",
-      title: "Integrity & Accountability",
+      title: "Excellence in Quality",
       description:
-        "We conduct business with honesty, transparency, and professionalism. We take ownership of our commitments and deliver on every promise with responsibility and ethical practices.",
+        "We are committed to delivering engineering solutions with exceptional quality, precision, and workmanship. Every project is executed to meet international standards and exceed customer expectations.",
     },
-    {
-      label: "Reliability",
-      icon: "/image/reliability.svg",
+     {
+      label: "Success",
+      icon: "/image/success.svg",
       number: "02",
-      title: "Safety & Sustainability",
+      title: "Customer Success",
       description:
-        "We prioritize the health and safety of our people while protecting the environment. Through responsible engineering and compliance, we create sustainable value for future generations.",
+        "Our clients' success is our success. We listen, respond, and continuously improve our services to build long-term partnerships founded on trust, reliability, and outstanding customer satisfaction.",
     },
     {
       label: "Innovation",
@@ -49,21 +49,24 @@ export default function About({ hero, about }) {
         "Our employees are our greatest asset. We foster a safe, respectful, and empowering workplace where every team member is encouraged to grow, collaborate, and reach their full potential.",
     },
     {
-      label: "Excellence",
-      icon: "/image/excellence.svg",
+      label: "Integrity",
+      icon: "/image/integrity.svg",
       number: "05",
-      title: "Excellence in Quality",
+      title: "Integrity & Accountability",
       description:
-        "We are committed to delivering engineering solutions with exceptional quality, precision, and workmanship. Every project is executed to meet international standards and exceed customer expectations.",
+        "We conduct business with honesty, transparency, and professionalism. We take ownership of our commitments and deliver on every promise with responsibility and ethical practices.",
     },
     {
-      label: "Success",
-      icon: "/image/success.svg",
+      label: "Reliability",
+      icon: "/image/reliability.svg",
       number: "06",
-      title: "Customer Success",
+      title: "Safety & Sustainability",
       description:
-        "Our clients' success is our success. We listen, respond, and continuously improve our services to build long-term partnerships founded on trust, reliability, and outstanding customer satisfaction.",
+        "We prioritize the health and safety of our people while protecting the environment. Through responsible engineering and compliance, we create sustainable value for future generations.",
     },
+    
+    
+   
   ];
 
   return (
@@ -231,16 +234,17 @@ export default function About({ hero, about }) {
             </div>
 
           </div>
-          {/* Our Team */}
+          {/*Key Team Pictures:*/}
           <section className=" mt-[1rem] py-20 px-4 md:px-6">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-center text-2xl md:text-3xl font-extrabold mb-16" style={{ color: "#2a5c92" }}>
-                Our Team
+                Key Team Pictures:
+
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-14">
                 {[
-                  { name: "Len Somoun Founder/CEO ", image: "/assets/images/photo/Phan Tola.png" },
+                  { name: "Mr. Len Somoun Founder/CEO ", image: "/assets/images/photo/Phan Tola.png" },
                   { name: "Mr. Cheup Toley ", image: "/assets/images/photo/Somphon.png" },
                   { name: "Mr. Moeu Sokleap", image: "/assets/images/photo/Sarout.png" },
                   { name: "Ms. Home Sreynoy", image: "/assets/images/photo/sreymech.png" },
@@ -273,7 +277,7 @@ export default function About({ hero, about }) {
 
           {/* Business Registration Certifications */}
 <div className="w-full max-w-7xl mx-auto overflow-hidden px-4 mt-10">
-  <h1 className="flex justify-center text-start text-[20px] md:text-[30px] text-[#2C3E50] leading-none font-[700]">
+  <h1 className="flex justify-center text-start text-[20px] md:text-[30px] leading-none font-[700]" style={{ color: "#2a5c92" }}>
     Business Registration Certifications
   </h1>
   <div className="flex justify-center items-center py-12">

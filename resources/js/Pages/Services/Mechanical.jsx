@@ -36,13 +36,13 @@ const highlights = [
     { number: "06", label: "Quality workmanship & testing" },
 ];
 const steps = [
-    { number: "1", label: "Site Inspection" },
-    { number: "2", label: "System Design" },
-    { number: "3", label: "BOQ & Quotation" },
-    { number: "4", label: "Equipment Procurement" },
-    { number: "5", label: "Installation" },
-    { number: "6", label: "Testing & Commissioning" },
-    { number: "7", label: "Maintenance Support" },
+    { number: 1, label: "Experienced HVAC engineering team" },
+    { number: 2, label: "Energy-efficient system solutions" },
+    { number: 3, label: "International engineering standards" },
+    { number: 4, label: "International engineering standards" },
+    { number: 5, label: "Fast installation & project execution" },
+    { number: 6, label: "Reliable maintenance support" },
+    { number: 7, label: "Quality workmanship & testing" },
 ];
 const staticFaqs = [
     { q: "What HVAC systems do you install?", a: "We install VRV/VRF systems, split type air conditioners, ventilation systems, cooling systems, AHU/FCU systems, and chilled water systems." },
@@ -173,7 +173,7 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
             <section className="py-16 px-4 md:px-6 max-w-7xl mx-auto">
                 <Reveal>
                     <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8">
-                        Services Include:
+                        Our HVAC & Mechanical Services Include:
                     </h2>
                 </Reveal>
 

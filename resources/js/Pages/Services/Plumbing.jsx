@@ -36,13 +36,13 @@ const highlights = [
     { number: "06", label: "Maintenance & after-sales support" },
 ];
 const steps = [
-    { number: "1", label: "Site Inspection" },
-    { number: "2", label: "Plumbing Layout Design" },
-    { number: "3", label: "BOQ & Quotation" },
-    { number: "4", label: "Pipe Installation" },
-    { number: "5", label: "Pressure Testing" },
-    { number: "6", label: "System Commissioning" },
-    { number: "7", label: "Maintenance Support" },
+    { number: 1, label: "Experienced HVAC engineering team" },
+    { number: 2, label: "Energy-efficient system solutions" },
+    { number: 3, label: "International engineering standards" },
+    { number: 4, label: "International engineering standards" },
+    { number: 5, label: "Fast installation & project execution" },
+    { number: 6, label: "Reliable maintenance support" },
+    { number: 7, label: "Quality workmanship & testing" },
 ];
 const staticFaqs = [
     { q: "Do you install water supply systems?", a: "Yes, we install complete cold and hot water supply systems for residential and commercial projects." },
@@ -178,15 +178,15 @@ export default function Plumbing({ service, serviceItems = [], projects = [], he
                 </section>
             </Reveal>
 
-            {/* Services Grid */}
-            <section className="py-16 px-4 md:px-6 max-w-7xl mx-auto">
+              {/*   Our Electrical & ELV Services Include  */}
+            <section id="services-grid" className="py-16 px-4 md:px-6 max-w-7xl mx-auto">
                 <Reveal>
-                    <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8">
-                        Services Include:
+                    <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8 text-left pl-14">
+                        Our Electrical & ELV Services Include
                     </h2>
                 </Reveal>
 
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-4">
                     {displayItems.map((item, index) => {
                         const points = item.points
                             ? Array.isArray(item.points)
@@ -196,7 +196,7 @@ export default function Plumbing({ service, serviceItems = [], projects = [], he
 
                         return (
                             <Reveal key={item.id || index} delay={index * 70}>
-                                <div className="hover-lift bg-blue-50 rounded-xl p-2 h-full w-[160px] sm:w-[200px] md:w-[220px]">
+                                <div className="hover-lift bg-blue-50 rounded-xl p-2 h-full w-[160px] sm:w-[190px] md:w-[210px]">
                                     <div className="w-full h-[140px] rounded-lg overflow-hidden bg-gray-300 mb-2">
                                         {item.image ? (
                                             <img
@@ -209,7 +209,7 @@ export default function Plumbing({ service, serviceItems = [], projects = [], he
                                         )}
                                     </div>
 
-                                    <h3 className="text-xs font-bold text-orange-500 mb-2">
+                                    <h3 className="text-xs font-bold text-orange-500 mb-2 text-center">
                                         {item.title}
                                     </h3>
 

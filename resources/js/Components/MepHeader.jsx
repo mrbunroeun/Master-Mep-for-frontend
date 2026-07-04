@@ -176,7 +176,7 @@ export default function MepHeader() {
                 <div>
                     <button
                       onClick={() => toggleDropdown(item.label)}
-                      className={`w-full flex items-center px-4 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
+                      className={`w-full flex items-center px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
                         openDropdown === item.label || isActive(item.href) || isChildActive(item)
                           ? "border-white bg-white text-[#1A3A5C] font-bold"
                           : "border-transparent text-white hover:bg-white/20"
@@ -231,75 +231,43 @@ export default function MepHeader() {
           style={{ background: "linear-gradient(to right, #0C2D4F, #1E5BA8)" }}
         >
           <ul className="flex flex-col px-4 py-3 gap-1">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                {item.dropdown ? (
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => toggleDropdown(item.label)}
-                      aria-expanded={openDropdown === item.label}
-                      className={`w-full flex items-center justify-between px-4 py-2.5 rounded-full text-white text-sm font-medium border transition-all duration-200 ${
-                        openDropdown === item.label
-                          ? "border-white bg-white/10"
-                          : "border-transparent hover:bg-white/20"
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        viewBox="0 0 24 24"
-                        className={`shrink-0 transition-transform duration-200 ${
-                          openDropdown === item.label ? "rotate-180" : ""
-                        }`}
-                      >
-                        <polyline points="6 9 12 15 18 9" />
-                      </svg>
-                    </button>
-
-                    <div
-                      className={`ml-4 mt-1 bg-white rounded-xl overflow-hidden shadow-lg transition-all duration-200 origin-top ${
-                        openDropdown === item.label
-                          ? "opacity-100 scale-100 translate-y-0 max-h-96"
-                          : "opacity-0 scale-95 -translate-y-2 max-h-0 pointer-events-none"
-                      }`}
-                    >
+            {navItems.map((item) => {
+              return (
+                <li key={item.label}>
+                  {item.dropdown ? (
+                    <div className="flex flex-col gap-1">
+                      <span className="px-4 py-2.5 text-white text-sm font-medium opacity-70">
+                        {item.label}
+                      </span>
                       {item.dropdown.map((sub) => (
                         <Link
                           key={sub.label}
                           href={sub.href}
-                          className={`block px-4 py-2.5 text-sm transition-colors border-b border-gray-50 last:border-0 ${
+                          className={`block pl-8 pr-4 py-2.5 rounded-full text-sm font-medium border transition-all duration-200 ${
                             url === sub.href
-                              ? "bg-[#E6F1FB] text-[#0C447C] font-medium border-l-[3px] border-[#185FA5]"
-                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                              ? "border-white bg-white text-[#1A3A5C] font-bold"
+                              : "border-transparent text-white hover:bg-white/20"
                           }`}
                         >
                           {sub.label}
                         </Link>
                       ))}
                     </div>
-                  </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`block px-4 py-2.5 rounded-full transition-all duration-200 text-sm font-medium border ${
-                      isActive(item.href)
-                        ? "border-white bg-white text-[#1A3A5C] font-bold"
-                        : "border-transparent text-white hover:bg-white/20"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </li>
-            ))}
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className={`block px-4 py-2.5 rounded-full transition-all duration-200 text-sm font-medium border ${
+                        isActive(item.href)
+                          ? "border-white bg-white text-[#1A3A5C] font-bold"
+                          : "border-transparent text-white hover:bg-white/20"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
 
             <li className="flex items-center gap-4 px-4 py-3 text-white text-lg">
               <a

@@ -36,13 +36,13 @@ const highlights = [
     { number: "06", label: "Strong after-sales support" },
 ];
 const steps = [
-    { number: "1", label: "Site Survey" },
-    { number: "2", label: "Electrical Load Calculation" },
-    { number: "3", label: "System Design" },
-    { number: "4", label: "Quotation & BOQ" },
-    { number: "5", label: "Installation" },
-    { number: "6", label: "Testing & Commissioning" },
-    { number: "7", label: "Maintenance Support" },
+    { number: 1, label: "Experienced HVAC engineering team" },
+    { number: 2, label: "Energy-efficient system solutions" },
+    { number: 3, label: "International engineering standards" },
+    { number: 4, label: "International engineering standards" },
+    { number: 5, label: "Fast installation & project execution" },
+    { number: 6, label: "Reliable maintenance support" },
+    { number: 7, label: "Quality workmanship & testing" },
 ];
 const staticFaqs = [
     { q: "Do you install CCTV and fire alarm systems?", a: "Yes, we provide CCTV, fire alarm, access control, and ELV system installation." },
@@ -143,7 +143,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     }
                 `}</style>
 
-             {/* Hero */}
+            {/* Hero */}
             <section
                 className="relative min-h-[90vh] flex items-center"
                 style={{ background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" }}
@@ -160,7 +160,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                             Electrical & ELV System Installation Services in Cambodia
                         </p>
                         <p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">
-                            Master MEP Solution Co., Ltd provides professional HVAC installation, ventilation systems, VRV/VRF systems, chilled water systems, ducting systems, and mechanical engineering solutions for commercial buildings, villas, restaurants, hospitals, and industrial facilities across Cambodia.
+                            Master MEP provides professional electrical engineering and ELV system installation including MDB systems, lighting systems, CCTV, fire alarm systems, LAN cabling, BMS systems, and power distribution solutions for commercial and industrial projects.
                         </p>
                     </Reveal>
                     <Reveal delay={340}>
@@ -181,61 +181,16 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
             </Reveal>
 
             {/* Core Services Overview — layout matches reference image */}
-            <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
-                <Reveal>
-                    <div className="flex flex-col md:flex-row gap-10 items-center">
-                        {/* Left: text content */}
-                        <div className="flex-1">
-                            <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-4 leading-snug">
-                                Core Services<br />Overview
-                            </h2>
-                            <p className="text-orange-500 font-bold text-base md:text-lg leading-snug mb-3">
-                                {overviewLabelLines.map((line, i) => (
-                                    <span key={i} className="block">{line}</span>
-                                ))}
-                            </p>
-                            <p className="text-sm text-gray-700 leading-relaxed mb-6 max-w-md">
-                                {DEFAULTS.overviewDescription}
-                            </p>
-                            <a
-                                href="#services-grid"
-                                className="btn-animate inline-block px-6 py-3 bg-[#1A3A5C] text-white rounded-xl text-sm font-medium hover:bg-[#2E5C8A] transition-colors"
-                            >
-                                {DEFAULTS.overviewButton}
-                            </a>
-                        </div>
 
-                        {/* Right: image */}
-                        <div className="flex-1 w-full">
-                            <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-200">
-                                {overviewImage ? (
-                                    <img
-                                        src={overviewImage}
-                                        alt={heroTitle}
-                                        className="w-full h-full object-cover"
-                                    />
-                                ) : (
-                                    <div
-                                        className="w-full h-full flex items-center justify-center"
-                                        style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}
-                                    >
-                                        <Zap size={40} className="text-white/40" />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </Reveal>
-            </section>
-
+        {/*   Our Electrical & ELV Services Include  */}
             <section id="services-grid" className="py-16 px-4 md:px-6 max-w-7xl mx-auto">
                 <Reveal>
-                    <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8">
-                        Services Include:
+                    <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8 text-left pl-14">
+                        Our Electrical & ELV Services Include
                     </h2>
                 </Reveal>
 
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-4">
                     {displayItems.map((item, index) => {
                         const points = item.points
                             ? Array.isArray(item.points)
@@ -245,7 +200,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
 
                         return (
                             <Reveal key={item.id || index} delay={index * 70}>
-                                <div className="hover-lift bg-blue-50 rounded-xl p-2 h-full w-[160px] sm:w-[200px] md:w-[220px]">
+                                <div className="hover-lift bg-blue-50 rounded-xl p-2 h-full w-[160px] sm:w-[190px] md:w-[210px]">
                                     <div className="w-full h-[140px] rounded-lg overflow-hidden bg-gray-300 mb-2">
                                         {item.image ? (
                                             <img
@@ -258,7 +213,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                         )}
                                     </div>
 
-                                    <h3 className="text-xs font-bold text-orange-500 mb-2">
+                                    <h3 className="text-xs font-bold text-orange-500 mb-2 text-center">
                                         {item.title}
                                     </h3>
 
