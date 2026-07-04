@@ -177,7 +177,7 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                     </h2>
                 </Reveal>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                <div className="flex flex-wrap justify-center gap-3">
                     {displayItems.map((item, index) => {
                         const points = item.points
                             ? (
@@ -189,7 +189,7 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
 
                         return (
                             <Reveal key={item.id || index} delay={index * 70}>
-                                <div className="hover-lift bg-blue-50 rounded-xl p-2 h-full">
+                                <div className="hover-lift bg-blue-50 rounded-xl p-2 h-full w-[160px] sm:w-[200px] md:w-[220px]">
                                     <div className="w-full h-[140px] rounded-lg overflow-hidden bg-gray-300 mb-2">
                                         {item.image ? (
                                             <img

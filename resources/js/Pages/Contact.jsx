@@ -48,10 +48,10 @@ export default function Contact({ flash = {}, heroImage = null }) {
                             </p>
                             <div className="space-y-5">
                                 {[
-                                    { icon: <MapPin size={16} />, title: "Head Office", lines: ["#159A, Street No. 2011, Phum Lorem, Sangkat Lorem, Khan Lorem, Phnom Penh."] },
-                                    { icon: <Phone size={16} />, title: "Phone", lines: ["089 911 988", "081 688 980"] },
-                                    { icon: <Mail size={16} />, title: "Email", lines: ["lorem@gmail.com"] },
-                                    { icon: <Clock size={16} />, title: "Business Hours", lines: ["Mon – Sat, 8:00 AM – 5:30 PM"] },
+                                    { icon: <MapPin size={16} />, title: "Head Office", lines: ["Borey Long Ny Chamkardoung,#40, Street 01, Prakar Village,Preysar Commune, Dangkor District, Phnom Penh"] },
+                                    { icon: <Phone size={16} />, title: "Phone", lines: ["017 55 22 38"] },
+                                    { icon: <Mail size={16} />, title: "Email", lines: [" lensamoun68@gmail.com"] },
+                                    { icon: <Clock size={16} />, title: "Business Hours", lines: ["Mon- Sat 8:00 AM - 5:00 PM"] },
                                 ].map((item, i) => (
                                     <FadeIn key={i} direction="up" delay={150 + i * 100}>
                                         <div className="flex items-start gap-3">
