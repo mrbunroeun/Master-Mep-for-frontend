@@ -12,6 +12,8 @@ export default function Contact({ flash = {}, heroImage = null }) {
         e.preventDefault();
         post("/contact", { onSuccess: () => reset() });
     };
+    const heroSecImage = "/HeroSection/heroSection.png";
+
 
     return (
         <MepLayout>
@@ -29,7 +31,10 @@ export default function Contact({ flash = {}, heroImage = null }) {
             {/* Hero */}
             <section
                 className="relative min-h-[60vh] flex items-center overflow-hidden"
-                style={!heroImage ? { background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" } : {}}
+                style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}
             >
                 {heroImage && (
                     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${heroImage}')` }} />

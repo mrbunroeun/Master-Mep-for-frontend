@@ -87,6 +87,7 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
     const [open, setOpen] = useState(null);
     const heroSecImage = "/HeroSection/heroSection.png";
 
+
     const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
     const heroTitle = service?.title ?? DEFAULTS.title;
     const heroDesc = service?.description ?? DEFAULTS.description;
@@ -374,8 +375,8 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
 
             {/* CTA */}
             <section className="relative py-20 text-white text-center"
-                style={bgImage
-                    ? { backgroundImage: `url('${bgImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
+                style={heroSecImage
+                    ? { backgroundImage: `url('${heroSecImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
                     : { background: "linear-gradient(135deg, #0C1F3F 0%, #1E5BA8 100%)" }
                 }>
                 <div className="absolute inset-0 bg-black/55" />

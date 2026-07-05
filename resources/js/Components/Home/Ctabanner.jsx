@@ -2,11 +2,13 @@ import FadeIn from "@/Components/FadeIn";
 
 export default function Ctabanner({ ctaBanner, heroImage }) {
   const backgroundImage = heroImage || "/images/hero.jpg";
+      const heroSecImage = "/HeroSection/heroSection.png";
+
 
   return (
     <section
       className="relative py-20 bg-cover bg-center text-white text-center"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+      style={{ backgroundImage: `url(${heroSecImage})` }}
     >
       <div className="absolute inset-0 bg-black/60" />
       <FadeIn className="relative z-10 max-w-2xl mx-auto px-6">
