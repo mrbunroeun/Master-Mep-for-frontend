@@ -13,10 +13,7 @@ export default function Hero() {
       }}
     >
       <div
-        className="absolute inset-0"
-        style={{
-          background: "linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%)"
-        }}
+        className="absolute inset-0 bg-black/50 "
       />
       <div className="relative z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto w-full">
 
