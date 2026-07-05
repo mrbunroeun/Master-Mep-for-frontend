@@ -152,12 +152,17 @@ export default function LatestActivities() {
             </section>
 
             {/* CTA */}
-            <section className="relative py-16 sm:py-20 text-center bg-[#CFE7F6]">
+            <section className="relative py-16 sm:py-20 text-center bg-[#CFE7F6]"  style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }} >
+                <div className="absolute inset-0 bg-black/55" />
+
                 <FadeIn className="relative z-10 max-w-2xl mx-auto px-6">
-                    <h2 className="text-2xl md:text-4xl font-bold mb-4 text-[#1A3A5C]">
+                    <h2 className="text-2xl md:text-4xl font-bold mb-4 text-[#d6d6d6]">
                         Want to Work With Us on Your Next Project?
                     </h2>
-                    <p className="text-sm text-[#1A3A5C]/80 mb-8">
+                    <p className="text-sm text-[#d3d3d3] mb-8">
                         Contact Master MEP Solution for professional MEP engineering, installation, and maintenance services in Cambodia.
                     </p>
                     <Link

@@ -10,7 +10,7 @@ const storageUrl = (path) => {
 };
 
 export default function Insights({ insights = [] }) {
-      const heroSecImage = "/HeroSection/heroSection.png";
+  const heroSecImage = "/HeroSection/heroSection.png";
 
   return (
     <MepLayout>
@@ -20,13 +20,13 @@ export default function Insights({ insights = [] }) {
       <section
         className="relative min-h-[70vh] bg-cover bg-no-repeat flex items-center"
         style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
-                }}
+          backgroundImage: `url(${heroSecImage})`,
+          backgroundPosition: "center center"
+        }}
       >
         <div
           className="absolute inset-0 bg-black/50"
-         
+
         />
         <FadeIn direction="up" className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
           <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
@@ -36,11 +36,11 @@ export default function Insights({ insights = [] }) {
             Master MEP Solution Co., Ltd provides professional Mechanical, Electrical, Plumbing (MEP), HVAC, ELV, Fire Protection, and Maintenance Services for commercial buildings, villas, banks, restaurants, hospitals, and industrial projects across Cambodia.
           </p>
           <div className="flex flex-row mt-[2rem] sm:flex-row gap-4 justify-center">
-                            <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Request Quotation</a>
-                            <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Book Site Inspection</a>
-                        </div>
+            <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Request Quotation</a>
+            <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Book Site Inspection</a>
+          </div>
         </FadeIn>
-        
+
       </section>
 
       {/* Insights List — card design, image alternating left/right */}
@@ -123,8 +123,13 @@ export default function Insights({ insights = [] }) {
       {/* CTA */}
       <section
         className="relative py-20 bg-cover bg-no-repeat text-white text-center"
-        style={{ backgroundImage: "url('/images/hero.jpg')", backgroundPosition: "center 15%" }}
+        style={{
+          backgroundImage: `url(${heroSecImage})`,
+          backgroundPosition: "center center"
+        }}
       >
+        <div className="absolute inset-0 bg-black/30" />
+
         <div
           className="absolute inset-0"
           style={{

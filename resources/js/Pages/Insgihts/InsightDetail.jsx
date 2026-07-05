@@ -32,7 +32,7 @@ export default function InsightDetail({ insight }) {
             >
                 <div
                     className="absolute inset-0 bg-black/50"
-                    
+
                 />
                 <FadeIn direction="up" className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
                     <p className="text-xs tracking-widest uppercase opacity-70 mb-2">MASTER MEP SOLUTION</p>
@@ -65,15 +65,25 @@ export default function InsightDetail({ insight }) {
             <div className="px-4 md:px-6 max-w-5xl mx-auto pt-6">
                 <Link
                     href="/insights"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-[#2E5C8A] hover:text-[#1A3A5C] transition-colors"
+                    className="group inline-flex items-center gap-2 pl-3 pr-4 py-2 rounded-full
+                   text-sm font-medium text-white bg-[#2E5C8A]
+                   hover:bg-[#1A3A5C] hover:shadow-md
+                   focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E5C8A]/40 focus-visible:ring-offset-2
+                   transition-all duration-200"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-0.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                    >
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                     Back to Insights
                 </Link>
             </div>
-
             {/* Section Title */}
             {insight.sections_title && (
                 <FadeIn direction="up">
@@ -167,12 +177,13 @@ export default function InsightDetail({ insight }) {
             {/* CTA */}
             <section
                 className="relative py-20 bg-cover bg-no-repeat text-white text-center"
-                style={
-                    insight.image
-                        ? { backgroundImage: `url('${storageUrl(insight.image)}')`, backgroundPosition: "center 15%" }
-                        : { background: "linear-gradient(135deg, #0C1F3F 0%, #1E5BA8 100%)" }
-                }
+                style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}
             >
+                <div className="absolute inset-0 bg-black/30" />
+
                 <div
                     className="absolute inset-0"
                     style={{

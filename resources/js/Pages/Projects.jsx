@@ -439,7 +439,7 @@ export default function Projects({ projects = [], heroImage = null }) {
 
   const bgStyle = heroImage
     ? { backgroundImage: `url('${heroImage}')` }
-    : { background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" };
+    : { background: `url(${heroSecImage})` };
 
   return (
     <MepLayout>
@@ -450,9 +450,9 @@ export default function Projects({ projects = [], heroImage = null }) {
       {/* HERO — dynamic image */}
       <section className="relative min-h-[60vh] sm:min-h-[65vh] md:min-h-[70vh] bg-cover bg-center bg-no-repeat flex items-center"
         style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
-                }}>
+          backgroundImage: `url(${heroSecImage})`,
+          backgroundPosition: "center center"
+        }}>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 md:px-16 py-12 sm:py-16">
           <div className="text-white text-center mx-auto">
@@ -542,7 +542,10 @@ export default function Projects({ projects = [], heroImage = null }) {
 
       {/* CTA */}
       <section className="relative py-16 sm:py-20 bg-cover bg-center text-white text-center"
-        style={bgStyle}>
+        style={{
+          backgroundImage: `url(${heroSecImage})`,
+          backgroundPosition: "center center"
+        }}>
         <div className="absolute inset-0 bg-black/55" />
         <FadeIn className="relative z-10 max-w-2xl mx-auto px-5 sm:px-6">
           <h2 className="text-xl sm:text-2xl md:text-4xl font-bold mb-4 leading-tight">
