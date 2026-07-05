@@ -1,8 +1,8 @@
 import { Link } from "@inertiajs/react";
 import FadeIn from "@/Components/FadeIn";
 
-export default function Hero({ hero }) {
-  const image = hero?.image ? `/storage/${hero.image}` : "/images/hero.jpg";
+export default function Hero() {
+  const image = "/HeroSection/heroSection.png";
 
   return (
     <section

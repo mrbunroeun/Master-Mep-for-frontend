@@ -10,8 +10,6 @@ import Faqs from "@/Components/Home/Faqs";
 import Ctabanner from "@/Components/Home/Ctabanner";
 
 export default function Home({
-    heroes,
-    hero,
     about,
     services,
     servicesHeader,
@@ -29,7 +27,7 @@ export default function Home({
                 {/* meta tags */}
             </Head>
 
-            <Hero hero={heroes?.[0] ?? hero} />
+            <Hero />
             <About />
             <Services services={services} serviceItems={serviceItems} pageHeader={servicesHeader} />
             <Whychooseus whyChooseUs={whyChooseUs} />
