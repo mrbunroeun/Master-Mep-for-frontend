@@ -28,7 +28,6 @@ use App\Models\Partner;
 use App\Models\Faq;
 use App\Models\KeyHighlight;
 use App\Models\CtaBanner;
-use App\Models\WhyChooseUs;
 use App\Models\Service;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
@@ -66,7 +65,6 @@ Route::get('/', function () {
         'keyHighlights' => KeyHighlight::where('is_active', true)->orderBy('order')->get(),
         'ctaBanner'     => CtaBanner::where('is_active', true)->latest()->first(),
         'heroImage'     => heroImageFor('/'),
-        'whyChooseUs'   => WhyChooseUs::where('is_active', true)->orderBy('order')->get(),
         'services'      => Service::where('is_active', true)->get(),
     ]);
 })->name('home');
@@ -85,38 +83,6 @@ Route::get('/about', function () {
 
 Route::get('/projects', [PublicProjectController::class, 'index'])->name('projects');
 
-Route::get('/services/maintenance', function () {
-    $maintenanceCategories = \App\Models\MaintenanceCategory::where('is_active', true)
-        ->orderBy('sort_order')
-        ->orderBy('id')
-        ->get();
-
-    $maintenanceBenefit = \App\Models\MaintenanceBenefit::where('is_active', true)
-        ->latest()
-        ->first();
-
-    $maintenanceContract = \App\Models\MaintenanceContract::where('is_active', true)
-        ->latest()
-        ->first();
-
-    return Inertia::render('Services/Maintenance', [
-        'maintenanceFeatures'   => \App\Models\MaintenanceFeature::where('is_active', true)->latest()->get(),
-        'heroImage'             => heroImageFor('/services/maintenance'),
-        'maintenanceCategories' => $maintenanceCategories,
-        'maintenanceBenefit'    => $maintenanceBenefit,
-        'maintenanceContract'   => $maintenanceContract,
-    ]);
-})->name('maintenance');
-
-Route::get('/services/solasystem', function () {
-    return Inertia::render('Services/SolaSystem', [
-        'service'       => null,
-        'serviceItems'  => [],
-        'projects'      => [],
-        'heroImage'     => null,
-        'keyHighlights' => [],
-    ]);
-})->name('solasystem');
 
 Route::get('/services/{type}', [ServiceController::class, 'show'])->name('services.show');
 
@@ -163,7 +129,7 @@ Route::get('/generate-sitemap', function () {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
-        'isAdmin' => Auth::user()->role === 'admin',
+        'isAdmin' => in_array(Auth::user()->role, ['admin', 'super_admin']),
         'auth'    => ['user' => Auth::user()],
         'counts'  => [
             'heroes'                => \App\Models\Hero::count(),
@@ -172,7 +138,6 @@ Route::get('/dashboard', function () {
             'partners'              => \App\Models\Partner::count(),
             'faqs'                  => \App\Models\Faq::count(),
             'keyHighlights'         => \App\Models\KeyHighlight::count(),
-            'whyChooseUs'           => \App\Models\WhyChooseUs::count(),
             'maintenanceBenefits'   => \App\Models\MaintenanceBenefit::count(),
             'maintenanceFeatures'   => \App\Models\MaintenanceFeature::count(),
             'maintenanceCategories' => \App\Models\MaintenanceCategory::count(),
@@ -206,7 +171,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('partner',       PartnerController::class);
     Route::resource('faq',           FaqController::class);
     Route::resource('key-highlight', KeyHighlightController::class);
-    Route::resource('why-choose-us', WhyChooseUsController::class);
     Route::resource('maintenance', MaintenanceFeatureController::class);
     Route::resource('maintenance-categories', MaintenanceCategoryController::class)
     ->names('admin.maintenance-categories');
@@ -214,7 +178,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('maintenance-contracts', MaintenanceContractController::class);
     Route::resource('insights', AdminInsightController::class);
     Route::resource('service', AdminServiceController::class);
-    Route::get('/services/{type}', [ServiceController::class, 'show']);
     Route::resource('key-highlight', KeyHighlightController::class)->names('admin.key-highlight');
 });
 

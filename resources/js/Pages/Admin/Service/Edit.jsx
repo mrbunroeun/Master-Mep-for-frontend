@@ -3,9 +3,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import BackToDashboard from "@/Components/BackToDashboard";
 
 const TYPE_OPTIONS = [
-    { value: "mechanical", label: "Mechanical / HVAC" },
-    { value: "electrical", label: "Electrical & ELV" },
-    { value: "plumbing",   label: "Plumbing" },
+    { value: "mechanical",  label: "Mechanical / HVAC" },
+    { value: "electrical",  label: "Electrical & ELV" },
+    { value: "plumbing",    label: "Plumbing" },
+    { value: "maintenance", label: "Maintenance (AMS)" },
+    { value: "solasystem",  label: "Solar System" },
 ];
 
 export default function Edit({ item }) {
@@ -20,13 +22,14 @@ export default function Edit({ item }) {
         benefits_points: item.benefits_points || "",
         order:           item.order ?? 0,
         is_active:       !!item.is_active,
-        // ← fix: empty array ពេល items null, មិនមែន [{empty}]
         items: Array.isArray(item.items) && item.items.length > 0
             ? item.items.map((it) => ({
-                title:     it.title     || "",
-                points:    it.points    || "",
-                image:     it.image     || null,
-                imageFile: null,
+                title:       it.title       || "",
+                subtitle:    it.subtitle    || "",
+                description: it.description || "",
+                points:      it.points      || "",
+                image:       it.image       || null,
+                imageFile:   null,
               }))
             : [],
     });
@@ -36,7 +39,7 @@ export default function Edit({ item }) {
         updated[i][field] = value;
         setData("items", updated);
     };
-    const addItem    = () => setData("items", [...data.items, { title: "", points: "", image: null, imageFile: null }]);
+    const addItem    = () => setData("items", [...data.items, { title: "", subtitle: "", description: "", points: "", image: null, imageFile: null }]);
     const removeItem = (i) => setData("items", data.items.filter((_, idx) => idx !== i));
 
     transform((formData) => {
@@ -54,8 +57,10 @@ export default function Edit({ item }) {
         if (formData.image) fd.append("image", formData.image);
 
         formData.items.forEach((it, i) => {
-            fd.append(`items[${i}][title]`,  it.title  || "");
-            fd.append(`items[${i}][points]`, it.points || "");
+            fd.append(`items[${i}][title]`,       it.title       || "");
+            fd.append(`items[${i}][subtitle]`,    it.subtitle    || "");
+            fd.append(`items[${i}][description]`, it.description || "");
+            fd.append(`items[${i}][points]`,      it.points      || "");
             if (it.imageFile) fd.append(`items[${i}][image]`, it.imageFile);
         });
 
@@ -166,7 +171,7 @@ export default function Edit({ item }) {
                     <div>
                         <div className="flex items-center justify-between mb-2">
                             <div>
-                                <label className="block text-sm font-medium">Service Items (grid cards)</label>
+                                <label className="block text-sm font-medium">Service Items</label>
                                 <p className="text-xs text-gray-400 mt-0.5">
                                     {data.items.length === 0
                                         ? "No items yet — click + Add Item to start"
@@ -178,6 +183,13 @@ export default function Edit({ item }) {
                                 + Add Item
                             </button>
                         </div>
+
+                        <p className="text-xs text-gray-400 mb-2">
+                            For <strong>Maintenance</strong>: Title = package name, Subtitle = frequency (e.g. "Every 6 months"),
+                            Description = "suitable for" list (one per line), Points = "includes" list (one per line).<br />
+                            For <strong>Solar System</strong>: Title = system name, Description = two paragraphs separated by a
+                            blank line (Best For, then How It Works), Points = benefits list (one per line).
+                        </p>
 
                         {data.items.length === 0 ? (
                             <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center text-gray-400 text-sm">
@@ -195,7 +207,7 @@ export default function Edit({ item }) {
                                             </button>
                                         </div>
 
-                                        <input type="text" placeholder="Item title (e.g. Air Conditioning System)"
+                                        <input type="text" placeholder="Title (e.g. Basic Package / On-Grid Solar System)"
                                             value={it.title}
                                             onChange={(e) => updateItem(i, "title", e.target.value)}
                                             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
@@ -203,8 +215,19 @@ export default function Edit({ item }) {
                                             <p className="text-red-500 text-xs mt-1">{errors[`items.${i}.title`]}</p>
                                         )}
 
+                                        <input type="text" placeholder="Subtitle (e.g. Every 6 months) — optional"
+                                            value={it.subtitle}
+                                            onChange={(e) => updateItem(i, "subtitle", e.target.value)}
+                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+
+                                        <textarea rows={3}
+                                            placeholder={"Description — see guidance above"}
+                                            value={it.description}
+                                            onChange={(e) => updateItem(i, "description", e.target.value)}
+                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
+
                                         <textarea rows={4}
-                                            placeholder={"Points — one per line\ne.g.\nSplit Type AC\nVRV/VRF Systems\nChiller Systems"}
+                                            placeholder={"Points — one per line"}
                                             value={it.points}
                                             onChange={(e) => updateItem(i, "points", e.target.value)}
                                             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono" />

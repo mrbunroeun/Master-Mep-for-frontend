@@ -6,6 +6,8 @@ const TYPE_LABELS = {
   mechanical: "Mechanical / HVAC",
   electrical: "Electrical & ELV",
   plumbing: "Plumbing",
+  maintenance: "Maintenance (AMS)",
+  solasystem: "Solar System",
 };
 
 export default function Index({ services = [] }) {

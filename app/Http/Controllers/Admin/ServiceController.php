@@ -22,23 +22,27 @@ class ServiceController extends Controller
         return Inertia::render('Admin/Service/Create');
     }
 
-    private function baseValidation(Request $request): array
+    private function baseValidation(Request $request, ?Service $service = null): array
     {
+        $uniqueRule = 'unique:services,type' . ($service ? ',' . $service->id : '');
+
         return $request->validate([
-            'type'             => 'required|string|in:mechanical,electrical,plumbing',
-            'tagline'          => 'nullable|string|max:255',
-            'title'            => 'required|string|max:255',
-            'description'      => 'nullable|string',
-            'image'            => 'nullable|image|max:10240',
-            'button_text'      => 'nullable|string|max:100',
-            'benefits_title'   => 'nullable|string|max:255',
-            'benefits_points'  => 'nullable|string',
-            'order'            => 'nullable|integer',
-            'is_active'        => 'sometimes|boolean',
-            'items'            => 'nullable|array',
-            'items.*.title'    => 'nullable|string|max:255',
-            'items.*.points'   => 'nullable|string',
-            'items.*.image'    => 'nullable|image|max:10240',
+            'type'                => 'required|string|in:mechanical,electrical,plumbing,maintenance,solasystem|' . $uniqueRule,
+            'tagline'             => 'nullable|string|max:255',
+            'title'               => 'required|string|max:255',
+            'description'         => 'nullable|string',
+            'image'               => 'nullable|image|max:10240',
+            'button_text'         => 'nullable|string|max:100',
+            'benefits_title'      => 'nullable|string|max:255',
+            'benefits_points'     => 'nullable|string',
+            'order'               => 'nullable|integer',
+            'is_active'           => 'sometimes|boolean',
+            'items'               => 'nullable|array',
+            'items.*.title'       => 'nullable|string|max:255',
+            'items.*.subtitle'    => 'nullable|string|max:255',
+            'items.*.description' => 'nullable|string',
+            'items.*.points'      => 'nullable|string',
+            'items.*.image'       => 'nullable|image|max:10240',
         ]);
     }
 
@@ -82,7 +86,7 @@ class ServiceController extends Controller
 
     public function update(Request $request, Service $service)
     {
-        $data = $this->baseValidation($request);
+        $data = $this->baseValidation($request, $service);
         $data['is_active']   = $request->boolean('is_active');
         $data['order']       = $data['order'] ?? 0;
         $data['button_link'] = "/services/{$data['type']}";

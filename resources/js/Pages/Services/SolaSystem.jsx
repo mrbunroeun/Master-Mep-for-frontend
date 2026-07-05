@@ -75,8 +75,6 @@ function SolarServicesCarousel() {
 
     return (
         <div className="max-w-6xl mx-auto relative">
-            {/* Left arrow */}
-            {/* Left arrow */}
             <button
                 onClick={() => scroll("left")}
                 aria-label="Scroll left"
@@ -88,7 +86,6 @@ function SolarServicesCarousel() {
                 </svg>
             </button>
 
-            {/* Scrollable cards */}
             <div
                 ref={scrollRef}
                 onPointerDown={handlePointerDown}
@@ -104,7 +101,6 @@ function SolarServicesCarousel() {
                     >
                         <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
                             {/* Replace with actual image */}
-                            {/* <img src="/image/solar-design.jpg" alt={service.title} className="w-full h-full object-cover" draggable={false} /> */}
                         </div>
                         <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
                             {service.title}
@@ -118,8 +114,6 @@ function SolarServicesCarousel() {
                 ))}
             </div>
 
-            {/* Right arrow */}
-            {/* Right arrow */}
             <button
                 onClick={() => scroll("right")}
                 aria-label="Scroll right"
@@ -142,14 +136,6 @@ const STATIC_ITEMS = [
     { icon: <Cpu className="w-10 h-10 text-white" />, title: "Building Management", points: ["BMS installation", "Smart building systems", "Energy monitoring"] },
     { icon: <Battery className="w-10 h-10 text-white" />, title: "Backup Power Systems", points: ["Generator installation", "UPS systems", "Battery backup", "Synchronization"] },
 ];
-const STATIC_ICONS = [
-    <Zap className="w-10 h-10 text-white" />,
-    <Lightbulb className="w-10 h-10 text-white" />,
-    <Shield className="w-10 h-10 text-white" />,
-    <Radio className="w-10 h-10 text-white" />,
-    <Cpu className="w-10 h-10 text-white" />,
-    <Battery className="w-10 h-10 text-white" />,
-];
 const highlights = [
     { number: "01", label: "Experienced electrical engineers" },
     { number: "02", label: "International standard installation" },
@@ -158,21 +144,40 @@ const highlights = [
     { number: "05", label: "Reliable testing & commissioning" },
     { number: "06", label: "Strong after-sales support" },
 ];
-const steps = [
-    { number: "1", label: "Site Survey" },
-    { number: "2", label: "Electrical Load Calculation" },
-    { number: "3", label: "System Design" },
-    { number: "4", label: "Quotation & BOQ" },
-    { number: "5", label: "Installation" },
-    { number: "6", label: "Testing & Commissioning" },
-    { number: "7", label: "Maintenance Support" },
+
+// Generic item shape (matches admin form): { title, subtitle, description, points, image }
+// description = two paragraphs separated by a blank line: Best For, then How It Works
+// points = benefits list (one per line)
+const DEFAULT_SOLAR_TYPES = [
+    {
+        title: "On-Grid Solar System (No Battery)",
+        description: "Homes, offices, commercial buildings, schools, factories, and businesses with reliable electricity from the national grid.\n\nAn On-Grid Solar System generates electricity during the day to power your building. Any additional electricity can be exported to the utility grid (subject to local regulations), helping reduce your monthly electricity bills.",
+        points: "Lower electricity costs\nNo battery maintenance\nHigher energy efficiency\nLower installation cost\nEnvironmentally friendly\nIdeal for daytime electricity usage",
+        image: null,
+    },
+    {
+        title: "Off-Grid Solar System (Battery Storage)",
+        description: "Remote villages, farms, construction sites, telecommunication stations, resorts, and locations without access to the electricity grid.\n\nAn Off-Grid Solar System stores solar energy in batteries, allowing electricity to be used day and night without relying on the national power grid.",
+        points: "Complete energy independence\nReliable power in remote areas\nBattery backup during cloudy days\nSuitable for rural developments\nContinuous electricity supply",
+        image: null,
+    },
+    {
+        title: "Hybrid Solar System (Grid + Battery)",
+        description: "Businesses, hospitals, hotels, factories, offices, villas, and customers requiring uninterrupted power.\n\nA Hybrid Solar System combines solar panels, battery storage, and the utility grid. During the day, solar power is used first. Excess energy charges the batteries, while the grid provides additional backup when needed.",
+        points: "Reduced electricity bills\nBackup power during outages\nMaximum energy security\nSmart energy management\nGreater energy independence\nIdeal for critical business operations",
+        image: null,
+    },
 ];
-const staticFaqs = [
-    { q: "Do you install CCTV and fire alarm systems?", a: "Yes, we provide CCTV, fire alarm, access control, and ELV system installation." },
-    { q: "Can you upgrade old electrical systems?", a: "Yes, we assess and upgrade existing electrical systems to meet current safety standards." },
-    { q: "Do you install MDB installation?", a: "Yes, we install MDB, SMDB, and DB panels for all building types." },
-    { q: "Do you provide maintenance services?", a: "Yes, we offer preventive and corrective maintenance for all electrical and ELV systems." },
-];
+
+function parseLines(text) {
+    return (text || "").split("\n").map((s) => s.trim()).filter(Boolean);
+}
+
+function parseParagraphs(text) {
+    const parts = (text || "").split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
+    return { bestFor: parts[0] || "", howItWorks: parts[1] || "" };
+}
+
 const DEFAULTS = {
     title: "Solar System Installation",
     description: "Professional Solar System Installation Services in Cambodia",
@@ -208,24 +213,22 @@ function Reveal({ children, className = "", delay = 0 }) {
     );
 }
 
-export default function Electrical({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
+export default function SolaSystem({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
     const [open, setOpen] = useState(null);
 
     const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
     const heroTitle = service?.title ?? DEFAULTS.title;
     const heroDesc = service?.description ?? DEFAULTS.description;
-    const ctaButton = service?.button_text ?? DEFAULTS.ctaButton;
-    const ctaLink = service?.button_link ?? "/contact";
     const displayItems = serviceItems.length > 0 ? serviceItems : STATIC_ITEMS;
-
     const displayHighlights = keyHighlights.length > 0 ? keyHighlights : highlights;
+
+    // Dynamic Solar System Type cards, sourced from services.items (falls back to defaults)
+    const solarTypes = (service?.items?.length > 0) ? service.items : DEFAULT_SOLAR_TYPES;
 
     const benefitsTitle = service?.benefits_title ?? DEFAULTS.benefitsTitle;
     const benefitsPointsRaw = service?.benefits_points ?? DEFAULTS.benefitsPoints;
     const benefitsPoints = (benefitsPointsRaw || "").split("\n").map(p => p.trim()).filter(Boolean);
 
-    // Overview section (image reference: "Core Services Overview")
-    const overviewImage = service?.image ? `/storage/${service.image}` : null;
     const overviewLabelLines = DEFAULTS.overviewLabel.split("\n");
 
     const heroStyle = bgImage
@@ -295,8 +298,8 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                         Talk to Our Solar Engineer
                     </Link>
                 </section>
-
             </Reveal>
+
             {/* Overview */}
             <section className="py-10 sm:py-12 md:py-16 px-4 sm:px-6 max-w-4xl mx-auto text-center">
                 <Reveal>
@@ -311,151 +314,53 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     </p>
                 </Reveal>
             </section>
-            {/* Solar System Type Card */}
-            <section className="py-6 sm:py-8 px-4 md:px-6 max-w-5xl mx-auto">
-                <Reveal>
-                    <div className="bg-[#EAF3FC] rounded-2xl p-4 sm:p-6 md:p-8">
-                        <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
-                            {/* Left: image - 45%, matches text height */}
-                            {/* Left: image - 45%, near-square on mobile, matches text height on desktop */}
-                            <div className="w-full md:w-[45%] shrink-0">
-                                <div className="w-full aspect-square md:aspect-auto md:h-full rounded-xl bg-gray-300 overflow-hidden">
-                                    {/* Replace with actual image */}
-                                    {/* <img src="/image/on-grid-solar.jpg" alt="On-Grid Solar System" className="w-full h-full object-cover" /> */}
+
+            {/* Solar System Type Cards — now dynamic from service.items (fallback to DEFAULT_SOLAR_TYPES) */}
+            {solarTypes.map((item, index) => {
+                const { bestFor, howItWorks } = parseParagraphs(item.description);
+                const benefits = parseLines(item.points);
+                return (
+                    <section key={index} className="py-6 sm:py-8 px-4 md:px-6 max-w-5xl mx-auto">
+                        <Reveal>
+                            <div className={index % 2 === 0 ? "bg-[#EAF3FC] rounded-2xl p-4 sm:p-6 md:p-8" : ""}>
+                                <div className={`flex flex-col md:flex-row${index % 2 !== 0 ? "-reverse" : ""} gap-6 md:gap-8 items-stretch`}>
+                                    <div className="w-full md:w-[45%] shrink-0">
+                                        <div className="w-full aspect-square md:aspect-auto md:h-full rounded-xl bg-gray-300 overflow-hidden">
+                                            {item.image && (
+                                                <img src={item.image.startsWith?.("http") || item.image.startsWith?.("/") ? item.image : `/storage/${item.image}`} alt={item.title} className="w-full h-full object-cover" />
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="w-full md:w-[55%]">
+                                        <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-3 sm:mb-4">
+                                            {item.title}
+                                        </h3>
+
+                                        <div className="mb-3 sm:mb-4">
+                                            <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Best For:</p>
+                                            <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">{bestFor}</p>
+                                        </div>
+
+                                        <div className="mb-3 sm:mb-4">
+                                            <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">How It Works:</p>
+                                            <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">{howItWorks}</p>
+                                        </div>
+
+                                        <div>
+                                            <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Benefits</p>
+                                            <ul className="text-xs sm:text-sm text-gray-700 space-y-1">
+                                                {benefits.map((b, i) => <li key={i}>• {b}</li>)}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                        </Reveal>
+                    </section>
+                );
+            })}
 
-                            {/* Right: content - 55% */}
-                            <div className="w-full md:w-[55%]">
-                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-3 sm:mb-4">
-                                    On-Grid Solar System (No Battery)
-                                </h3>
-
-                                <div className="mb-3 sm:mb-4">
-                                    <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Best For:</p>
-                                    <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                        Homes, offices, commercial buildings, schools, factories, and businesses with reliable electricity from the national grid.
-                                    </p>
-                                </div>
-
-                                <div className="mb-3 sm:mb-4">
-                                    <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">How It Works:</p>
-                                    <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                        An On-Grid Solar System generates electricity during the day to power your building. Any additional electricity can be exported to the utility grid (subject to local regulations), helping reduce your monthly electricity bills.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Benefits</p>
-                                    <ul className="text-xs sm:text-sm text-gray-700 space-y-1">
-                                        <li>• Lower electricity costs</li>
-                                        <li>• No battery maintenance</li>
-                                        <li>• Higher energy efficiency</li>
-                                        <li>• Lower installation cost</li>
-                                        <li>• Environmentally friendly</li>
-                                        <li>• Ideal for daytime electricity usage</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Reveal>
-            </section>
-            {/* Solar System Type Card - Off-Grid */}
-            <section className="py-6 sm:py-8 px-4 md:px-6 max-w-5xl mx-auto">
-                <Reveal>
-                    <div className="flex flex-col md:flex-row-reverse gap-6 md:gap-8 items-stretch">
-                        {/* Right: image - 45% */}
-                        <div className="w-full md:w-[45%] shrink-0">
-                            <div className="w-full aspect-square md:aspect-auto md:h-full rounded-xl bg-gray-300 overflow-hidden">
-                                {/* Replace with actual image */}
-                                {/* <img src="/image/off-grid-solar.jpg" alt="Off-Grid Solar System" className="w-full h-full object-cover" /> */}
-                            </div>
-                        </div>
-
-                        {/* Left: content - 55% */}
-                        <div className="w-full md:w-[55%]">
-                            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-3 sm:mb-4">
-                                Off-Grid Solar System (Battery Storage)
-                            </h3>
-
-                            <div className="mb-3 sm:mb-4">
-                                <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Best For:</p>
-                                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                    Remote villages, farms, construction sites, telecommunication stations, resorts, and locations without access to the electricity grid.
-                                </p>
-                            </div>
-
-                            <div className="mb-3 sm:mb-4">
-                                <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">How It Works:</p>
-                                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                    An Off-Grid Solar System stores solar energy in batteries, allowing electricity to be used day and night without relying on the national power grid.
-                                </p>
-                            </div>
-
-                            <div>
-                                <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Benefits</p>
-                                <ul className="text-xs sm:text-sm text-gray-700 space-y-1">
-                                    <li>• Complete energy independence</li>
-                                    <li>• Reliable power in remote areas</li>
-                                    <li>• Battery backup during cloudy days</li>
-                                    <li>• Suitable for rural developments</li>
-                                    <li>• Continuous electricity supply</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </Reveal>
-            </section>
-            {/* Solar System Type Card - Hybrid */}
-            <section className="py-6 sm:py-8 px-4 md:px-6 max-w-5xl mx-auto">
-                <Reveal>
-                    <div className="bg-[#EAF3FC] rounded-2xl p-4 sm:p-6 md:p-8">
-                        <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
-                            {/* Left: image - 45% */}
-                            <div className="w-full md:w-[45%] shrink-0">
-                                <div className="w-full aspect-square md:aspect-auto md:h-full rounded-xl bg-gray-300 overflow-hidden">
-                                    {/* Replace with actual image */}
-                                    {/* <img src="/image/hybrid-solar.jpg" alt="Hybrid Solar System" className="w-full h-full object-cover" /> */}
-                                </div>
-                            </div>
-
-                            {/* Right: content - 55% */}
-                            <div className="w-full md:w-[55%]">
-                                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-3 sm:mb-4">
-                                    Hybrid Solar System (Grid + Battery)
-                                </h3>
-
-                                <div className="mb-3 sm:mb-4">
-                                    <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Best For:</p>
-                                    <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                        Businesses, hospitals, hotels, factories, offices, villas, and customers requiring uninterrupted power.
-                                    </p>
-                                </div>
-
-                                <div className="mb-3 sm:mb-4">
-                                    <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">How It Works:</p>
-                                    <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                                        A Hybrid Solar System combines solar panels, battery storage, and the utility grid. During the day, solar power is used first. Excess energy charges the batteries, while the grid provides additional backup when needed.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <p className="text-sm sm:text-base font-semibold text-[#1A3A5C] mb-1">Benefits</p>
-                                    <ul className="text-xs sm:text-sm text-gray-700 space-y-1">
-                                        <li>• Reduced electricity bills</li>
-                                        <li>• Backup power during outages</li>
-                                        <li>• Maximum energy security</li>
-                                        <li>• Smart energy management</li>
-                                        <li>• Greater energy independence</li>
-                                        <li>• Ideal for critical business operations</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Reveal>
-            </section>
             {/* Our Solar Installation Services */}
             <section
                 className="py-12 sm:py-16 px-4 md:px-6 relative overflow-hidden"
@@ -474,6 +379,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
 
                 <SolarServicesCarousel />
             </section>
+
             {/* Applications */}
             <section className="py-16 px-4 md:px-6 bg-white">
                 <div className="max-w-5xl mx-auto text-center">
@@ -485,59 +391,23 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     </Reveal>
 
                     <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-                        <Reveal delay={0}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Residential Homes</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={60}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Office Buildings</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={120}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Factories & Industrial Facilities</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={180}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Hotels & Resorts</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={240}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Hospitals & Clinics</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={300}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Schools & Universities</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={360}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Shopping Malls</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={420}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Religious Buildings</p>
-                            </div>
-                        </Reveal>
-
-                        <Reveal delay={480}>
-                            <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Farms & Agricultural Facilities</p>
-                            </div>
-                        </Reveal>
+                        {[
+                            "Residential Homes",
+                            "Office Buildings",
+                            "Factories & Industrial Facilities",
+                            "Hotels & Resorts",
+                            "Hospitals & Clinics",
+                            "Schools & Universities",
+                            "Shopping Malls",
+                            "Religious Buildings",
+                            "Farms & Agricultural Facilities",
+                        ].map((label, i) => (
+                            <Reveal delay={i * 60} key={i}>
+                                <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                                    <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">{label}</p>
+                                </div>
+                            </Reveal>
+                        ))}
                     </div>
                 </div>
             </section>
@@ -551,63 +421,26 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                 </Reveal>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-                    <Reveal delay={0}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">01</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Experienced solar engineers</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={60}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">02</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Customized system design</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={120}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">03</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">High-quality solar components</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={180}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">04</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Professional installation team</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={240}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">05</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Compliance with electrical safety standards</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={300}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">06</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">After-sales maintenance and technical support</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={360}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">07</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Energy-efficient and cost-effective solutions</p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={420}>
-                        <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-                            <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">08</p>
-                            <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">One-stop engineering, procurement, and installation services</p>
-                        </div>
-                    </Reveal>
+                    {[
+                        "Experienced solar engineers",
+                        "Customized system design",
+                        "High-quality solar components",
+                        "Professional installation team",
+                        "Compliance with electrical safety standards",
+                        "After-sales maintenance and technical support",
+                        "Energy-efficient and cost-effective solutions",
+                        "One-stop engineering, procurement, and installation services",
+                    ].map((label, i) => (
+                        <Reveal delay={i * 60} key={i}>
+                            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                                <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">{String(i + 1).padStart(2, "0")}</p>
+                                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">{label}</p>
+                            </div>
+                        </Reveal>
+                    ))}
                 </div>
             </section>
+
             {/* Our Installation Process */}
             <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
                 <Reveal>
@@ -617,67 +450,25 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                 </Reveal>
 
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-10">
-                    <Reveal delay={0}>
-                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 1</p>
-                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Free Site Survey</p>
-                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                                Our engineers assess your roof, electrical system, and energy consumption.
-                            </p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={80}>
-                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 2</p>
-                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">System Design & Proposal</p>
-                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                                We recommend the most suitable On-Grid, Off-Grid, or Hybrid solution based on your requirements.
-                            </p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={160}>
-                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 3</p>
-                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Quotation & Approval</p>
-                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                                Receive a detailed proposal outlining equipment, installation scope, estimated energy savings, and project timeline.
-                            </p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={240}>
-                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 4</p>
-                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Professional Installation</p>
-                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                                Our certified technicians install the complete solar system safely and efficiently.
-                            </p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={320}>
-                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 5</p>
-                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Testing & Commissioning</p>
-                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                                We test system performance, verify electrical safety, and provide user training.
-                            </p>
-                        </div>
-                    </Reveal>
-
-                    <Reveal delay={400}>
-                        <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-                            <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 6</p>
-                            <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Maintenance & Technical Support</p>
-                            <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                                Ongoing maintenance services ensure your solar system operates at maximum efficiency for years to come.
-                            </p>
-                        </div>
-                    </Reveal>
+                    {[
+                        { step: "Step 1", title: "Free Site Survey", desc: "Our engineers assess your roof, electrical system, and energy consumption." },
+                        { step: "Step 2", title: "System Design & Proposal", desc: "We recommend the most suitable On-Grid, Off-Grid, or Hybrid solution based on your requirements." },
+                        { step: "Step 3", title: "Quotation & Approval", desc: "Receive a detailed proposal outlining equipment, installation scope, estimated energy savings, and project timeline." },
+                        { step: "Step 4", title: "Professional Installation", desc: "Our certified technicians install the complete solar system safely and efficiently." },
+                        { step: "Step 5", title: "Testing & Commissioning", desc: "We test system performance, verify electrical safety, and provide user training." },
+                        { step: "Step 6", title: "Maintenance & Technical Support", desc: "Ongoing maintenance services ensure your solar system operates at maximum efficiency for years to come." },
+                    ].map((s, i) => (
+                        <Reveal delay={i * 80} key={i}>
+                            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                                <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">{s.step}</p>
+                                <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">{s.title}</p>
+                                <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">{s.desc}</p>
+                            </div>
+                        </Reveal>
+                    ))}
                 </div>
             </section>
+
             {/* FAQs */}
             <section className="py-16 px-4 md:px-6">
                 <div className="max-w-5xl mx-auto">
@@ -687,124 +478,50 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                         </Reveal>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-start">
-                            {/* Column 1 */}
                             <div className="flex flex-col gap-3 sm:gap-4">
-                                <Reveal delay={0}>
-                                    <div className="bg-white rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setOpen(open === "s1" ? null : "s1")}
-                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                                        >
-                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                What types of air conditioners are covered under the AMS program?
-                                            </span>
-                                            <span className="text-[#1A3A5C] shrink-0">{open === "s1" ? "▼" : "▶"}</span>
-                                        </button>
-                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s1" ? "300px" : "0px" }}>
-                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                We maintain wall-mounted split units, cassette units, ceiling concealed units, ducted systems, floor-standing units, VRF/VRV systems, packaged units, and central chilled water air conditioning systems.
+                                {[
+                                    { key: "s1", q: "What types of air conditioners are covered under the AMS program?", a: "We maintain wall-mounted split units, cassette units, ceiling concealed units, ducted systems, floor-standing units, VRF/VRV systems, packaged units, and central chilled water air conditioning systems." },
+                                    { key: "s2", q: "Can I include multiple buildings under one maintenance contract?", a: "Yes, our AMS program can cover multiple buildings or sites under a single contract, with a consolidated maintenance schedule and unified reporting across all locations." },
+                                    { key: "s3", q: "What happens if an air conditioner breaks down between scheduled maintenance visits?", a: "AMS customers can request emergency repair support outside of scheduled visits. Our technicians will assess the issue and carry out the necessary repairs as quickly as possible." },
+                                ].map((faq, i) => (
+                                    <Reveal delay={i * 80} key={faq.key}>
+                                        <div className="bg-white rounded-xl overflow-hidden">
+                                            <button
+                                                onClick={() => setOpen(open === faq.key ? null : faq.key)}
+                                                className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                            >
+                                                <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">{faq.q}</span>
+                                                <span className="text-[#1A3A5C] shrink-0">{open === faq.key ? "▼" : "▶"}</span>
+                                            </button>
+                                            <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === faq.key ? "300px" : "0px" }}>
+                                                <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">{faq.a}</div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Reveal>
-
-                                <Reveal delay={80}>
-                                    <div className="bg-white rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setOpen(open === "s2" ? null : "s2")}
-                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                                        >
-                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Can I include multiple buildings under one maintenance contract?
-                                            </span>
-                                            <span className="text-[#1A3A5C] shrink-0">{open === "s2" ? "▼" : "▶"}</span>
-                                        </button>
-                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s2" ? "300px" : "0px" }}>
-                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Yes, our AMS program can cover multiple buildings or sites under a single contract, with a consolidated maintenance schedule and unified reporting across all locations.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Reveal>
-
-                                <Reveal delay={160}>
-                                    <div className="bg-white rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setOpen(open === "s3" ? null : "s3")}
-                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                                        >
-                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                What happens if an air conditioner breaks down between scheduled maintenance visits?
-                                            </span>
-                                            <span className="text-[#1A3A5C] shrink-0">{open === "s3" ? "▼" : "▶"}</span>
-                                        </button>
-                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s3" ? "300px" : "0px" }}>
-                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                AMS customers can request emergency repair support outside of scheduled visits. Our technicians will assess the issue and carry out the necessary repairs as quickly as possible.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Reveal>
+                                    </Reveal>
+                                ))}
                             </div>
 
-                            {/* Column 2 */}
                             <div className="flex flex-col gap-3 sm:gap-4">
-                                <Reveal delay={240}>
-                                    <div className="bg-white rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setOpen(open === "s4" ? null : "s4")}
-                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                                        >
-                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Do you provide maintenance reports after each visit?
-                                            </span>
-                                            <span className="text-[#1A3A5C] shrink-0">{open === "s4" ? "▼" : "▶"}</span>
-                                        </button>
-                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s4" ? "300px" : "0px" }}>
-                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Yes, after every service visit we provide a detailed report covering the inspection checklist, work performed, system condition, and any recommended follow-up actions.
+                                {[
+                                    { key: "s4", q: "Do you provide maintenance reports after each visit?", a: "Yes, after every service visit we provide a detailed report covering the inspection checklist, work performed, system condition, and any recommended follow-up actions." },
+                                    { key: "s5", q: "Can the maintenance schedule be arranged outside normal office hours?", a: "Yes, we can schedule maintenance visits during evenings, weekends, or other off-hours to minimize disruption to your business operations." },
+                                    { key: "s6", q: "How do I know which AMS package is right for my business?", a: "During your free site survey, our engineers assess your equipment type, quantity, and operating conditions, then recommend the Basic, Standard, or Premium package that best fits your maintenance needs and budget." },
+                                ].map((faq, i) => (
+                                    <Reveal delay={240 + i * 80} key={faq.key}>
+                                        <div className="bg-white rounded-xl overflow-hidden">
+                                            <button
+                                                onClick={() => setOpen(open === faq.key ? null : faq.key)}
+                                                className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                                            >
+                                                <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">{faq.q}</span>
+                                                <span className="text-[#1A3A5C] shrink-0">{open === faq.key ? "▼" : "▶"}</span>
+                                            </button>
+                                            <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === faq.key ? "300px" : "0px" }}>
+                                                <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">{faq.a}</div>
                                             </div>
                                         </div>
-                                    </div>
-                                </Reveal>
-
-                                <Reveal delay={320}>
-                                    <div className="bg-white rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setOpen(open === "s5" ? null : "s5")}
-                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                                        >
-                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                Can the maintenance schedule be arranged outside normal office hours?
-                                            </span>
-                                            <span className="text-[#1A3A5C] shrink-0">{open === "s5" ? "▼" : "▶"}</span>
-                                        </button>
-                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s5" ? "300px" : "0px" }}>
-                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                Yes, we can schedule maintenance visits during evenings, weekends, or other off-hours to minimize disruption to your business operations.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Reveal>
-
-                                <Reveal delay={400}>
-                                    <div className="bg-white rounded-xl overflow-hidden">
-                                        <button
-                                            onClick={() => setOpen(open === "s6" ? null : "s6")}
-                                            className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                                        >
-                                            <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                                                How do I know which AMS package is right for my business?
-                                            </span>
-                                            <span className="text-[#1A3A5C] shrink-0">{open === "s6" ? "▼" : "▶"}</span>
-                                        </button>
-                                        <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s6" ? "300px" : "0px" }}>
-                                            <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                                                During your free site survey, our engineers assess your equipment type, quantity, and operating conditions, then recommend the Basic, Standard, or Premium package that best fits your maintenance needs and budget.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Reveal>
+                                    </Reveal>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -867,12 +584,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
                     <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
 
-                    <div className="flex flex-row gap-2 "><Link
-                        href="/contact"
-                        className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                    >
-                        Request Maintenance Service
-                    </Link>
+                    <div className="flex flex-row gap-2 ">
+                        <Link
+                            href="/contact"
+                            className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                        >
+                            Request Maintenance Service
+                        </Link>
                         <Link
                             href="/contact"
                             className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
@@ -884,7 +602,8 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                             className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
                         >
                             Book Site Inspection
-                        </Link></div>
+                        </Link>
+                    </div>
                 </Reveal>
             </section>
         </MepLayout>

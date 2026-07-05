@@ -81,7 +81,6 @@ function SolarServicesCarousel() {
   return (
     <div className="max-w-6xl mx-auto relative">
       {/* Left arrow */}
-      {/* Left arrow */}
       <button
         onClick={() => scroll("left")}
         aria-label="Scroll left"
@@ -109,7 +108,6 @@ function SolarServicesCarousel() {
           >
             <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
               {/* Replace with actual image */}
-              {/* <img src="/image/solar-design.jpg" alt={service.title} className="w-full h-full object-cover" draggable={false} /> */}
             </div>
             <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
               {service.title}
@@ -123,7 +121,6 @@ function SolarServicesCarousel() {
         ))}
       </div>
 
-      {/* Right arrow */}
       {/* Right arrow */}
       <button
         onClick={() => scroll("right")}
@@ -147,14 +144,6 @@ const STATIC_ITEMS = [
   { icon: <Cpu className="w-10 h-10 text-white" />, title: "Building Management", points: ["BMS installation", "Smart building systems", "Energy monitoring"] },
   { icon: <Battery className="w-10 h-10 text-white" />, title: "Backup Power Systems", points: ["Generator installation", "UPS systems", "Battery backup", "Synchronization"] },
 ];
-const STATIC_ICONS = [
-  <Zap className="w-10 h-10 text-white" />,
-  <Lightbulb className="w-10 h-10 text-white" />,
-  <Shield className="w-10 h-10 text-white" />,
-  <Radio className="w-10 h-10 text-white" />,
-  <Cpu className="w-10 h-10 text-white" />,
-  <Battery className="w-10 h-10 text-white" />,
-];
 const highlights = [
   { number: "01", label: "Experienced electrical engineers" },
   { number: "02", label: "International standard installation" },
@@ -163,21 +152,32 @@ const highlights = [
   { number: "05", label: "Reliable testing & commissioning" },
   { number: "06", label: "Strong after-sales support" },
 ];
-const steps = [
-  { number: "1", label: "Site Survey" },
-  { number: "2", label: "Electrical Load Calculation" },
-  { number: "3", label: "System Design" },
-  { number: "4", label: "Quotation & BOQ" },
-  { number: "5", label: "Installation" },
-  { number: "6", label: "Testing & Commissioning" },
-  { number: "7", label: "Maintenance Support" },
+// Generic item shape (matches admin form): { title, subtitle, description, points, image }
+// subtitle = frequency, description = "suitable for" list (one per line), points = "includes" list (one per line)
+const DEFAULT_PACKAGES = [
+  {
+    title: "Basic Package",
+    subtitle: "Every 6 months",
+    description: "Small offices\nRetail shops\nResidential Villas",
+    points: "General Inspection\nAir Conditioner Cleaning\nMaintenance Report",
+  },
+  {
+    title: "Standard Package",
+    subtitle: "Every 4 months",
+    description: "Medium-sized offices\nRestaurants\nClinics\nSchools",
+    points: "Everything in Basic\nMore frequent inspections\nPriority scheduling",
+  },
+  {
+    title: "Premium Package",
+    subtitle: "Every 3 months",
+    description: "Factories\nHotels\nHospitals\nData centers\nCommercial buildings",
+    points: "Maximum preventive maintenance\nPriority technical support\nDetailed performance reporting\nReduced risk of system failure",
+  },
 ];
-const staticFaqs = [
-  { q: "Do you install CCTV and fire alarm systems?", a: "Yes, we provide CCTV, fire alarm, access control, and ELV system installation." },
-  { q: "Can you upgrade old electrical systems?", a: "Yes, we assess and upgrade existing electrical systems to meet current safety standards." },
-  { q: "Do you install MDB installation?", a: "Yes, we install MDB, SMDB, and DB panels for all building types." },
-  { q: "Do you provide maintenance services?", a: "Yes, we offer preventive and corrective maintenance for all electrical and ELV systems." },
-];
+
+function parseLines(text) {
+  return (text || "").split("\n").map((s) => s.trim()).filter(Boolean);
+}
 const DEFAULTS = {
   title: "Annual Maintenance Service",
   description: "Annual Air Conditioner Maintenance Service (AMS) in Cambodia",
@@ -213,11 +213,9 @@ function Reveal({ children, className = "", delay = 0 }) {
   );
 }
 
-export default function Electrical({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
+export default function Maintenance({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
   const [open, setOpen] = useState(null);
   const [contractOpen, setContractOpen] = useState(false);
-  const [openField, setOpenField] = useState(null);
-  const [openLocation, setOpenLocation] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedContract, setSelectedContract] = useState(null);
 
@@ -225,18 +223,16 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
   const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
   const heroTitle = service?.title ?? DEFAULTS.title;
   const heroDesc = service?.description ?? DEFAULTS.description;
-  const ctaButton = service?.button_text ?? DEFAULTS.ctaButton;
-  const ctaLink = service?.button_link ?? "/contact";
   const displayItems = serviceItems.length > 0 ? serviceItems : STATIC_ITEMS;
-
   const displayHighlights = keyHighlights.length > 0 ? keyHighlights : highlights;
+
+  // Dynamic Service Packages, sourced from services.items (falls back to defaults)
+  const packages = (service?.items?.length > 0) ? service.items : DEFAULT_PACKAGES;
 
   const benefitsTitle = service?.benefits_title ?? DEFAULTS.benefitsTitle;
   const benefitsPointsRaw = service?.benefits_points ?? DEFAULTS.benefitsPoints;
   const benefitsPoints = (benefitsPointsRaw || "").split("\n").map(p => p.trim()).filter(Boolean);
 
-  // Overview section (image reference: "Core Services Overview")
-  const overviewImage = service?.image ? `/storage/${service.image}` : null;
   const overviewLabelLines = DEFAULTS.overviewLabel.split("\n");
 
   const heroStyle = bgImage
@@ -306,7 +302,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
             Download Service Agreement
           </Link>
         </section>
-
       </Reveal>
 
 
@@ -330,7 +325,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
       <section className="max-w-6xl mx-auto px-4 md:px-6 py-12 sm:py-16">
         <Reveal>
           <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden">
-            {/* Left: image */}
             <div className="w-full md:w-[45%] shrink-0">
               <img
                 src="/Services/Maintainent/ARman.png"
@@ -339,7 +333,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
               />
             </div>
 
-            {/* Right: content */}
             <div className="w-full md:w-[55%] bg-[#CFE7F6] p-6 sm:p-8 md:p-10 flex flex-col justify-center">
               <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-2 sm:mb-3 leading-snug">
                 Why Annual Maintenance Matters
@@ -379,59 +372,23 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
           </Reveal>
 
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
-            <Reveal delay={0}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Office Buildings</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={60}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Factories & Industrial Facilities</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={120}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Hotels & Resorts</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={180}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Hospitals & Clinics</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={240}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Schools & Universities</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={300}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Shopping Malls & Retail Stores</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={360}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Restaurants & Commercial Kitchens</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={420}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Banks & Financial Institutions</p>
-              </div>
-            </Reveal>
-
-            <Reveal delay={480}>
-              <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
-                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">Mixed-use Commercial Buildings</p>
-              </div>
-            </Reveal>
+            {[
+              "Office Buildings",
+              "Factories & Industrial Facilities",
+              "Hotels & Resorts",
+              "Hospitals & Clinics",
+              "Schools & Universities",
+              "Shopping Malls & Retail Stores",
+              "Restaurants & Commercial Kitchens",
+              "Banks & Financial Institutions",
+              "Mixed-use Commercial Buildings",
+            ].map((label, i) => (
+              <Reveal delay={i * 60} key={i}>
+                <div className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4 text-left hover-lift w-[150px] sm:w-[170px] md:w-[180px] min-h-[72px] sm:min-h-[80px] flex items-center">
+                  <p className="text-xs sm:text-sm font-medium text-[#1A3A5C] leading-snug">{label}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
@@ -457,9 +414,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
       </section>
 
 
-
-
-      {/* Service Packages */}
+      {/* Service Packages — now dynamic from service.items (fallback to DEFAULT_PACKAGES) */}
       <section className="py-16 px-4 md:px-6 max-w-6xl mx-auto">
         <Reveal>
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] text-center mb-10">
@@ -468,96 +423,43 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
         </Reveal>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6">
-          <Reveal delay={0}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-3 sm:p-5 md:p-6 h-full hover-lift">
-              <div className="flex justify-between items-start mb-2 sm:mb-3">
-                <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">
-                  Basic Package
-                </h3>
-                <span className="text-xl sm:text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">01</span>
-              </div>
+          {packages.map((pkg, index) => {
+            const suitableFor = parseLines(pkg.description);
+            const includes = parseLines(pkg.points);
+            const orderNumber = String(index + 1).padStart(2, "0");
+            return (
+              <Reveal key={index} delay={index * 100}>
+                <div
+                  className={`border-2 border-[#2E9BD6] rounded-2xl p-3 sm:p-5 md:p-6 h-full hover-lift ${
+                    index === 2 ? "col-span-2 md:col-span-1" : ""
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2 sm:mb-3">
+                    <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">
+                      {pkg.title}
+                    </h3>
+                    <span className="text-xl sm:text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">
+                      {orderNumber}
+                    </span>
+                  </div>
 
-              <p className="text-[10px] sm:text-xs text-[#2E9BD6] font-medium mb-3 sm:mb-4 leading-snug">
-                Service Frequency<br />Every 6 months
-              </p>
+                  <p className="text-[10px] sm:text-xs text-[#2E9BD6] font-medium mb-3 sm:mb-4 leading-snug">
+                    Service Frequency<br />{pkg.subtitle}
+                  </p>
 
-              <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
-              <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside mb-3 sm:mb-4">
-                <li>Small offices</li>
-                <li>Retail shops</li>
-                <li>Residential Villas</li>
-              </ul>
+                  <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
+                  <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside mb-3 sm:mb-4">
+                    {suitableFor.map((s, i) => <li key={i}>{s}</li>)}
+                  </ul>
 
-              <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
-              <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside">
-                <li>General Inspection</li>
-                <li>Air Conditioner Cleaning</li>
-                <li>Maintenance Report</li>
-              </ul>
-            </div>
-          </Reveal>
-
-          <Reveal delay={100}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-3 sm:p-5 md:p-6 h-full hover-lift">
-              <div className="flex justify-between items-start mb-2 sm:mb-3">
-                <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">
-                  Standard Package
-                </h3>
-                <span className="text-xl sm:text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">02</span>
-              </div>
-
-              <p className="text-[10px] sm:text-xs text-[#2E9BD6] font-medium mb-3 sm:mb-4 leading-snug">
-                Service Frequency<br />Every 4 months
-              </p>
-
-              <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
-              <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside mb-3 sm:mb-4">
-                <li>Medium-sized offices</li>
-                <li>Restaurants</li>
-                <li>Clinics</li>
-                <li>Schools</li>
-              </ul>
-
-              <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
-              <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside">
-                <li>Everything in Basic</li>
-                <li>More frequent inspections</li>
-                <li>Priority scheduling</li>
-              </ul>
-            </div>
-          </Reveal>
-
-          <Reveal delay={200}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-3 sm:p-5 md:p-6 h-full hover-lift col-span-2 md:col-span-1">
-              <div className="flex justify-between items-start mb-2 sm:mb-3">
-                <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">
-                  Premium Package
-                </h3>
-                <span className="text-xl sm:text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">03</span>
-              </div>
-
-              <p className="text-[10px] sm:text-xs text-[#2E9BD6] font-medium mb-3 sm:mb-4 leading-snug">
-                Service Frequency<br />Every 3 months
-              </p>
-
-              <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
-              <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside mb-3 sm:mb-4">
-                <li>Factories</li>
-                <li>Hotels</li>
-                <li>Hospitals</li>
-                <li>Data centers</li>
-                <li>Commercial buildings</li>
-              </ul>
-
-              <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
-              <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside">
-                <li>Maximum preventive maintenance</li>
-                <li>Priority technical support</li>
-                <li>Detailed performance reporting</li>
-                <li>Reduced risk of system failure</li>
-              </ul>
-            </div>
-          </Reveal>
+                  <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
+                  <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside">
+                    {includes.map((inc, i) => <li key={i}>{inc}</li>)}
+                  </ul>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </section>
 
@@ -571,65 +473,22 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
         </Reveal>
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 sm:gap-x-8 gap-y-8 sm:gap-y-10">
-          <Reveal delay={0}>
-            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-              <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 1</p>
-              <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Customer Registration</p>
-              <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                Complete the AMS Registration Form.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={80}>
-            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-              <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 2</p>
-              <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Free Site Survey</p>
-              <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                Our engineers inspect your air conditioning systems and assess maintenance requirements.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={160}>
-            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-              <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 3</p>
-              <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Quotation & Agreement</p>
-              <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                Receive a customized maintenance proposal based on equipment quantity and operating conditions.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={240}>
-            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-              <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 4</p>
-              <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Service Scheduling</p>
-              <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                A maintenance calendar is prepared according to your selected package.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={320}>
-            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-              <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 5</p>
-              <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Regular Maintenance Visits</p>
-              <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                Our certified technicians perform scheduled inspections and cleaning throughout the contract period.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={400}>
-            <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
-              <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">Step 6</p>
-              <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">Performance Reporting</p>
-              <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">
-                Receive detailed maintenance reports after every service visit.
-              </p>
-            </div>
-          </Reveal>
+          {[
+            { step: "Step 1", title: "Customer Registration", desc: "Complete the AMS Registration Form." },
+            { step: "Step 2", title: "Free Site Survey", desc: "Our engineers inspect your air conditioning systems and assess maintenance requirements." },
+            { step: "Step 3", title: "Quotation & Agreement", desc: "Receive a customized maintenance proposal based on equipment quantity and operating conditions." },
+            { step: "Step 4", title: "Service Scheduling", desc: "A maintenance calendar is prepared according to your selected package." },
+            { step: "Step 5", title: "Regular Maintenance Visits", desc: "Our certified technicians perform scheduled inspections and cleaning throughout the contract period." },
+            { step: "Step 6", title: "Performance Reporting", desc: "Receive detailed maintenance reports after every service visit." },
+          ].map((s, i) => (
+            <Reveal delay={i * 80} key={i}>
+              <div className="min-h-[150px] sm:min-h-[140px] lg:min-h-[150px]">
+                <p className="text-orange-500 font-bold text-xs sm:text-sm mb-1">{s.step}</p>
+                <p className="text-[#1A3A5C] font-bold text-xs sm:text-sm mb-2">{s.title}</p>
+                <p className="text-[11px] sm:text-xs md:text-sm text-gray-700 leading-relaxed">{s.desc}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
@@ -637,7 +496,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
       {/* Contract Duration & Customer Registration */}
       <section className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          {/* Contract Duration */}
           <Reveal delay={0}>
             <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full flex flex-col">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
@@ -683,7 +541,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
             </div>
           </Reveal>
 
-          {/* Customer Registration */}
           <Reveal delay={120}>
             <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full flex flex-col">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-2">
@@ -726,10 +583,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
 
       {/* Service Location, Equipment, Package & Contract */}
       <section className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
-        {/* Top row: Service Location + Equipment Information */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 mb-8 sm:mb-12">
-          {/* Service Location */}
-          {/* Service Location */}
           <Reveal delay={0}>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
@@ -757,7 +611,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
             </div>
           </Reveal>
 
-          {/* Equipment Information */}
           <Reveal delay={100}>
             <div>
               <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-2 sm:mb-3">
@@ -777,7 +630,6 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
           </Reveal>
         </div>
 
-        {/* Bottom row: Choose Your Service Package + Select Contract Duration */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <Reveal delay={0}>
             <div className="bg-[#DFF1FC] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full">
@@ -785,23 +637,23 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                 Choose Your Service Package
               </h3>
               <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
-                {["Basic", "Standard", "Premium"].map((pkg, i) => (
+                {packages.map((pkg, i) => (
                   <li key={i}>
                     <button
-                      onClick={() => setSelectedPackage(selectedPackage === pkg ? null : pkg)}
+                      onClick={() => setSelectedPackage(selectedPackage === pkg.title ? null : pkg.title)}
                       className="flex items-center gap-2"
                     >
                       <span
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === pkg ? "bg-[#1A3A5C]" : "bg-transparent"
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === pkg.title ? "bg-[#1A3A5C]" : "bg-transparent"
                           }`}
                       >
-                        {selectedPackage === pkg && (
+                        {selectedPackage === pkg.title && (
                           <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                         )}
                       </span>
-                      {pkg}
+                      {pkg.title}
                     </button>
                   </li>
                 ))}
@@ -851,61 +703,23 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
         </Reveal>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
-          <Reveal delay={0}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">01</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Experienced solar engineers</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={60}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">02</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Customized system design</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">03</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">High-quality solar components</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={180}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">04</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Professional installation team</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={240}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">05</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Compliance with electrical safety standards</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={300}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">06</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">After-sales maintenance and technical support</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={360}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">07</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">Energy-efficient and cost-effective solutions</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={420}>
-            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">08</p>
-              <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">One-stop engineering, procurement, and installation services</p>
-            </div>
-          </Reveal>
+          {[
+            "Experienced solar engineers",
+            "Customized system design",
+            "High-quality solar components",
+            "Professional installation team",
+            "Compliance with electrical safety standards",
+            "After-sales maintenance and technical support",
+            "Energy-efficient and cost-effective solutions",
+            "One-stop engineering, procurement, and installation services",
+          ].map((label, i) => (
+            <Reveal delay={i * 60} key={i}>
+              <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">
+                <p className="text-3xl sm:text-4xl font-extrabold text-orange-500 mb-2">{String(i + 1).padStart(2, "0")}</p>
+                <p className="text-xs sm:text-sm font-medium text-[#1A3A5C]">{label}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </section>
 
@@ -919,124 +733,50 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
             </Reveal>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-start">
-              {/* Column 1 */}
               <div className="flex flex-col gap-3 sm:gap-4">
-                <Reveal delay={0}>
-                  <div className="bg-white rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setOpen(open === "s1" ? null : "s1")}
-                      className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                    >
-                      <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                        What types of air conditioners are covered under the AMS program?
-                      </span>
-                      <span className="text-[#1A3A5C] shrink-0">{open === "s1" ? "▼" : "▶"}</span>
-                    </button>
-                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s1" ? "300px" : "0px" }}>
-                      <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                        We maintain wall-mounted split units, cassette units, ceiling concealed units, ducted systems, floor-standing units, VRF/VRV systems, packaged units, and central chilled water air conditioning systems.
+                {[
+                  { key: "s1", q: "What types of air conditioners are covered under the AMS program?", a: "We maintain wall-mounted split units, cassette units, ceiling concealed units, ducted systems, floor-standing units, VRF/VRV systems, packaged units, and central chilled water air conditioning systems." },
+                  { key: "s2", q: "Can I include multiple buildings under one maintenance contract?", a: "Yes, our AMS program can cover multiple buildings or sites under a single contract, with a consolidated maintenance schedule and unified reporting across all locations." },
+                  { key: "s3", q: "What happens if an air conditioner breaks down between scheduled maintenance visits?", a: "AMS customers can request emergency repair support outside of scheduled visits. Our technicians will assess the issue and carry out the necessary repairs as quickly as possible." },
+                ].map((faq, i) => (
+                  <Reveal delay={i * 80} key={faq.key}>
+                    <div className="bg-white rounded-xl overflow-hidden">
+                      <button
+                        onClick={() => setOpen(open === faq.key ? null : faq.key)}
+                        className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                      >
+                        <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">{faq.q}</span>
+                        <span className="text-[#1A3A5C] shrink-0">{open === faq.key ? "▼" : "▶"}</span>
+                      </button>
+                      <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === faq.key ? "300px" : "0px" }}>
+                        <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">{faq.a}</div>
                       </div>
                     </div>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={80}>
-                  <div className="bg-white rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setOpen(open === "s2" ? null : "s2")}
-                      className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                    >
-                      <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                        Can I include multiple buildings under one maintenance contract?
-                      </span>
-                      <span className="text-[#1A3A5C] shrink-0">{open === "s2" ? "▼" : "▶"}</span>
-                    </button>
-                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s2" ? "300px" : "0px" }}>
-                      <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                        Yes, our AMS program can cover multiple buildings or sites under a single contract, with a consolidated maintenance schedule and unified reporting across all locations.
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={160}>
-                  <div className="bg-white rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setOpen(open === "s3" ? null : "s3")}
-                      className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                    >
-                      <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                        What happens if an air conditioner breaks down between scheduled maintenance visits?
-                      </span>
-                      <span className="text-[#1A3A5C] shrink-0">{open === "s3" ? "▼" : "▶"}</span>
-                    </button>
-                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s3" ? "300px" : "0px" }}>
-                      <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                        AMS customers can request emergency repair support outside of scheduled visits. Our technicians will assess the issue and carry out the necessary repairs as quickly as possible.
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
+                  </Reveal>
+                ))}
               </div>
 
-              {/* Column 2 */}
               <div className="flex flex-col gap-3 sm:gap-4">
-                <Reveal delay={240}>
-                  <div className="bg-white rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setOpen(open === "s4" ? null : "s4")}
-                      className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                    >
-                      <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                        Do you provide maintenance reports after each visit?
-                      </span>
-                      <span className="text-[#1A3A5C] shrink-0">{open === "s4" ? "▼" : "▶"}</span>
-                    </button>
-                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s4" ? "300px" : "0px" }}>
-                      <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                        Yes, after every service visit we provide a detailed report covering the inspection checklist, work performed, system condition, and any recommended follow-up actions.
+                {[
+                  { key: "s4", q: "Do you provide maintenance reports after each visit?", a: "Yes, after every service visit we provide a detailed report covering the inspection checklist, work performed, system condition, and any recommended follow-up actions." },
+                  { key: "s5", q: "Can the maintenance schedule be arranged outside normal office hours?", a: "Yes, we can schedule maintenance visits during evenings, weekends, or other off-hours to minimize disruption to your business operations." },
+                  { key: "s6", q: "How do I know which AMS package is right for my business?", a: "During your free site survey, our engineers assess your equipment type, quantity, and operating conditions, then recommend the Basic, Standard, or Premium package that best fits your maintenance needs and budget." },
+                ].map((faq, i) => (
+                  <Reveal delay={240 + i * 80} key={faq.key}>
+                    <div className="bg-white rounded-xl overflow-hidden">
+                      <button
+                        onClick={() => setOpen(open === faq.key ? null : faq.key)}
+                        className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
+                      >
+                        <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">{faq.q}</span>
+                        <span className="text-[#1A3A5C] shrink-0">{open === faq.key ? "▼" : "▶"}</span>
+                      </button>
+                      <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === faq.key ? "300px" : "0px" }}>
+                        <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">{faq.a}</div>
                       </div>
                     </div>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={320}>
-                  <div className="bg-white rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setOpen(open === "s5" ? null : "s5")}
-                      className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                    >
-                      <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                        Can the maintenance schedule be arranged outside normal office hours?
-                      </span>
-                      <span className="text-[#1A3A5C] shrink-0">{open === "s5" ? "▼" : "▶"}</span>
-                    </button>
-                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s5" ? "300px" : "0px" }}>
-                      <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                        Yes, we can schedule maintenance visits during evenings, weekends, or other off-hours to minimize disruption to your business operations.
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={400}>
-                  <div className="bg-white rounded-xl overflow-hidden">
-                    <button
-                      onClick={() => setOpen(open === "s6" ? null : "s6")}
-                      className="w-full flex justify-between items-center gap-3 px-4 sm:px-5 py-3 sm:py-4 text-left"
-                    >
-                      <span className="text-xs sm:text-sm font-semibold text-[#1A3A5C]">
-                        How do I know which AMS package is right for my business?
-                      </span>
-                      <span className="text-[#1A3A5C] shrink-0">{open === "s6" ? "▼" : "▶"}</span>
-                    </button>
-                    <div className="overflow-hidden transition-all duration-300 ease-out" style={{ maxHeight: open === "s6" ? "300px" : "0px" }}>
-                      <div className="px-4 sm:px-5 pb-4 text-xs sm:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                        During your free site survey, our engineers assess your equipment type, quantity, and operating conditions, then recommend the Basic, Standard, or Premium package that best fits your maintenance needs and budget.
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
+                  </Reveal>
+                ))}
               </div>
             </div>
           </div>
@@ -1093,12 +833,13 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
           <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
           <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
 
-          <div className="flex flex-row gap-2 "><Link
-            href="/contact"
-            className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-          >
-            Request Maintenance Service
-          </Link>
+          <div className="flex flex-row gap-2 ">
+            <Link
+              href="/contact"
+              className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+            >
+              Request Maintenance Service
+            </Link>
             <Link
               href="/contact"
               className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
@@ -1110,7 +851,8 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
               className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
             >
               Book Site Inspection
-            </Link></div>
+            </Link>
+          </div>
         </Reveal>
       </section>
     </MepLayout>

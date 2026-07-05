@@ -3,9 +3,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import BackToDashboard from "@/Components/BackToDashboard";
 
 const TYPE_OPTIONS = [
-    { value: "mechanical", label: "Mechanical / HVAC" },
-    { value: "electrical", label: "Electrical & ELV" },
-    { value: "plumbing",   label: "Plumbing" },
+    { value: "mechanical",  label: "Mechanical / HVAC" },
+    { value: "electrical",  label: "Electrical & ELV" },
+    { value: "plumbing",    label: "Plumbing" },
+    { value: "maintenance", label: "Maintenance (AMS)" },
+    { value: "solasystem",  label: "Solar System" },
 ];
 
 export default function Create() {
@@ -81,26 +83,26 @@ export default function Create() {
                         {errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                         <input type="text" value={data.title} onChange={(e) => setData("title", e.target.value)}
                             placeholder="e.g. Plumbing System"
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
                         {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
                         <input type="text" value={data.tagline} onChange={(e) => setData("tagline", e.target.value)}
                             placeholder="e.g. What We Do"
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea rows={4} value={data.description} onChange={(e) => setData("description", e.target.value)}
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm resize-none" />
-                    </div>
+                    </div> */}
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Hero Image</label>
@@ -108,14 +110,14 @@ export default function Create() {
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
                     </div>
 
-                    <div>
+                    {/* <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Button Text</label>
                         <input type="text" value={data.button_text} onChange={(e) => setData("button_text", e.target.value)}
                             placeholder="View Plumbing Solutions"
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
-                    </div>
+                    </div> */}
 
-                    <div className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50">
+                    {/* <div className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50">
                         <p className="text-sm font-semibold">Benefits Section</p>
                         <input type="text" placeholder="Benefits title" value={data.benefits_title}
                             onChange={(e) => setData("benefits_title", e.target.value)}
@@ -123,7 +125,7 @@ export default function Create() {
                         <textarea rows={4} placeholder="One benefit per line" value={data.benefits_points}
                             onChange={(e) => setData("benefits_points", e.target.value)}
                             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
-                    </div>
+                    </div> */}
 
                     {/* Items (3 grid cards) */}
                     <div>
