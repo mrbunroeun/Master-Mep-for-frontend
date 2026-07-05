@@ -63,12 +63,12 @@ function FuelPumpIcon({ size = 20 }) {
 }
 
 const CATEGORY_META = [
-  { label: "Commercial Buildings",       icon: <Building2 size={20} /> },
-  { label: "Hospitals",                  icon: <Hospital size={20} /> },
-  { label: "Banks",                      icon: <Landmark size={20} /> },
-  { label: "Restaurants & Cafés",       icon: <UtensilsCrossed size={20} /> },
-  { label: "Luxury Villas",              icon: <LuxuryVillaIcon size={20} /> },
-  { label: "Fitness Centers",            icon: <FitnessCenterIcon size={20} /> },
+  { label: "Commercial Buildings", icon: <Building2 size={20} /> },
+  { label: "Hospitals", icon: <Hospital size={20} /> },
+  { label: "Banks", icon: <Landmark size={20} /> },
+  { label: "Restaurants & Cafés", icon: <UtensilsCrossed size={20} /> },
+  { label: "Luxury Villas", icon: <LuxuryVillaIcon size={20} /> },
+  { label: "Fitness Centers", icon: <FitnessCenterIcon size={20} /> },
   { label: "Fuel & Industrial Projects", icon: <FuelPumpIcon size={20} /> },
 ];
 
@@ -196,7 +196,7 @@ function ProjectImageCarousel({ images = [], title }) {
     isDragging.current = false;
     const el = scrollRef.current;
     if (el && e?.pointerId != null) {
-      try { el.releasePointerCapture(e.pointerId); } catch {}
+      try { el.releasePointerCapture(e.pointerId); } catch { }
     }
   };
 
@@ -286,16 +286,16 @@ function ProjectCard({ project, onPlayVideo }) {
   const scopeItems = Array.isArray(project.scope)
     ? project.scope
     : (project.scope || project.description || "")
-        .split("\n")
-        .map((s) => s.trim())
-        .filter(Boolean);
+      .split("\n")
+      .map((s) => s.trim())
+      .filter(Boolean);
 
   // Supports project.images (array of up to 3) or falls back to single project.image
   const projectImages = Array.isArray(project.images) && project.images.length > 0
     ? project.images.slice(0, 3)
     : project.image
-    ? [project.image]
-    : [];
+      ? [project.image]
+      : [];
 
   return (
     <div
@@ -398,6 +398,8 @@ export default function Projects({ projects = [], heroImage = null }) {
   const params = new URLSearchParams(window.location.search);
   const [activeCategory, setActiveCategory] = useState(params.get("category") || "All");
   const [activeVideo, setActiveVideo] = useState(null);
+  const heroSecImage = "/HeroSection/heroSection.png";
+
 
   const grouped = projects.reduce((acc, p) => {
     const cat = p.category || "General";
@@ -429,7 +431,7 @@ export default function Projects({ projects = [], heroImage = null }) {
   };
 
   const filterBtn = (isActive) =>
-  `flex flex-col items-center justify-center gap-2 rounded-2xl
+    `flex flex-col items-center justify-center gap-2 rounded-2xl
    text-xs font-medium transition-all duration-200
    px-4 py-5 hover:scale-105 active:scale-95
    w-[110px] sm:w-[130px] md:w-[150px]
@@ -447,14 +449,17 @@ export default function Projects({ projects = [], heroImage = null }) {
 
       {/* HERO — dynamic image */}
       <section className="relative min-h-[60vh] sm:min-h-[65vh] md:min-h-[70vh] bg-cover bg-center bg-no-repeat flex items-center"
-        style={bgStyle}>
+        style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 w-full max-w-3xl mx-auto px-5 sm:px-8 md:px-16 py-12 sm:py-16">
           <div className="text-white text-center mx-auto">
             <FadeIn delay={0}>
               <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
-                    <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
-              
+              <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
+
             </FadeIn>
             <FadeIn delay={150}>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight mb-3 sm:mb-4">
@@ -470,11 +475,11 @@ export default function Projects({ projects = [], heroImage = null }) {
             <FadeIn delay={450}>
               <div className="flex flex-col xs:flex-row sm:flex-row gap-3 justify-center">
                 <Link href="/contact"
-                   className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">
+                  className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">
                   Request Quotation
                 </Link>
                 <Link href="/contact"
-                   className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">
+                  className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">
                   Book Site Inspection
                 </Link>
               </div>
@@ -483,28 +488,28 @@ export default function Projects({ projects = [], heroImage = null }) {
         </div>
       </section>
 
-{/* CATEGORY FILTER */}
-<FadeIn>
-  <section
-    className="relative z-10 -mt-10 mx-3 sm:mx-6 md:mx-10 lg:mx-16 rounded-2xl shadow-xl py-8 sm:py-10 px-4 sm:px-6"
-    style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
-    <h2 className="text-white text-center font-bold text-sm sm:text-base mb-6 sm:mb-8 tracking-wide">
-      Featured MEP Projects
-    </h2>
-    <div className="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-3xl mx-auto">
-      <button onClick={() => handleCategory("All")} className={filterBtn(activeCategory === "All")}>
-        <LayoutGrid size={24} /><span>All</span>
-      </button>
-      {CATEGORY_META.map((cat) => (
-        <button key={cat.label} onClick={() => handleCategory(cat.label)}
-          className={filterBtn(activeCategory === cat.label)}>
-          {cat.icon}
-          <span className="text-center leading-tight">{cat.label}</span>
-        </button>
-      ))}
-    </div>
-  </section>
-</FadeIn>
+      {/* CATEGORY FILTER */}
+      <FadeIn>
+        <section
+          className="relative z-10 -mt-10 mx-3 sm:mx-6 md:mx-10 lg:mx-16 rounded-2xl shadow-xl py-8 sm:py-10 px-4 sm:px-6"
+          style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
+          <h2 className="text-white text-center font-bold text-sm sm:text-base mb-6 sm:mb-8 tracking-wide">
+            Featured MEP Projects
+          </h2>
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 max-w-3xl mx-auto">
+            <button onClick={() => handleCategory("All")} className={filterBtn(activeCategory === "All")}>
+              <LayoutGrid size={24} /><span>All</span>
+            </button>
+            {CATEGORY_META.map((cat) => (
+              <button key={cat.label} onClick={() => handleCategory(cat.label)}
+                className={filterBtn(activeCategory === cat.label)}>
+                {cat.icon}
+                <span className="text-center leading-tight">{cat.label}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </FadeIn>
 
       {/* PROJECT LISTINGS */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-12 sm:space-y-16">

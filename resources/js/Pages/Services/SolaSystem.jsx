@@ -215,6 +215,8 @@ function Reveal({ children, className = "", delay = 0 }) {
 
 export default function SolaSystem({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
     const [open, setOpen] = useState(null);
+    const heroSecImage = "/HeroSection/heroSection.png";
+
 
     const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
     const heroTitle = service?.title ?? DEFAULTS.title;
@@ -270,7 +272,10 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 `}</style>
 
             {/* Hero */}
-            <section className="relative min-h-[90vh] flex items-center" style={heroStyle}>
+            <section className="relative min-h-[90vh] flex items-center" style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}>
                 <div className="absolute inset-0 bg-black/55" />
                 <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
                     <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>

@@ -44,6 +44,7 @@ const steps = [
     { number: 6, label: "Reliable maintenance support" },
     { number: 7, label: "Quality workmanship & testing" },
 ];
+
 const staticFaqs = [
     { q: "What HVAC systems do you install?", a: "We install VRV/VRF systems, split type air conditioners, ventilation systems, cooling systems, AHU/FCU systems, and chilled water systems." },
     { q: "How often should HVAC systems be serviced?", a: "We recommend quarterly maintenance for commercial systems and bi-annual for residential systems." },
@@ -84,6 +85,7 @@ function Reveal({ children, className = "", delay = 0 }) {
 
 export default function Mechanical({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
     const [open, setOpen] = useState(null);
+    const heroSecImage = "/HeroSection/heroSection.png";
 
     const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
     const heroTitle = service?.title ?? DEFAULTS.title;
@@ -135,7 +137,10 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
             {/* Hero */}
             <section
                 className="relative min-h-[90vh] flex items-center"
-                style={{ background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" }}
+                style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}
             >
                 <div className="absolute inset-0 bg-black/55" />
                 <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">

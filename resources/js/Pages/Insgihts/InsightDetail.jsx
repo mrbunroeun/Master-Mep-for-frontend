@@ -11,7 +11,10 @@ const storageUrl = (path) => {
 
 export default function InsightDetail({ insight }) {
     const slugSource = insight.slug || insight.url || "";
+    const heroSecImage = "/HeroSection/heroSection.png";
+
     const isBlackTheme = String(slugSource)
+
         .toLowerCase()
         .includes("how-to-choose-mep");
 
@@ -22,17 +25,14 @@ export default function InsightDetail({ insight }) {
             {/* Hero */}
             <section
                 className="relative min-h-[40vh] flex items-center bg-cover bg-no-repeat"
-                style={
-                    insight.image
-                        ? { backgroundImage: `url('${storageUrl(insight.image)}')`, backgroundPosition: "center 15%" }
-                        : { background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" }
-                }
+                style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}
             >
                 <div
-                    className="absolute inset-0"
-                    style={{
-                        background: "linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%)"
-                    }}
+                    className="absolute inset-0 bg-black/50"
+                    
                 />
                 <FadeIn direction="up" className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
                     <p className="text-xs tracking-widest uppercase opacity-70 mb-2">MASTER MEP SOLUTION</p>
@@ -111,9 +111,8 @@ export default function InsightDetail({ insight }) {
                                             />
                                         ) : null}
                                         <div
-                                            className={`rounded-lg w-full max-w-[345px] aspect-[4/3] items-center justify-center ${
-                                                isBlackTheme ? "bg-gray-800" : "bg-gradient-to-br from-[#1A3A5C]/5 to-[#2E5C8A]/10"
-                                            } ${section.image ? "hidden" : "flex"}`}
+                                            className={`rounded-lg w-full max-w-[345px] aspect-[4/3] items-center justify-center ${isBlackTheme ? "bg-gray-800" : "bg-gradient-to-br from-[#1A3A5C]/5 to-[#2E5C8A]/10"
+                                                } ${section.image ? "hidden" : "flex"}`}
                                         >
                                             <svg
                                                 className={`w-12 h-12 ${isBlackTheme ? "text-[#1A3A5C]/40" : "text-[#1A3A5C]/25"}`}

@@ -10,6 +10,8 @@ const storageUrl = (path) => {
 };
 
 export default function Insights({ insights = [] }) {
+      const heroSecImage = "/HeroSection/heroSection.png";
+
   return (
     <MepLayout>
       <Head title="Insights — Master MEP" />
@@ -17,13 +19,14 @@ export default function Insights({ insights = [] }) {
       {/* Hero */}
       <section
         className="relative min-h-[70vh] bg-cover bg-no-repeat flex items-center"
-        style={{ backgroundImage: "url('/images/hero.jpg')", backgroundPosition: "center 15%" }}
+        style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}
       >
         <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(90deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.65) 100%)"
-          }}
+          className="absolute inset-0 bg-black/50"
+         
         />
         <FadeIn direction="up" className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
           <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>

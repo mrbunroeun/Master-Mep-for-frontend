@@ -59,6 +59,8 @@ export default function LatestActivities() {
     const categories = ["All", ...new Set(ACTIVITIES.map((a) => a.category))];
     const filtered =
         filter === "All" ? ACTIVITIES : ACTIVITIES.filter((a) => a.category === filter);
+    const heroSecImage = "/HeroSection/heroSection.png";
+
 
     return (
         <MepLayout>
@@ -72,7 +74,10 @@ export default function LatestActivities() {
             {/* Hero */}
             <section
                 className="relative min-h-[70vh] flex items-center"
-                style={{ background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" }}
+                style={{
+                    backgroundImage: `url(${heroSecImage})`,
+                    backgroundPosition: "center center"
+                }}
             >
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
@@ -104,8 +109,8 @@ export default function LatestActivities() {
                                 key={cat}
                                 onClick={() => setFilter(cat)}
                                 className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-medium transition-colors ${filter === cat
-                                        ? "bg-[#1A3A5C] text-white"
-                                        : "bg-[#CFE7F6] text-[#1A3A5C] hover:bg-[#B8DCF2]"
+                                    ? "bg-[#1A3A5C] text-white"
+                                    : "bg-[#CFE7F6] text-[#1A3A5C] hover:bg-[#B8DCF2]"
                                     }`}
                             >
                                 {cat}
