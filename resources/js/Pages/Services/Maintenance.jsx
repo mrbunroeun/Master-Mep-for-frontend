@@ -568,11 +568,12 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
       </section>
 
 
-      {/* Contract Duration & Customer Registration */}
+      {/* Contract Duration, Customer Registration, Service Location & Service Package */}
       <section className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 flex flex-col gap-8 sm:gap-10">
+
           <Reveal delay={0}>
-            <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full flex flex-col">
+            <div className="flex flex-col">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
                 Contract Duration
               </h3>
@@ -617,7 +618,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
           </Reveal>
 
           <Reveal delay={120}>
-            <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full flex flex-col">
+            <div className="flex flex-col">
               <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-2">
                 Customer Registration
               </h3>
@@ -636,7 +637,6 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   { field: "Phone Number", placeholder: "e.g. +855 12 345 678" },
                   { field: "Email Address", placeholder: "e.g. name@example.com" },
                   { field: "Office Address", placeholder: "e.g. St. 271, Phnom Penh" },
-                  { field: "Billing Address", placeholder: "e.g. Same as office address" },
                 ].map((item, i) => (
                   <div key={i}>
                     <label className="text-[11px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
@@ -652,119 +652,66 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
               </div>
             </div>
           </Reveal>
-        </div>
-      </section>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
+            <Reveal delay={0}>
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
+                  Service Location
+                </h3>
 
-      {/* Service Location, Equipment, Package & Contract */}
-      <section className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 mb-8 sm:mb-12">
-          <Reveal delay={0}>
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
-                Service Location
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-md">
-                {[
-                  { field: "Site Name", placeholder: "e.g. Riverside Office Tower" },
-                  { field: "Site Address", placeholder: "e.g. St. 271, Phnom Penh" },
-                  { field: "Operating Hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
-                      {item.field}
-                    </label>
-                    <input
-                      type="text"
-                      placeholder={item.placeholder}
-                      className="w-full bg-[#CFE7F6] rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
-                    />
-                  </div>
-                ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  {[
+                    { field: "Site Name", placeholder: "e.g. Riverside Office Tower" },
+                    { field: "Site Address", placeholder: "e.g. St. 271, Phnom Penh" },
+                    { field: "Operating Hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
+                  ].map((item, i) => (
+                    <div key={i}>
+                      <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
+                        {item.field}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={item.placeholder}
+                        className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          </Reveal>
+            </Reveal>
 
-          <Reveal delay={100}>
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-2 sm:mb-3">
-                Equipment Information
-              </h3>
-              <p className="text-xs sm:text-sm text-[#1A3A5C]/80 mb-2 sm:mb-3">
-                Please provide:
-              </p>
-              <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-1.5 sm:space-y-2 list-disc list-inside">
-                <li>Air Conditioner Type</li>
-                <li>Brand</li>
-                <li>Cooling Capacity (HP/BTU)</li>
-                <li>Quantity</li>
-                <li>Installation Location</li>
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          <Reveal delay={0}>
-            <div className="bg-[#DFF1FC] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
-                Choose Your Service Package
-              </h3>
-              <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
-                {["Basic", "Standard", "Premium"].map((title, i) => (
-                  <li key={i}>
-                    <button
-                      onClick={() => setSelectedPackage(selectedPackage === title ? null : title)}
-                      className="flex items-center gap-2"
-                    >
-                      <span
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === title ? "bg-[#1A3A5C]" : "bg-transparent"
-                          }`}
+            <Reveal delay={0}>
+              <div>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
+                  Choose Your Service Package
+                </h3>
+                <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
+                  {["Basic", "Standard", "Premium"].map((title, i) => (
+                    <li key={i}>
+                      <button
+                        onClick={() => setSelectedPackage(selectedPackage === title ? null : title)}
+                        className="flex items-center gap-2"
                       >
-                        {selectedPackage === title && (
-                          <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                      </span>
-                      {title}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+                        <span
+                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === title ? "bg-[#1A3A5C]" : "bg-transparent"
+                            }`}
+                        >
+                          {selectedPackage === title && (
+                            <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          )}
+                        </span>
+                        {title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          </div>
 
-          <Reveal delay={120}>
-            <div className="bg-[#DFF1FC] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 h-full">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
-                Select Contract Duration
-              </h3>
-              <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
-                {["1 Year", "2 Year", "3 Year"].map((term, i) => (
-                  <li key={i}>
-                    <button
-                      onClick={() => setSelectedContract(selectedContract === term ? null : term)}
-                      className="flex items-center gap-2"
-                    >
-                      <span
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedContract === term ? "bg-[#1A3A5C]" : "bg-transparent"
-                          }`}
-                      >
-                        {selectedContract === term && (
-                          <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        )}
-                      </span>
-                      {term}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
         </div>
       </section>
 
