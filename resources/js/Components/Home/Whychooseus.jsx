@@ -1,7 +1,7 @@
 export default function Whychooseus() {
     const sectionTitle = "Why Choose Us";
     const mainDesc =
-        "Master MEP Solution Co., Ltd combines technical expertise, reliable project delivery, and a client-first approach to bring your mechanical, electrical, and plumbing projects to life — on time and to the highest standard.";
+        "Master MEP Solution Co., Ltd combines technical expertise, reliable project delivery, quality workmanship, and cost-effective engineering solutions. Our team follows international standards including ASHRAE, NFPA, IEC, and local regulations to ensure every project meets safety and compliance requirements.";
     const sectionImage = "/image/whychoos.jpg";
 
     return (

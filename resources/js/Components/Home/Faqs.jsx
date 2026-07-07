@@ -5,7 +5,7 @@ const staticFaqs = [
   { q: "What is MEP engineering?", a: "MEP engineering stands for Mechanical, Electrical, and Plumbing engineering, which includes HVAC systems, electrical systems, plumbing systems, ELV systems, and fire protection systems used in modern buildings." },
   { q: "Which areas in Cambodia do you serve?", a: "We provide MEP engineering and maintenance services in Phnom Penh and provinces across Cambodia." },
   { q: "What services does Master MEP provide?", a: "We provide HVAC installation, electrical systems, plumbing systems, ELV systems, fire alarm systems, ventilation systems, MEP design, and maintenance services for commercial and residential projects across Cambodia." },
-  { q: "Do you provide free on-site consultations?", a: "Yes. Our engineering team provides site inspections and consultations before quotation and project planning." },
+  { q: "Do you provide free consultations or site inspections?", a: "Yes. Our engineering team provides site inspections and consultations before quotation and project planning." },
   { q: "What types of projects do you work on?", a: "We work on commercial buildings, luxury villas, banks, restaurants, cafés, hospitals, fitness centers, retail stores, and industrial facilities." },
   { q: "Why should clients choose Master MEP?", a: "We provide one-stop MEP solutions, experienced engineering teams, quality workmanship, reliable project timelines, and long-term maintenance support." },
 ];

@@ -13,7 +13,7 @@ export default function About({ hero, about, members = [], certifications = [] }
     videoRef.current?.play();
   };
 
-  const heroImage =  "/HeroSection/heroSection.png";
+  const heroImage = "/HeroSection/heroSection.png";
 
   const values = [
     {
@@ -24,7 +24,7 @@ export default function About({ hero, about, members = [], certifications = [] }
       description:
         "We are committed to delivering engineering solutions with exceptional quality, precision, and workmanship. Every project is executed to meet international standards and exceed customer expectations.",
     },
-     {
+    {
       label: "Success",
       icon: "/image/success.svg",
       number: "02",
@@ -228,92 +228,92 @@ export default function About({ hero, about, members = [], certifications = [] }
             </div>
 
           </div>
-  {/* Key Team Pictures */}
-<section className="mt-[1rem] py-20 px-4 md:px-6">
-    <div className="max-w-4xl mx-auto">
-        <h2 className="text-center text-2xl md:text-3xl font-extrabold mb-16"
-            style={{ color: "#2a5c92" }}>
-            Key Team Pictures
-        </h2>
+          {/* Key Team  */}
+          <section className="mt-[1rem] py-20 px-4 md:px-6">
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-center text-2xl md:text-3xl font-extrabold mb-16"
+                style={{ color: "#2a5c92" }}>
+                Key Team
+              </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-14">
-            {members.length > 0 ? members.map((member, i) => (
-                <FadeIn key={member.id} delay={i * 100}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-14">
+                {members.length > 0 ? members.map((member, i) => (
+                  <FadeIn key={member.id} delay={i * 100}>
                     <div className="flex flex-col items-center text-center">
-                        <div className="w-40 h-40 rounded-2xl overflow-hidden bg-white shadow-md mb-4 border-4 border-white">
-                            {member.image ? (
-                                <img
-                                    src={`/storage/${member.image}`}
-                                    alt={member.name}
-                                    className="w-full h-full object-cover object-top"
-                                    onError={(e) => { e.target.style.display = "none"; }}
-                                />
-                            ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-[#1A3A5C] to-[#2E5C8A] flex items-center justify-center text-white text-4xl font-bold">
-                                    {member.name.charAt(0)}
-                                </div>
-                            )}
-                        </div>
-                        <h3 className="font-bold text-sm md:text-base" style={{ color: "#2a5c92" }}>
-                            {member.name}
-                        </h3>
-                        <p className="text-[#758290] text-xs md:text-sm mt-1">{member.position}</p>
+                      <div className="w-40 h-40 rounded-2xl overflow-hidden bg-white shadow-md mb-4 border-4 border-white">
+                        {member.image ? (
+                          <img
+                            src={`/storage/${member.image}`}
+                            alt={member.name}
+                            className="w-full h-full object-cover object-top"
+                            onError={(e) => { e.target.style.display = "none"; }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-[#1A3A5C] to-[#2E5C8A] flex items-center justify-center text-white text-4xl font-bold">
+                            {member.name.charAt(0)}
+                          </div>
+                        )}
+                      </div>
+                      <h3 className="font-bold text-sm md:text-base" style={{ color: "#2a5c92" }}>
+                        {member.name}
+                      </h3>
+                      <p className="text-[#758290] text-xs md:text-sm mt-1">{member.position}</p>
                     </div>
-                </FadeIn>
-            )) : (
-                // Static fallback បើ DB ទទេ
-                [
+                  </FadeIn>
+                )) : (
+                  // Static fallback បើ DB ទទេ
+                  [
                     { name: "Mr. Len Somoun", position: "Founder / CEO", image: "/assets/images/photo/Phan Tola.png" },
                     { name: "Mr. Cheup Toley", position: "MVAC Designer", image: "/assets/images/photo/Somphon.png" },
                     { name: "Mr. Moeu Sokleap", position: "Electrical Designer", image: "/assets/images/photo/Sarout.png" },
                     { name: "Ms. Home Sreynoy", position: "Accountant", image: "/assets/images/photo/sreymech.png" },
-                ].map((member, i) => (
+                  ].map((member, i) => (
                     <FadeIn key={member.name} delay={i * 100}>
-                        <div className="flex flex-col items-center text-center">
-                            <div className="w-40 h-40 rounded-2xl overflow-hidden bg-white shadow-md mb-4 border-4 border-white">
-                                <img
-                                    src={member.image}
-                                    alt={member.name}
-                                    className="w-full h-full object-cover object-top"
-                                    onError={(e) => { e.target.style.display = "none"; }}
-                                />
-                            </div>
-                            <h3 className="font-bold text-sm md:text-base" style={{ color: "#2a5c92" }}>
-                                {member.name}
-                            </h3>
-                            <p className="text-[#758290] text-xs md:text-sm mt-1">{member.position}</p>
+                      <div className="flex flex-col items-center text-center">
+                        <div className="w-40 h-40 rounded-2xl overflow-hidden bg-white shadow-md mb-4 border-4 border-white">
+                          <img
+                            src={member.image}
+                            alt={member.name}
+                            className="w-full h-full object-cover object-top"
+                            onError={(e) => { e.target.style.display = "none"; }}
+                          />
                         </div>
+                        <h3 className="font-bold text-sm md:text-base" style={{ color: "#2a5c92" }}>
+                          {member.name}
+                        </h3>
+                        <p className="text-[#758290] text-xs md:text-sm mt-1">{member.position}</p>
+                      </div>
                     </FadeIn>
-                ))
-            )}
-        </div>
-    </div>
-</section>
+                  ))
+                )}
+              </div>
+            </div>
+          </section>
 
-{/* Business Registration Certifications */}
+          {/* Business Registration Certifications */}
 {certifications.length > 0 && (
   <div className="w-full max-w-7xl mx-auto overflow-hidden px-4 mt-10">
-    <h1 className="flex justify-center text-start text-[20px] md:text-[30px] leading-none font-[700]" style={{ color: "#2a5c92" }}>
+    <h1
+      className="flex justify-center text-start text-[20px] md:text-[30px] leading-none font-[700]"
+      style={{ color: "#2a5c92" }}
+    >
       Business Registration Certifications
     </h1>
-    <div className="flex justify-center items-center py-12">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-6 place-items-center w-full">
-        {certifications.map((cert, i) => (
-          <FadeIn key={cert.id} delay={i * 100} className="w-full flex justify-center">
-            <div className="bg-white p-4 w-full max-w-[400px] shadow-md rounded-lg">
-              <img
-                src={cert.image}
-                alt={cert.title || "Certification"}
-                className="w-full h-auto object-contain"
-              />
-            </div>
-          </FadeIn>
-        ))}
-      </div>
+    <div className="flex flex-wrap justify-center items-start gap-8 sm:gap-6 py-12">
+      {certifications.map((cert, i) => (
+        <FadeIn key={cert.id} delay={i * 100} className="flex justify-center">
+          <div className="flex items-start justify-center h-[320px]">
+            <img
+              src={cert.image}
+              alt={cert.title || "Certification"}
+              className="h-full w-auto object-contain"
+            />
+          </div>
+        </FadeIn>
+      ))}
     </div>
   </div>
 )}
-
         </div>
       </section>
 

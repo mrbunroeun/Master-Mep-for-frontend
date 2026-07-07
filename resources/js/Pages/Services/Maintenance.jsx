@@ -815,48 +815,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
         </div>
       </section>
 
-      {/* Download & Contact */}
-      <section className="py-12 sm:py-16 px-4 md:px-6 max-w-5xl mx-auto">
-        <Reveal>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1A3A5C] mb-3 sm:mb-4">
-            Download &amp; Contact
-          </h2>
-          <p className="text-orange-500 text-sm sm:text-base font-semibold mb-5 sm:mb-6">
-            At the bottom of the page, include clear calls to action:
-          </p>
-
-          <ul className="text-sm sm:text-base text-[#1A3A5C] space-y-3 sm:space-y-4 list-disc list-inside mb-6 sm:mb-8">
-            <li>
-              <a
-                href="/download%20service%20agreement.png"
-                download="download service agreement.png"
-                className="hover:underline"
-              >
-                Download AMS Registration Form
-              </a>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:underline">
-                Request a Free Site Survey
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:underline">
-                Request an AMS Quotation
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="hover:underline">
-                Contact Our Technical Team
-              </Link>
-            </li>
-          </ul>
-
-          <p className="text-xs sm:text-sm md:text-base text-[#1A3A5C] leading-relaxed">
-            This structure not only explains the form shown in your image but also builds confidence, answers common customer questions, and improves the page's SEO by covering the topics people search for when looking for commercial AC maintenance services.
-          </p>
-        </Reveal>
-      </section>
+      
 
       {/* CTA */}
       <section className="relative py-20 text-white text-center"
@@ -868,25 +827,12 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
         <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
           <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
           <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
-
-          <div className="flex flex-row gap-2 ">
-            <Link
-              href="/contact"
-              className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-            >
-              Request Maintenance Service
-            </Link>
+          <div className="flex justify-center ">
             <Link
               href="/contact"
               className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
             >
               Contact Maintenance Team
-            </Link>
-            <Link
-              href="/contact"
-              className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-            >
-              Book Site Inspection
             </Link>
           </div>
         </Reveal>
