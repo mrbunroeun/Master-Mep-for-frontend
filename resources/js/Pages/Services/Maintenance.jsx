@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import MepLayout from "@/Layouts/MepLayout";
-import { Head, Link } from "@inertiajs/react";
 import { Zap, Lightbulb, Shield, Battery, Cpu, Radio } from "lucide-react";
 
 function getYouTubeId(url) {
@@ -229,21 +228,29 @@ function Reveal({ children, className = "", delay = 0 }) {
 export default function Maintenance({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
   const [open, setOpen] = useState(null);
   const [contractOpen, setContractOpen] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [selectedContract, setSelectedContract] = useState(null);
   const { data, setData, post, processing, errors, reset } = useForm({
-  contract_duration: "",
-  company_name: "",
-  contact_person: "",
-  position: "",
-  phone_number: "",
-  email_address: "",
-  office_address: "",
-  site_name: "",
-  site_address: "",
-  operating_hours: "",
-  service_package: "",
-});
+    contract_duration: "",
+    company_name: "",
+    contact_person: "",
+    position: "",
+    phone_number: "",
+    email_address: "",
+    office_address: "",
+    site_name: "",
+    site_address: "",
+    operating_hours: "",
+    service_package: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    post("/ams-registration", {
+      onSuccess: () => {
+        reset();
+        alert("Registration submitted successfully! Our team will contact you shortly.");
+      },
+    });
+  };
 
   // Hero background is dynamic (admin-uploaded service.image -> heroImage prop -> static fallback);
   // title and tagline remain static for this page
@@ -592,176 +599,198 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
 
       {/* Contract Duration, Customer Registration, Service Location & Service Package */}
-      <section id="contract-duration" className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
-        <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 flex flex-col gap-8 sm:gap-10">
+   <section id="contract-duration" className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
+        <form onSubmit={handleSubmit}>
+          <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 flex flex-col gap-8 sm:gap-10">
 
-          <Reveal delay={0}>
-            <div className="flex flex-col">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
-                Contract Duration
-              </h3>
-
-              <button
-                onClick={() => setContractOpen((v) => !v)}
-                className="w-full flex justify-between items-center bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 mb-2"
-              >
-                <span className="text-xs sm:text-sm font-medium text-[#1A3A5C]">
-                  Customers may choose:
-                </span>
-                <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#1A3A5C] flex items-center justify-center shrink-0">
-                  <svg
-                    className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-white transition-transform duration-300 ${contractOpen ? "rotate-90" : ""
-                      }`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
-                  </svg>
-                </span>
-              </button>
-
-              <div
-                className="overflow-hidden transition-all duration-300 ease-out"
-                style={{ maxHeight: contractOpen ? "220px" : "0px" }}
-              >
-                <div className="bg-white/70 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 mb-3 sm:mb-4">
-                  <ul className="text-xs sm:text-sm text-[#1A3A5C] space-y-2 sm:space-y-2.5">
-                    {["1-Year Contract", "2-Year Contract", "3-Year Contract"].map((label, i) => (
-                      <li key={i}>
-                        <button
-                          onClick={() => setSelectedContract(selectedContract === label ? null : label)}
-                          className="flex items-center gap-2"
-                        >
-                          <span
-                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedContract === label ? "bg-[#1A3A5C]" : "bg-transparent"
-                              }`}
-                          >
-                            {selectedContract === label && (
-                              <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </span>
-                          {label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <p className="text-[11px] sm:text-xs md:text-sm text-[#1A3A5C]/80 leading-relaxed">
-                Longer contracts provide better maintenance planning and operational stability.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div className="flex flex-col">
-              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-2">
-                Customer Registration
-              </h3>
-              <p className="text-xs sm:text-sm text-[#1A3A5C]/80 mb-1">
-                To register, please prepare:
-              </p>
-              <p className="text-xs sm:text-sm font-bold text-[#1A3A5C] mb-3 sm:mb-4">
-                Customer Information
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                {[
-                  { field: "Company Name", placeholder: "e.g. Master MEP Solution Co., Ltd." },
-                  { field: "Contact Person", placeholder: "e.g. Sokha Chan" },
-                  { field: "Position", placeholder: "e.g. Facilities Manager" },
-                  { field: "Phone Number", placeholder: "e.g. +855 12 345 678" },
-                  { field: "Email Address", placeholder: "e.g. name@example.com" },
-                  { field: "Office Address", placeholder: "e.g. St. 271, Phnom Penh" },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <label className="text-[11px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
-                      {item.field}
-                    </label>
-                    <input
-                      type="text"
-                      placeholder={item.placeholder}
-                      className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
             <Reveal delay={0}>
-              <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
-                  Service Location
+              <div className="flex flex-col">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
+                  Contract Duration
                 </h3>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <button
+                  type="button"
+                  onClick={() => setContractOpen((v) => !v)}
+                  className="w-full flex justify-between items-center bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 mb-2"
+                >
+                  <span className="text-xs sm:text-sm font-medium text-[#1A3A5C]">
+                    Customers may choose:
+                  </span>
+                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#1A3A5C] flex items-center justify-center shrink-0">
+                    <svg
+                      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-white transition-transform duration-300 ${contractOpen ? "rotate-90" : ""
+                        }`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </button>
+
+                <div
+                  className="overflow-hidden transition-all duration-300 ease-out"
+                  style={{ maxHeight: contractOpen ? "220px" : "0px" }}
+                >
+                  <div className="bg-white/70 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 mb-3 sm:mb-4">
+                    <ul className="text-xs sm:text-sm text-[#1A3A5C] space-y-2 sm:space-y-2.5">
+                      {["1-Year Contract", "2-Year Contract", "3-Year Contract"].map((label, i) => (
+                        <li key={i}>
+                          <button
+                            type="button"
+                            onClick={() => setData("contract_duration", data.contract_duration === label ? "" : label)}
+                            className="flex items-center gap-2"
+                          >
+                            <span
+                              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${data.contract_duration === label ? "bg-[#1A3A5C]" : "bg-transparent"
+                                }`}
+                            >
+                              {data.contract_duration === label && (
+                                <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                </svg>
+                              )}
+                            </span>
+                            {label}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                {errors.contract_duration && (
+                  <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors.contract_duration}</p>
+                )}
+
+                <p className="text-[11px] sm:text-xs md:text-sm text-[#1A3A5C]/80 leading-relaxed">
+                  Longer contracts provide better maintenance planning and operational stability.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={120}>
+              <div className="flex flex-col">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-2">
+                  Customer Registration
+                </h3>
+                <p className="text-xs sm:text-sm text-[#1A3A5C]/80 mb-1">
+                  To register, please prepare:
+                </p>
+                <p className="text-xs sm:text-sm font-bold text-[#1A3A5C] mb-3 sm:mb-4">
+                  Customer Information
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   {[
-                    { field: "Site Name", placeholder: "e.g. Riverside Office Tower" },
-                    { field: "Site Address", placeholder: "e.g. St. 271, Phnom Penh" },
-                    { field: "Operating Hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
+                    { field: "Company Name", key: "company_name", placeholder: "e.g. Master MEP Solution Co., Ltd." },
+                    { field: "Contact Person", key: "contact_person", placeholder: "e.g. Sokha Chan" },
+                    { field: "Position", key: "position", placeholder: "e.g. Facilities Manager" },
+                    { field: "Phone Number", key: "phone_number", placeholder: "e.g. +855 12 345 678" },
+                    { field: "Email Address", key: "email_address", placeholder: "e.g. name@example.com" },
+                    { field: "Office Address", key: "office_address", placeholder: "e.g. St. 271, Phnom Penh" },
                   ].map((item, i) => (
                     <div key={i}>
-                      <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
+                      <label className="text-[11px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
                         {item.field}
                       </label>
                       <input
                         type="text"
+                        value={data[item.key]}
+                        onChange={(e) => setData(item.key, e.target.value)}
                         placeholder={item.placeholder}
                         className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
                       />
+                      {errors[item.key] && (
+                        <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
+                      )}
                     </div>
                   ))}
                 </div>
               </div>
             </Reveal>
 
-            <Reveal delay={0}>
-              <div>
-                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
-                  Choose Your Service Package
-                </h3>
-                <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
-                  {["Basic", "Standard", "Premium"].map((title, i) => (
-                    <li key={i}>
-                      <button
-                        onClick={() => setSelectedPackage(selectedPackage === title ? null : title)}
-                        className="flex items-center gap-2"
-                      >
-                        <span
-                          className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === title ? "bg-[#1A3A5C]" : "bg-transparent"
-                            }`}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10">
+              <Reveal delay={0}>
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
+                    Service Location
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    {[
+                      { field: "Site Name", key: "site_name", placeholder: "e.g. Riverside Office Tower" },
+                      { field: "Site Address", key: "site_address", placeholder: "e.g. St. 271, Phnom Penh" },
+                      { field: "Operating Hours", key: "operating_hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
+                    ].map((item, i) => (
+                      <div key={i}>
+                        <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
+                          {item.field}
+                        </label>
+                        <input
+                          type="text"
+                          value={data[item.key]}
+                          onChange={(e) => setData(item.key, e.target.value)}
+                          placeholder={item.placeholder}
+                          className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
+                        />
+                        {errors[item.key] && (
+                          <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0}>
+                <div>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
+                    Choose Your Service Package
+                  </h3>
+                  <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
+                    {["Basic", "Standard", "Premium"].map((title, i) => (
+                      <li key={i}>
+                        <button
+                          type="button"
+                          onClick={() => setData("service_package", data.service_package === title ? "" : title)}
+                          className="flex items-center gap-2"
                         >
-                          {selectedPackage === title && (
-                            <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </span>
-                        {title}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
+                          <span
+                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${data.service_package === title ? "bg-[#1A3A5C]" : "bg-transparent"
+                              }`}
+                          >
+                            {data.service_package === title && (
+                              <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </span>
+                          {title}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  {errors.service_package && (
+                    <p className="text-red-600 text-[11px] mt-1">{errors.service_package}</p>
+                  )}
+                </div>
+              </Reveal>
+            </div>
+
           </div>
 
-        </div>
-
-        <div className="flex justify-center mt-8 sm:mt-10">
-          <button
-            type="submit"
-            className="px-10 sm:px-14 py-3 sm:py-3.5 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition font-medium text-sm sm:text-base shadow-md"
-          >
-            Submit
-          </button>
-        </div>
+          <div className="flex justify-center mt-8 sm:mt-10">
+            <button
+              type="submit"
+              disabled={processing}
+              className="px-10 sm:px-14 py-3 sm:py-3.5 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition font-medium text-sm sm:text-base shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {processing ? "Submitting..." : "Submit"}
+            </button>
+          </div>
+        </form>
       </section>
 
 
