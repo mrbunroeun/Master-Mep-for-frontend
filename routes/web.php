@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\AmsRegistrationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InsightController;
 use App\Http\Controllers\ContactController;
@@ -125,6 +125,7 @@ Route::get('/contact', function () {
     ]);
 })->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+Route::post('/ams-registration', [AmsRegistrationController::class, 'store'])->name('ams-registration.store');
 
 Route::get('/generate-sitemap', function () {
     $sitemap = Sitemap::create()
