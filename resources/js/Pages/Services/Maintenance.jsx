@@ -321,12 +321,13 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
         <section className="text-white text-center px-6 py-10 mx-4 md:mx-16 rounded-2xl -mt-10 relative z-10" style={{ background: "linear-gradient(to right, #0C2D4F, #1E5BA8)" }}>
           <h2 className="text-xl md:text-2xl font-bold mb-3">{DEFAULTS.bannerTitle}</h2>
           <p className="text-sm opacity-90 max-w-3xl mx-auto leading-relaxed">{DEFAULTS.bannerDescription}</p>
-          <Link
-            href="/contact"
+          <a
+            href="/download service agreement.png"
+            download="download service agreement.png"
             className="inline-block px-6 text-[#1d4984] mt-[1rem] sm:px-8 py-2.5 sm:py-3 bg-white rounded-xl hover:bg-blue-800 hover:text-white transition font-medium text-xs sm:text-sm"
           >
             Download Service Agreement
-          </Link>
+          </a>
         </section>
       </Reveal>
 
@@ -713,6 +714,15 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
           </div>
 
         </div>
+
+        <div className="flex justify-center mt-8 sm:mt-10">
+          <button
+            type="submit"
+            className="px-10 sm:px-14 py-3 sm:py-3.5 bg-blue-900 text-white rounded-xl hover:bg-blue-800 transition font-medium text-sm sm:text-base shadow-md"
+          >
+            Submit
+          </button>
+        </div>
       </section>
 
 
@@ -817,9 +827,13 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
           <ul className="text-sm sm:text-base text-[#1A3A5C] space-y-3 sm:space-y-4 list-disc list-inside mb-6 sm:mb-8">
             <li>
-              <Link href="/contact" className="hover:underline">
+              <a
+                href="/download%20service%20agreement.png"
+                download="download service agreement.png"
+                className="hover:underline"
+              >
                 Download AMS Registration Form
-              </Link>
+              </a>
             </li>
             <li>
               <Link href="/contact" className="hover:underline">
@@ -877,6 +891,6 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
           </div>
         </Reveal>
       </section>
-    </MepLayout>
+    </MepLayout >
   );
 }
