@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Head, Link, useForm } from "@inertiajs/react";
 import MepLayout from "@/Layouts/MepLayout";
 import { Head, Link } from "@inertiajs/react";
 import { Zap, Lightbulb, Shield, Battery, Cpu, Radio } from "lucide-react";
@@ -230,6 +231,19 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
   const [contractOpen, setContractOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedContract, setSelectedContract] = useState(null);
+  const { data, setData, post, processing, errors, reset } = useForm({
+  contract_duration: "",
+  company_name: "",
+  contact_person: "",
+  position: "",
+  phone_number: "",
+  email_address: "",
+  office_address: "",
+  site_name: "",
+  site_address: "",
+  operating_hours: "",
+  service_package: "",
+});
 
   // Hero background is dynamic (admin-uploaded service.image -> heroImage prop -> static fallback);
   // title and tagline remain static for this page
@@ -309,7 +323,15 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
           <Reveal delay={260}><p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">{heroDesc}</p></Reveal>
           <Reveal delay={340}>
             <div className="flex flex-row sm:flex-row gap-4 justify-center">
-              <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Register for AMS Request</a>
+              <button
+                onClick={() => {
+                  const el = document.getElementById("contract-duration");
+                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
+                className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm"
+              >
+                Register for AMS Request
+              </button>
               <a href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">Free Site Survey</a>
             </div>
           </Reveal>
@@ -570,7 +592,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
 
       {/* Contract Duration, Customer Registration, Service Location & Service Package */}
-      <section className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
+      <section id="contract-duration" className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
         <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 flex flex-col gap-8 sm:gap-10">
 
           <Reveal delay={0}>
@@ -601,13 +623,30 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
               <div
                 className="overflow-hidden transition-all duration-300 ease-out"
-                style={{ maxHeight: contractOpen ? "160px" : "0px" }}
+                style={{ maxHeight: contractOpen ? "220px" : "0px" }}
               >
                 <div className="bg-white/70 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 mb-3 sm:mb-4">
-                  <ul className="text-xs sm:text-sm text-[#1A3A5C] space-y-1 sm:space-y-1.5">
-                    <li>1-Year Contract</li>
-                    <li>2-Year Contract</li>
-                    <li>3-Year Contract</li>
+                  <ul className="text-xs sm:text-sm text-[#1A3A5C] space-y-2 sm:space-y-2.5">
+                    {["1-Year Contract", "2-Year Contract", "3-Year Contract"].map((label, i) => (
+                      <li key={i}>
+                        <button
+                          onClick={() => setSelectedContract(selectedContract === label ? null : label)}
+                          className="flex items-center gap-2"
+                        >
+                          <span
+                            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedContract === label ? "bg-[#1A3A5C]" : "bg-transparent"
+                              }`}
+                          >
+                            {selectedContract === label && (
+                              <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </span>
+                          {label}
+                        </button>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -815,7 +854,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
         </div>
       </section>
 
-      
+
 
       {/* CTA */}
       <section className="relative py-20 text-white text-center"
