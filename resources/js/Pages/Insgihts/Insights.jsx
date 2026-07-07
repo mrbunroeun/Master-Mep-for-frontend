@@ -109,7 +109,7 @@ export default function Insights({ insights = [] }) {
                         href={`/insights/${item.slug}`}
                         className="text-xs px-4 py-2 rounded-full bg-[#2E5C8A] text-white font-medium hover:bg-[#1A3A5C] transition-colors"
                       >
-                        Learn More
+                        Read More
                       </Link>
                     </div>
                   </div>

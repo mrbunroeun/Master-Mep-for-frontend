@@ -267,7 +267,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
         ? { backgroundImage: `url('${bgImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
         : { background: "linear-gradient(135deg, #0C1F3F 0%, #1A3A5C 50%, #1E5BA8 100%)" };
 
-    const featuredProjects = projects;
+    const featuredProjects = projects.slice(0, 2);
 
     function getFeaturedDisplay(project) {
         const ytId = getYouTubeId(project.video_url);
@@ -416,6 +416,8 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 <SolarServicesCarousel services={displaySolarServices} />
             </section>
 
+          
+
             {/* Applications */}
             <section className="py-16 px-4 md:px-6 bg-white">
                 <div className="max-w-5xl mx-auto text-center">
@@ -476,6 +478,109 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                     ))}
                 </div>
             </section>
+              {/* Featured Projects */}
+            {featuredProjects.length > 0 && (
+                <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
+                    <Reveal>
+                        <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-1">Featured Projects</h2>
+                        <p className="text-orange-500 text-sm font-medium mb-8">Solar Energy Projects</p>
+                    </Reveal>
+
+                    {/* Group by category */}
+                    {(() => {
+                        const grouped = featuredProjects.reduce((acc, p) => {
+                            const cat = p.category || "General";
+                            if (!acc[cat]) acc[cat] = [];
+                            acc[cat].push(p);
+                            return acc;
+                        }, {});
+
+                        return Object.entries(grouped).map(([category, items], groupIdx) => (
+                            <div key={category} className={groupIdx > 0 ? "mt-12" : ""}>
+                                <Reveal>
+                                    <h3 className="text-base font-bold text-[#1A3A5C] mb-1">{category}</h3>
+                                    <div className="w-8 h-0.5 bg-orange-500 mb-6" />
+                                </Reveal>
+
+                                <div className="space-y-5">
+                                    {items.map((project, idx) => {
+                                        const { ytId, bg, scopeItems } = getFeaturedDisplay(project);
+                                        return (
+                                            <Reveal key={project.id || idx} delay={idx * 80}>
+                                                <div
+                                                    className="text-white rounded-2xl overflow-hidden shadow-md flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                                                    style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}
+                                                >
+                                                    {/* Image — full height, no padding */}
+                                                    <div className="w-full md:w-2/5 flex-shrink-0 min-h-[240px] md:min-h-[260px] overflow-hidden">
+                                                        {bg ? (
+                                                            <img
+                                                                src={bg}
+                                                                alt={project.title}
+                                                                className="w-full h-full object-cover"
+                                                                style={{ minHeight: "240px" }}
+                                                            />
+                                                        ) : (
+                                                            <div className="w-full h-full min-h-[240px] flex flex-col items-center justify-center gap-3"
+                                                                style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
+                                                                <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+                                                                    <Zap size={32} className="text-white/40" />
+                                                                </div>
+                                                                <p className="text-white/30 text-xs font-medium tracking-wide uppercase">No Image Yet</p>
+                                                            </div>
+                                                        )}
+                                                        {ytId && (
+                                                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                                                <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center">
+                                                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="ml-0.5"><path d="M8 5v14l11-7z" /></svg>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Content */}
+                                                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
+                                                        <div>
+                                                            <h3 className="text-base md:text-lg font-bold mb-4 leading-snug">
+                                                                {project.title}
+                                                            </h3>
+                                                            {scopeItems.length > 0 && (
+                                                                <>
+                                                                    <p className="text-sm font-semibold mb-2">Scope of work:</p>
+                                                                    <div className="text-xs md:text-sm opacity-85 space-y-1 mb-5">
+                                                                        {scopeItems.map((s, i) => (
+                                                                            <p key={i}>{s}</p>
+                                                                        ))}
+                                                                    </div>
+                                                                </>
+                                                            )}
+                                                            <div className="flex flex-col gap-1 text-xs opacity-70">
+                                                                {project.location && <p>Location : {project.location}</p>}
+                                                                {project.timeline && <p>Timeline: {project.timeline}</p>}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Reveal>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ));
+                    })()}
+
+                    <Reveal>
+                        <div className="text-center mt-10">
+                            <Link
+                                href="/projects"
+                                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A3A5C] hover:bg-[#0C2D4F] text-white rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
+                            >
+                                View All Projects →
+                            </Link>
+                        </div>
+                    </Reveal>
+                </section>
+            )}
 
             {/* Our Installation Process */}
             <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
@@ -570,39 +675,32 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                     <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-2">
                         Related Services
                     </h2>
-                    <p className="text-orange-500 text-xs sm:text-sm font-medium mb-4 sm:mb-5">
-                        To strengthen SEO and improve user navigation, add links to related services.
-                    </p>
 
                     <ul className="text-xs sm:text-sm text-[#2E5C8A] space-y-1.5 sm:space-y-2 list-disc list-inside">
+                         <li>
+                            <Link href="/services/mechanical" className="hover:underline">
+                                Mechanical /HVAC System
+                            </Link>
+                        </li>
                         <li>
                             <Link href="/services/electrical" className="hover:underline">
-                                Electrical Engineering Services
+                                Electrical & ELV System
                             </Link>
                         </li>
+                        <li>
+                            <Link href="/services/plumbing" className="hover:underline">
+                                Plumbing Services
+                            </Link>
+                        </li>
+                       
                         <li>
                             <Link href="/services/maintenance" className="hover:underline">
-                                Annual Electrical Maintenance
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/services/mechanical" className="hover:underline">
-                                Air Conditioning Installation
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/services/maintenance" className="hover:underline">
-                                Air Conditioning Annual Maintenance Service (AMS)
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/services" className="hover:underline">
-                                MEP Design & Build solutions
+                                 Annual Maintenance Service
                             </Link>
                         </li>
                         <li>
                             <Link href="/services/solasystem" className="hover:underline">
-                                Energy Efficiency Consulting
+                                Solar System Installation
                             </Link>
                         </li>
                     </ul>
@@ -620,24 +718,12 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
         <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
         <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
 
-        <div className="flex flex-row gap-2 ">
-            <Link
-                href="/contact"
-                className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-            >
-                Request Free Site Survey
-            </Link>
+        <div className="flex justify-center ">
             <Link
                 href="/contact"
                 className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
             >
                 Get Solar Quotation
-            </Link>
-            <Link
-                href="/contact"
-                className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-            >
-                Talk to Our Solar Engineer
             </Link>
         </div>
     </Reveal>
