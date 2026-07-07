@@ -1,7 +1,7 @@
 import { Head, useForm, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ArrowLeft, Save } from "lucide-react";
-import CategoryGalleryEditor from "@/Components/Admin/CategoryGalleryEditor";
+import ProjectGalleryEditor from "@/Components/Admin/ProjectGalleryEditor";
 
 const CATEGORIES = [
     "Commercial Buildings",
@@ -13,7 +13,7 @@ const CATEGORIES = [
     "Fitness Centers",
 ];
 
-export default function Create({ auth, categoryGalleries = {} }) {
+export default function Create({ auth }) {
     const { data, setData, post, processing, errors, progress } = useForm({
         title:       "",
         description: "",
@@ -24,7 +24,14 @@ export default function Create({ auth, categoryGalleries = {} }) {
         timeline:    "",
         order:       0,
         is_active:   true,
+        gallery:     [null, null, null, null, null], // per-project gallery slots
     });
+
+    const handleGalleryChange = (index, value) => {
+        const updated = [...data.gallery];
+        updated[index] = value;
+        setData("gallery", updated);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,10 +76,11 @@ export default function Create({ auth, categoryGalleries = {} }) {
                         {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                     </div>
 
-                    {/* Category Gallery — embedded directly in the project form */}
-                    <CategoryGalleryEditor
-                        category={data.category}
-                        initialImages={categoryGalleries[data.category] || []}
+                    {/* Project Gallery — belongs to THIS project, not shared by category */}
+                    <ProjectGalleryEditor
+                        gallery={data.gallery}
+                        onChange={handleGalleryChange}
+                        errors={errors}
                     />
 
                     {/* Scope */}

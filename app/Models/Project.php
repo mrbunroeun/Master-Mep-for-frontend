@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
@@ -7,6 +9,12 @@ class Project extends Model
     protected $fillable = [
         'title', 'category', 'description', 'scope',
         'location', 'timeline',
-        'image', 'is_active', 'order',
+        'image', 'gallery', 'is_active', 'order',
+    ];
+
+    protected $casts = [
+        'gallery'   => 'array',
+        'is_active' => 'boolean',
+        'order'     => 'integer',
     ];
 }

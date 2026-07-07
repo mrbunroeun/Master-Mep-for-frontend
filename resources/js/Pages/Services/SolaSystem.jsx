@@ -240,7 +240,17 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
 
     // Solar System Type cards are static (admin items only carry title/points/image,
     // not the Best For / How It Works paragraphs this section needs)
-    const solarTypes = DEFAULT_SOLAR_TYPES;
+    // Solar System Type cards: Best For / How It Works text stays static (admin
+    // doesn't have those fields), but title, points, and image now pull from
+    // admin-managed serviceItems when available (matched by index)
+    const solarTypes = DEFAULT_SOLAR_TYPES.map((defaultItem, index) => {
+        const adminItem = serviceItems[index];
+        return {
+            ...defaultItem,
+            title: adminItem?.title || defaultItem.title,
+            image: adminItem?.image || defaultItem.image,
+        };
+    });
 
     // "Our Solar Installation Services" carousel content — sourced from serviceItems (same admin-managed
     // Service Items grid used for the Solar System Type cards above), falls back to DEFAULT_SOLAR_SERVICES

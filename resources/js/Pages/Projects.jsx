@@ -23,7 +23,7 @@ function FuelPumpIcon({ size = 20 }) {
 }
 
 const CATEGORY_META = [
-  { label: "Commercial Building", icon: <Building2 size={20} /> },
+  { label: "Commercial Buildings", icon: <Building2 size={20} /> },
   { label: "Hospitals", icon: <Hospital size={20} /> },
   { label: "Banks", icon: <Landmark size={20} /> },
   { label: "Restaurants & Cafés", icon: <UtensilsCrossed size={20} /> },
@@ -172,13 +172,17 @@ function CategoryGallery({ images = [], category, variant = "card" }) {
   );
 }
 
-function ProjectCard({ project, galleryImages = [] }) {
+function ProjectCard({ project }) {
   const scopeItems = Array.isArray(project.scope)
     ? project.scope
     : (project.scope || project.description || "")
       .split("\n")
       .map((s) => s.trim())
       .filter(Boolean);
+
+  // Gallery images belong to THIS project (project.gallery), not shared
+  // across every project in the same category. Filter out empty slots.
+  const galleryImages = (project.gallery || []).filter(Boolean);
 
   return (
     <div
@@ -188,7 +192,7 @@ function ProjectCard({ project, galleryImages = [] }) {
       }}
     >
       <div className="w-full md:w-[46%] p-8">
-        <CategoryGallery images={galleryImages} category={project.category || project.title} variant="card" />
+        <CategoryGallery images={galleryImages} category={project.title} variant="card" />
       </div>
 
       <div className="w-full md:w-[54%] px-8 py-8 flex flex-col text-white">
@@ -216,7 +220,7 @@ function ProjectCard({ project, galleryImages = [] }) {
   );
 }
 
-export default function Projects({ projects = [], heroImage = null, categoryGalleries = {} }) {
+export default function Projects({ projects = [], heroImage = null }) {
   const params = new URLSearchParams(window.location.search);
   const [activeCategory, setActiveCategory] = useState(params.get("category") || "All");
   const heroSecImage = "/HeroSection/heroSection.png";
@@ -342,7 +346,7 @@ export default function Projects({ projects = [], heroImage = null, categoryGall
               <div className="space-y-4">
                 {group.items.map((project, i) => (
                   <FadeIn key={project.id} delay={i * 80}>
-                    <ProjectCard project={project} galleryImages={categoryGalleries[group.category] || []} />
+                    <ProjectCard project={project} />
                   </FadeIn>
                 ))}
               </div>

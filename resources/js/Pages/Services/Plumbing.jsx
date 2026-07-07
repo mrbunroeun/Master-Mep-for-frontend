@@ -216,7 +216,7 @@ export default function Plumbing({ service, serviceItems = [], projects = [], he
                                         )}
                                     </div>
 
-                                    <h3 className="text-xs font-bold text-orange-500 mb-2 text-center">
+                                    <h3 className="text-xs font-bold text-orange-500 mb-2 text-left">
                                         {item.title}
                                     </h3>
 

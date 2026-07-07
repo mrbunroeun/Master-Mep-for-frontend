@@ -233,7 +233,7 @@ export default function About({ hero, about, members = [], certifications = [] }
     <div className="max-w-4xl mx-auto">
         <h2 className="text-center text-2xl md:text-3xl font-extrabold mb-16"
             style={{ color: "#2a5c92" }}>
-            Key Team Pictures:
+            Key Team Pictures
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-8 gap-y-14">

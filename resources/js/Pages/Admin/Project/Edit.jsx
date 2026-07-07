@@ -1,7 +1,7 @@
 import { Head, useForm, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ArrowLeft, Save } from "lucide-react";
-import CategoryGalleryEditor from "@/Components/Admin/CategoryGalleryEditor";
+import ProjectGalleryEditor from "@/Components/Admin/ProjectGalleryEditor";
 
 const CATEGORIES = [
     "Commercial Buildings",
@@ -13,7 +13,7 @@ const CATEGORIES = [
     "Fitness Centers",
 ];
 
-export default function Edit({ auth, project, categoryGalleries = {} }) {
+export default function Edit({ auth, project }) {
     const { data, setData, post, processing, errors, progress } = useForm({
         _method:     "put",
         title:       project.title       ?? "",
@@ -25,7 +25,15 @@ export default function Edit({ auth, project, categoryGalleries = {} }) {
         timeline:    project.timeline    ?? "",
         order:       project.order       ?? 0,
         is_active:   project.is_active   ?? true,
+        // seed gallery slots from the project's own saved gallery (per-project, not per-category)
+        gallery: Array.from({ length: 5 }, (_, i) => (project.gallery && project.gallery[i]) || null),
     });
+
+    const handleGalleryChange = (index, value) => {
+        const updated = [...data.gallery];
+        updated[index] = value;
+        setData("gallery", updated);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,10 +77,11 @@ export default function Edit({ auth, project, categoryGalleries = {} }) {
                         {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                     </div>
 
-                    {/* Category Gallery — embedded directly in the project form */}
-                    <CategoryGalleryEditor
-                        category={data.category}
-                        initialImages={categoryGalleries[data.category] || []}
+                    {/* Project Gallery — belongs to THIS project, not shared by category */}
+                    <ProjectGalleryEditor
+                        gallery={data.gallery}
+                        onChange={handleGalleryChange}
+                        errors={errors}
                     />
 
                     {/* Scope */}

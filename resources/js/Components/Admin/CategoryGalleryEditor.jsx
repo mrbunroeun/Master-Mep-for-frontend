@@ -12,6 +12,8 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
     const [currentImages, setCurrentImages] = useState(
         Array.from({ length: 5 }, (_, i) => initialImages[i] || null)
     );
+    // bump this whenever we get fresh saved paths back, to cache-bust <img src>
+    const [version, setVersion] = useState(Date.now());
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [errors, setErrors] = useState({});
@@ -21,7 +23,16 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
         setCurrentImages(Array.from({ length: 5 }, (_, i) => initialImages[i] || null));
         setSlotFiles([null, null, null, null, null]);
         setSaved(false);
+        setVersion(Date.now());
     }, [category]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Also resync if the parent hands us new initialImages for the SAME
+    // category (e.g. after an Inertia reload/props refresh post-save)
+    useEffect(() => {
+        setCurrentImages(Array.from({ length: 5 }, (_, i) => initialImages[i] || null));
+        setVersion(Date.now());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(initialImages)]);
 
     const setSlotFile = (i, file) => {
         const updated = [...slotFiles];
@@ -46,6 +57,12 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
     };
 
     const saveGallery = () => {
+        const filledCount = currentImages.filter((img) => img).length;
+        if (filledCount < 3) {
+            setErrors({ minimum: `Please upload at least 3 images (currently ${filledCount}/5).` });
+            return;
+        }
+
         setSaving(true);
         setErrors({});
         const formData = new FormData();
@@ -65,7 +82,19 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
                 forceFormData: true,
                 preserveScroll: true,
                 preserveState: true,
-                onSuccess: () => {
+                // Pull fresh categoryGalleries prop back down after save so
+                // currentImages reflects the real stored path, not just the
+                // blob preview left over from before saving.
+                only: ["categoryGalleries", "flash", "errors"],
+                onSuccess: (page) => {
+                    const fresh =
+                        page?.props?.categoryGalleries?.[category] ?? null;
+                    if (fresh) {
+                        setCurrentImages(
+                            Array.from({ length: 5 }, (_, i) => fresh[i] || null)
+                        );
+                    }
+                    setVersion(Date.now());
                     setSaved(true);
                     setSlotFiles([null, null, null, null, null]);
                 },
@@ -73,6 +102,13 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
                 onFinish: () => setSaving(false),
             }
         );
+    };
+
+    const resolveSrc = (img) => {
+        if (!img) return null;
+        if (img.startsWith("blob:")) return img; // blob previews are already unique, no cache-busting needed
+        if (img.startsWith("http") || img.startsWith("/")) return `${img}?v=${version}`;
+        return `/storage/${img}?v=${version}`;
     };
 
     return (
@@ -84,6 +120,10 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
                 {saved && <span className="text-xs text-green-600 font-medium">✓ Saved</span>}
             </div>
 
+            {errors.minimum && (
+                <p className="text-red-500 text-xs mb-2">{errors.minimum}</p>
+            )}
+
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
                 {[0, 1, 2, 3, 4].map((i) => (
                     <div key={i} className="space-y-1.5">
@@ -91,13 +131,7 @@ export default function CategoryGalleryEditor({ category, initialImages = [] }) 
                             {currentImages[i] ? (
                                 <>
                                     <img
-                                        src={
-                                            currentImages[i].startsWith("http") ||
-                                            currentImages[i].startsWith("blob:") ||
-                                            currentImages[i].startsWith("/")
-                                                ? currentImages[i]
-                                                : `/storage/${currentImages[i]}`
-                                        }
+                                        src={resolveSrc(currentImages[i])}
                                         alt={`${category} slot ${i + 1}`}
                                         className="w-full h-full object-cover"
                                     />

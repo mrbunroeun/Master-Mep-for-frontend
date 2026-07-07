@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\CategoryGallery;
 use App\Models\Hero;
 use App\Models\Project;
 use Inertia\Inertia;
@@ -11,16 +10,6 @@ class ProjectController extends Controller
     public function index()
     {
         $hero = Hero::where('is_active', true)->latest()->first();
-
-        $categoryGalleries = CategoryGallery::all()
-            ->mapWithKeys(fn ($g) => [
-                $g->category => collect($g->images ?? [])
-                    ->map(fn ($path) => $path ? '/storage/' . $path : null)
-                    ->filter()
-                    ->values()
-                    ->toArray(),
-            ])
-            ->toArray();
 
         return Inertia::render('Projects', [
             'heroImage' => $hero?->image ? '/storage/' . $hero->image : null,
@@ -36,8 +25,12 @@ class ProjectController extends Controller
                     'location'    => $p->location,
                     'timeline'    => $p->timeline ?? null,
                     'scope'       => $p->scope ?: $p->description,
+                    // per-project gallery — turn each stored path into a full URL,
+                    // keep nulls so slot order/positions are preserved
+                    'gallery'     => collect($p->gallery ?? [])
+                        ->map(fn ($path) => $path ? '/storage/' . $path : null)
+                        ->toArray(),
                 ]),
-            'categoryGalleries' => $categoryGalleries,
         ]);
     }
 }
