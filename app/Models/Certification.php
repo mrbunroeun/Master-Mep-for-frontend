@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MaintenanceFeature extends Model
+class Certification extends Model
 {
     protected $fillable = [
         'title',
         'image',
-        'scope',
-        'location',
-        'timeline',
+        'order',
         'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
     ];
 }

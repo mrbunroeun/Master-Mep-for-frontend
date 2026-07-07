@@ -10,8 +10,8 @@ export default function Whychooseus() {
                 <div className="grid md:grid-cols-2 gap-12 items-center">
                     {/* Left: Image */}
                     <div className="relative">
-                        <div className="bg-gray-200/60 rounded-2xl p-4 h-[320px] flex items-center justify-center">
-                            <div className="overflow-hidden rounded-xl w-full h-full shadow-lg">
+                        <div className=" p-4 h-[320px] flex items-center justify-center">
+                            <div className="overflow-hidden rounded-tr-[3rem] w-full h-full shadow-lg">
                                 <img
                                     src={sectionImage}
                                     alt="Why Choose Us"

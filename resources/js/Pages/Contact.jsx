@@ -10,10 +10,32 @@ export default function Contact({ flash = {}, heroImage = null }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/contact", { onSuccess: () => reset() });
+
+        const message =
+            `New Contact Form Submission\n` +
+            `Name: ${data.name}\n` +
+            `Phone: ${data.phone}\n` +
+            `Email: ${data.email || "-"}\n` +
+            `Subject: ${data.subject}\n` +
+            `Message: ${data.message}`;
+
+        post("/contact", {
+            onSuccess: () => {
+                reset();
+                const encoded = encodeURIComponent(message);
+                window.open(`https://t.me/share/url?url=&text=${encoded}`, "_blank");
+            },
+        });
     };
+
     const heroSecImage = "/HeroSection/heroSection.png";
 
+    const contactInfo = [
+        { icon: <MapPin size={16} />, title: "Head Office", lines: ["Borey Long Ny Chamkardoung,#40, Street 01, Prakar Village,Preysar Commune, Dangkor District, Phnom Penh"] },
+        { icon: <Phone size={16} />, title: "Phone", lines: ["017 55 22 38"] },
+        { icon: <Mail size={16} />, title: "Email", lines: ["lensamoun68@gmail.com"] },
+        { icon: <Clock size={16} />, title: "Business Hours", lines: ["Mon- Sat 8:00 AM - 5:00 PM"] },
+    ];
 
     return (
         <MepLayout>
@@ -52,12 +74,7 @@ export default function Contact({ flash = {}, heroImage = null }) {
                                 Get in touch with our MEP engineering team for quotations, site inspections, or any project enquiries.
                             </p>
                             <div className="space-y-5">
-                                {[
-                                    { icon: <MapPin size={16} />, title: "Head Office", lines: ["Borey Long Ny Chamkardoung,#40, Street 01, Prakar Village,Preysar Commune, Dangkor District, Phnom Penh"] },
-                                    { icon: <Phone size={16} />, title: "Phone", lines: ["017 55 22 38"] },
-                                    { icon: <Mail size={16} />, title: "Email", lines: [" lensamoun68@gmail.com"] },
-                                    { icon: <Clock size={16} />, title: "Business Hours", lines: ["Mon- Sat 8:00 AM - 5:00 PM"] },
-                                ].map((item, i) => (
+                                {contactInfo.map((item, i) => (
                                     <FadeIn key={i} direction="up" delay={150 + i * 100}>
                                         <div className="flex items-start gap-3">
                                             <div className="w-8 h-8 bg-white/15 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 hover:scale-110">
@@ -65,7 +82,21 @@ export default function Contact({ flash = {}, heroImage = null }) {
                                             </div>
                                             <div>
                                                 <p className="font-semibold text-sm">{item.title}</p>
-                                                {item.lines.map((line, j) => <p key={j} className="text-blue-100 text-xs">{line}</p>)}
+                                                {item.lines.map((line, j) =>
+                                                    item.title === "Email" ? (
+                                                        <a
+                                                            key={j}
+                                                            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${line}&su=Contact%20from%20Website`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-blue-100 text-xs hover:underline"
+                                                        >
+                                                            {line}
+                                                        </a>
+                                                    ) : (
+                                                        <p key={j} className="text-blue-100 text-xs">{line}</p>
+                                                    )
+                                                )}
                                             </div>
                                         </div>
                                     </FadeIn>
@@ -76,7 +107,7 @@ export default function Contact({ flash = {}, heroImage = null }) {
 
                     {/* Right - Floating Form Card (Glassmorphism) */}
                     <FadeIn direction="right" delay={150}>
-                        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-7 shadow-2xl transition-all duration-300 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)]">
+                        <div id="contact-form" className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-7 shadow-2xl transition-all duration-300 hover:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)]">
                             <h2 className="text-xl font-bold text-white mb-5">Send Us a Message</h2>
                             {flash.success && (
                                 <div className="bg-green-500/20 border border-green-300/40 text-green-100 px-4 py-3 rounded-lg mb-5 text-sm backdrop-blur-sm">
@@ -122,7 +153,7 @@ export default function Contact({ flash = {}, heroImage = null }) {
                                 <div>
                                     <label className="block text-sm font-medium text-white/90 mb-1">Message *</label>
                                     <textarea rows={3} value={data.message} onChange={(e) => setData("message", e.target.value)}
-                                        className="w-full bg-white/10 backdrop-blur-sm border border-white/25 rounded-lg px-4 py-2.5 text-sm text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/15 resize-none transition-all duration-200"
+                                        className="w-full bg-white/10 backdrop-blur-sm border border-white/25 rounded-lg px-4 py-2.5 text-sm text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 resize-none transition-all duration-200"
                                         placeholder="Describe your project or inquiry..." />
                                     {errors.message && <p className="text-red-300 text-xs mt-1">{errors.message}</p>}
                                 </div>

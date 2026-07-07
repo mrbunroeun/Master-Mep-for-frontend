@@ -11,15 +11,16 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\KeyHighlightController;
-use App\Http\Controllers\Admin\WhyChooseUsController;
-use App\Http\Controllers\Admin\MaintenanceCategoryController;
-use App\Http\Controllers\Admin\MaintenanceBenefitController;
-use App\Http\Controllers\Admin\MaintenanceContractController;
-use App\Http\Controllers\Admin\MaintenanceFeatureController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\CategoryGalleryController;
+use App\Http\Controllers\ServiceController as PublicServiceController;
+use App\Http\Controllers\Admin\ActivityController;
+use App\Http\Controllers\Admin\TeamMemberController;
+use App\Http\Controllers\Admin\CertificationController;
+
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use Inertia\Inertia;
 use App\Models\Hero;
 use App\Models\About;
@@ -29,8 +30,11 @@ use App\Models\Faq;
 use App\Models\KeyHighlight;
 use App\Models\CtaBanner;
 use App\Models\Service;
+use App\Models\Activity;
+use App\Models\TeamMember;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
+use App\Models\Certification;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,14 +44,12 @@ use Spatie\Sitemap\Tags\Url;
 
 function heroImageFor(string $pagePath): ?string
 {
-    // link_url now identifies which page a hero is assigned to (not a link).
     $image = Hero::where('is_active', true)
         ->where('link_url', $pagePath)
         ->latest()
         ->first()?->image;
 
     if (! $image) {
-        // No hero explicitly tagged for this page — fall back to the first active hero.
         $image = Hero::where('is_active', true)
             ->orderBy('order')
             ->first()?->image;
@@ -64,8 +66,8 @@ Route::get('/', function () {
         'faqs'          => Faq::where('is_active', true)->orderBy('order')->get(),
         'keyHighlights' => KeyHighlight::where('is_active', true)->orderBy('order')->get(),
         'ctaBanner'     => CtaBanner::where('is_active', true)->latest()->first(),
-        'heroImage'     => heroImageFor('/'),
         'services'      => Service::where('is_active', true)->get(),
+        'heroImage'     => heroImageFor('/'),
     ]);
 })->name('home');
 
@@ -74,28 +76,49 @@ Route::get('/about', function () {
         ?? Hero::where('is_active', true)->where('link_url', '/')->latest()->first();
     $about = About::where('is_active', true)->latest()->first();
     return Inertia::render('About', [
-        'hero'       => $hero,
-        'about'      => $about,
-        'aboutVideo' => $about?->video ? '/storage/' . $about->video : null,
+        'hero'            => $hero,
+        'about'           => $about,
+        'aboutVideo'      => $about?->video ? '/storage/' . $about->video : null,
+        'members'         => TeamMember::where('is_active', true)->orderBy('order')->get()
+            ->map(fn ($m) => [
+                'id'       => $m->id,
+                'name'     => $m->name,
+                'position' => $m->position,
+                'image'    => $m->image,
+            ]),
+        'certifications'  => Certification::where('is_active', true)->orderBy('order')->get()
+            ->map(fn ($c) => [
+                'id'    => $c->id,
+                'title' => $c->title,
+                'image' => "/storage/{$c->image}",
+            ]),
     ]);
 })->name('about');
 
-
 Route::get('/projects', [PublicProjectController::class, 'index'])->name('projects');
 
-
-Route::get('/services/{type}', [ServiceController::class, 'show'])->name('services.show');
+Route::get('/services/{type}', [PublicServiceController::class, 'show'])->name('services.show');
 
 Route::get('/latestactivities', function () {
     return Inertia::render('LatestActivities', [
-        'heroImage' => heroImageFor('/latestactivities'),
+        'heroImage'  => heroImageFor('/latestactivities'),
+        'activities' => Activity::where('is_active', true)
+            ->orderByDesc('activity_date')
+            ->get()
+            ->map(fn ($a) => [
+                'id'       => $a->id,
+                'category' => $a->category,
+                'date'     => $a->activity_date->format('F Y'),
+                'title'    => $a->title,
+                'excerpt'  => $a->excerpt,
+                'image'    => $a->image ? "/storage/{$a->image}" : null,
+            ]),
     ]);
 })->name('latestactivities');
 
 Route::get('/insights',        [InsightController::class, 'index'])->name('insights');
 Route::get('/insights/{slug}', [InsightController::class, 'show'])->name('insights.show');
 
-// Contact
 Route::get('/contact', function () {
     return Inertia::render('Contact', [
         'heroImage' => heroImageFor('/contact'),
@@ -103,8 +126,6 @@ Route::get('/contact', function () {
 })->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
-// SEO — Sitemap generator. Visit /generate-sitemap once after deploying to
-// your real domain, then remove this route (or restrict it to admin-only).
 Route::get('/generate-sitemap', function () {
     $sitemap = Sitemap::create()
         ->add(Url::create('/')->setPriority(1.0))
@@ -132,18 +153,16 @@ Route::get('/dashboard', function () {
         'isAdmin' => in_array(Auth::user()->role, ['admin', 'super_admin']),
         'auth'    => ['user' => Auth::user()],
         'counts'  => [
-            'heroes'                => \App\Models\Hero::count(),
-            'abouts'                => \App\Models\About::count(),
-            'projects'              => \App\Models\Project::count(),
-            'partners'              => \App\Models\Partner::count(),
-            'faqs'                  => \App\Models\Faq::count(),
-            'keyHighlights'         => \App\Models\KeyHighlight::count(),
-            'maintenanceBenefits'   => \App\Models\MaintenanceBenefit::count(),
-            'maintenanceFeatures'   => \App\Models\MaintenanceFeature::count(),
-            'maintenanceCategories' => \App\Models\MaintenanceCategory::count(),
-            'maintenanceContracts'  => \App\Models\MaintenanceContract::count(),
-            'insights'              => \App\Models\Insight::count(),
-            'services'      => Service::where('is_active', true)->orderBy('order')->get(),
+            'heroes'          => Hero::count(),
+            'abouts'          => About::count(),
+            'projects'        => Project::count(),
+            'partners'        => Partner::count(),
+            'faqs'            => Faq::count(),
+            'keyHighlights'   => KeyHighlight::count(),
+            'insights'        => \App\Models\Insight::count(),
+            'activities'      => Activity::count(),
+            'teamMembers'     => TeamMember::count(),
+            'certifications'  => Certification::count(),
         ],
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -155,29 +174,31 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('hero',          HeroController::class);
+    Route::resource('hero', HeroController::class);
 
-    // CTA Banner — merged into HeroController (was Admin\CtaBannerController)
-    // NOTE: rename these to match whatever method names you actually used
-    // in HeroController (ctaIndex/ctaEdit/ctaUpdate/ctaDestroy, etc.)
-    Route::get('cta-banner',                  [HeroController::class, 'ctaIndex'])->name('cta-banner.index');
-    Route::get('cta-banner/{ctaBanner}/edit',  [HeroController::class, 'ctaEdit'])->name('cta-banner.edit');
-    Route::put('cta-banner/{ctaBanner}',       [HeroController::class, 'ctaUpdate'])->name('cta-banner.update');
-    Route::delete('cta-banner/{ctaBanner}',    [HeroController::class, 'ctaDestroy'])->name('cta-banner.destroy');
+    Route::get('cta-banner',                   [HeroController::class, 'ctaIndex'])->name('cta-banner.index');
+    Route::get('cta-banner/{ctaBanner}/edit',   [HeroController::class, 'ctaEdit'])->name('cta-banner.edit');
+    Route::put('cta-banner/{ctaBanner}',        [HeroController::class, 'ctaUpdate'])->name('cta-banner.update');
+    Route::delete('cta-banner/{ctaBanner}',     [HeroController::class, 'ctaDestroy'])->name('cta-banner.destroy');
 
     Route::resource('about',         AboutController::class);
-    // Route::resource('service', ...); — REMOVED, rebuilding fresh
+    Route::resource('service',       ServiceController::class);
     Route::resource('project',       ProjectController::class);
     Route::resource('partner',       PartnerController::class);
     Route::resource('faq',           FaqController::class);
     Route::resource('key-highlight', KeyHighlightController::class);
-    Route::resource('maintenance', MaintenanceFeatureController::class);
-    Route::resource('maintenance-categories', MaintenanceCategoryController::class)
-    ->names('admin.maintenance-categories');
-    Route::resource('maintenance-benefits', MaintenanceBenefitController::class);
-    Route::resource('maintenance-contracts', MaintenanceContractController::class);
-    Route::resource('insights', AdminInsightController::class);
-    Route::resource('service', AdminServiceController::class);
+    Route::resource('activity',      ActivityController::class);
+    Route::resource('team-member',   TeamMemberController::class);
+    Route::resource('certification', CertificationController::class);
+
+    Route::get('category-gallery', [CategoryGalleryController::class, 'index'])
+        ->name('category-gallery.index');
+
+    Route::put('category-gallery/{category}', [CategoryGalleryController::class, 'update'])
+        ->name('category-gallery.update')
+        ->where('category', '.*');
+
+    Route::resource('insights',      AdminInsightController::class);
     Route::resource('key-highlight', KeyHighlightController::class)->names('admin.key-highlight');
 });
 

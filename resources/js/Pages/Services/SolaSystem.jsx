@@ -10,30 +10,34 @@ function getYouTubeId(url) {
     );
     return match ? match[1] : null;
 }
-function SolarServicesCarousel() {
+
+// Fallback content used only when no serviceItems have been added yet
+const DEFAULT_SOLAR_SERVICES = [
+    {
+        title: "Solar System Design",
+        points: ["Energy consumption analysis", "Site assessment", "System sizing", "ROI calculation"],
+    },
+    {
+        title: "Engineering & Installation",
+        points: ["Solar panel installation", "Inverter installation", "Battery installation", "Mounting structure installation", "Electrical wiring", "Grid connection"],
+    },
+    {
+        title: "Testing & Commissioning",
+        points: ["Performance testing", "System verification", "Safety inspection", "Operational training"],
+    },
+    {
+        title: "Maintenance & Support",
+        points: ["Solar panel cleaning", "Performance inspection", "Inverter testing", "Battery health monitoring", "Preventive maintenance"],
+    },
+];
+
+function SolarServicesCarousel({ services = DEFAULT_SOLAR_SERVICES }) {
     const scrollRef = useRef(null);
     const isDragging = useRef(false);
     const startX = useRef(0);
     const scrollStart = useRef(0);
 
-    const solarServices = [
-        {
-            title: "Solar System Design",
-            points: ["Energy consumption analysis", "Site assessment", "System sizing", "ROI calculation"],
-        },
-        {
-            title: "Engineering & Installation",
-            points: ["Solar panel installation", "Inverter installation", "Battery installation", "Mounting structure installation", "Electrical wiring", "Grid connection"],
-        },
-        {
-            title: "Testing & Commissioning",
-            points: ["Performance testing", "System verification", "Safety inspection", "Operational training"],
-        },
-        {
-            title: "Maintenance & Support",
-            points: ["Solar panel cleaning", "Performance inspection", "Inverter testing", "Battery health monitoring", "Preventive maintenance"],
-        },
-    ];
+    const solarServices = services.length > 0 ? services : DEFAULT_SOLAR_SERVICES;
 
     const scroll = (direction) => {
         if (!scrollRef.current) return;
@@ -94,24 +98,35 @@ function SolarServicesCarousel() {
                 onPointerCancel={stopDragging}
                 className="flex gap-4 sm:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory px-10 sm:px-12 pb-2 cursor-grab select-none touch-pan-y [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             >
-                {solarServices.map((service, i) => (
-                    <div
-                        key={i}
-                        className="snap-start shrink-0 w-[75%] sm:w-[45%] md:w-[31%] bg-[#EAF3FC] rounded-2xl p-3 sm:p-4"
-                    >
-                        <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
-                            {/* Replace with actual image */}
+                {solarServices.map((service, i) => {
+                    const points = Array.isArray(service.points)
+                        ? service.points
+                        : (service.points || "").split("\n").map((s) => s.trim()).filter(Boolean);
+                    const imageSrc = service.image
+                        ? (service.image.startsWith?.("http") || service.image.startsWith?.("/") ? service.image : `/storage/${service.image}`)
+                        : null;
+
+                    return (
+                        <div
+                            key={i}
+                            className="snap-start shrink-0 w-[75%] sm:w-[45%] md:w-[31%] bg-[#EAF3FC] rounded-2xl p-3 sm:p-4"
+                        >
+                            <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
+                                {imageSrc && (
+                                    <img src={imageSrc} alt={service.title} className="w-full h-full object-cover" />
+                                )}
+                            </div>
+                            <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
+                                {service.title}
+                            </h3>
+                            <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5">
+                                {points.map((p, j) => (
+                                    <li key={j}>• {p}</li>
+                                ))}
+                            </ul>
                         </div>
-                        <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
-                            {service.title}
-                        </h3>
-                        <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5">
-                            {service.points.map((p, j) => (
-                                <li key={j}>• {p}</li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             <button
@@ -217,15 +232,20 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
     const [open, setOpen] = useState(null);
     const heroSecImage = "/HeroSection/heroSection.png";
 
-
     const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
-    const heroTitle = service?.title ?? DEFAULTS.title;
-    const heroDesc = service?.description ?? DEFAULTS.description;
+    const heroTitle = DEFAULTS.title;
+    const heroDesc = DEFAULTS.description;
     const displayItems = serviceItems.length > 0 ? serviceItems : STATIC_ITEMS;
     const displayHighlights = keyHighlights.length > 0 ? keyHighlights : highlights;
 
-    // Dynamic Solar System Type cards, sourced from services.items (falls back to defaults)
-    const solarTypes = (service?.items?.length > 0) ? service.items : DEFAULT_SOLAR_TYPES;
+    // Solar System Type cards are static (admin items only carry title/points/image,
+    // not the Best For / How It Works paragraphs this section needs)
+    const solarTypes = DEFAULT_SOLAR_TYPES;
+
+    // "Our Solar Installation Services" carousel content — sourced from serviceItems (same admin-managed
+    // Service Items grid used for the Solar System Type cards above), falls back to DEFAULT_SOLAR_SERVICES
+    // if no items have been added yet
+    const displaySolarServices = serviceItems.length > 0 ? serviceItems : DEFAULT_SOLAR_SERVICES;
 
     const benefitsTitle = service?.benefits_title ?? DEFAULTS.benefitsTitle;
     const benefitsPointsRaw = service?.benefits_points ?? DEFAULTS.benefitsPoints;
@@ -273,8 +293,9 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
 
             {/* Hero */}
             <section className="relative min-h-[90vh] flex items-center" style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
+                    backgroundImage: `url(${bgImage || heroSecImage})`,
+                    backgroundPosition: "center center",
+                    backgroundSize: "cover"
                 }}>
                 <div className="absolute inset-0 bg-black/55" />
                 <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
@@ -366,7 +387,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 );
             })}
 
-            {/* Our Solar Installation Services */}
+            {/* Our Solar Installation Services — now dynamic, sourced from serviceItems (fallback to DEFAULT_SOLAR_SERVICES) */}
             <section
                 className="py-12 sm:py-16 px-4 md:px-6 relative overflow-hidden"
                 style={{ background: "linear-gradient(90deg, #0C2D4F 0%, #1E5BA8 100%)" }}
@@ -382,7 +403,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                     </Reveal>
                 </div>
 
-                <SolarServicesCarousel />
+                <SolarServicesCarousel services={displaySolarServices} />
             </section>
 
             {/* Applications */}
@@ -474,7 +495,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 </div>
             </section>
 
-            {/* FAQs */}
+           {/* FAQs */}
             <section className="py-16 px-4 md:px-6">
                 <div className="max-w-5xl mx-auto">
                     <div className="bg-[#CFE7F6] rounded-3xl p-6 sm:p-8 md:p-10">
@@ -485,9 +506,9 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 items-start">
                             <div className="flex flex-col gap-3 sm:gap-4">
                                 {[
-                                    { key: "s1", q: "What types of air conditioners are covered under the AMS program?", a: "We maintain wall-mounted split units, cassette units, ceiling concealed units, ducted systems, floor-standing units, VRF/VRV systems, packaged units, and central chilled water air conditioning systems." },
-                                    { key: "s2", q: "Can I include multiple buildings under one maintenance contract?", a: "Yes, our AMS program can cover multiple buildings or sites under a single contract, with a consolidated maintenance schedule and unified reporting across all locations." },
-                                    { key: "s3", q: "What happens if an air conditioner breaks down between scheduled maintenance visits?", a: "AMS customers can request emergency repair support outside of scheduled visits. Our technicians will assess the issue and carry out the necessary repairs as quickly as possible." },
+                                    { key: "s1", q: "How long does a solar system installation take?", a: "Most residential installations are completed within 3-7 days, while larger commercial or industrial projects may take 2-4 weeks depending on system size and site complexity." },
+                                    { key: "s2", q: "Do I need a battery for my solar system?", a: "Not necessarily. If you're connected to a reliable grid, an On-Grid system without battery is more cost-effective. A battery is recommended if you experience frequent power outages or want energy independence." },
+                                    { key: "s3", q: "How much can I save on my electricity bill with solar?", a: "Savings depend on your system size, energy consumption, and sunlight exposure. Most customers see a 30-70% reduction in monthly electricity costs after installation." },
                                 ].map((faq, i) => (
                                     <Reveal delay={i * 80} key={faq.key}>
                                         <div className="bg-white rounded-xl overflow-hidden">
@@ -508,9 +529,9 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
 
                             <div className="flex flex-col gap-3 sm:gap-4">
                                 {[
-                                    { key: "s4", q: "Do you provide maintenance reports after each visit?", a: "Yes, after every service visit we provide a detailed report covering the inspection checklist, work performed, system condition, and any recommended follow-up actions." },
-                                    { key: "s5", q: "Can the maintenance schedule be arranged outside normal office hours?", a: "Yes, we can schedule maintenance visits during evenings, weekends, or other off-hours to minimize disruption to your business operations." },
-                                    { key: "s6", q: "How do I know which AMS package is right for my business?", a: "During your free site survey, our engineers assess your equipment type, quantity, and operating conditions, then recommend the Basic, Standard, or Premium package that best fits your maintenance needs and budget." },
+                                    { key: "s4", q: "What is the lifespan of a solar system, and does it need maintenance?", a: "Solar panels typically last 25-30 years with minimal maintenance. We recommend periodic panel cleaning and annual inspections to ensure optimal performance and efficiency." },
+                                    { key: "s5", q: "What happens to my solar system during a power outage?", a: "For On-Grid systems, power output stops automatically for safety during a grid outage. Off-Grid and Hybrid systems with battery storage continue supplying power to your building." },
+                                    { key: "s6", q: "Do you provide warranty and after-sales support?", a: "Yes, we provide warranty coverage on solar panels, inverters, and installation workmanship, along with ongoing maintenance and technical support to keep your system running efficiently." },
                                 ].map((faq, i) => (
                                     <Reveal delay={240 + i * 80} key={faq.key}>
                                         <div className="bg-white rounded-xl overflow-hidden">
@@ -578,39 +599,39 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 </Reveal>
             </section>
 
-            {/* CTA */}
-            <section className="relative py-20 text-white text-center"
-                style={heroSecImage
-                    ? { backgroundImage: `url('${heroSecImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
-                    : { background: "linear-gradient(135deg, #0C1F3F 0%, #1E5BA8 100%)" }
-                }>
-                <div className="absolute inset-0 bg-black/55" />
-                <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
-                    <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
-                    <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
+          {/* CTA */}
+<section className="relative py-20 text-white text-center"
+    style={heroSecImage
+        ? { backgroundImage: `url('${heroSecImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
+        : { background: "linear-gradient(135deg, #0C1F3F 0%, #1E5BA8 100%)" }
+    }>
+    <div className="absolute inset-0 bg-black/55" />
+    <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
+        <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
+        <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
 
-                    <div className="flex flex-row gap-2 ">
-                        <Link
-                            href="/contact"
-                            className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                        >
-                            Request Maintenance Service
-                        </Link>
-                        <Link
-                            href="/contact"
-                            className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                        >
-                            Contact Maintenance Team
-                        </Link>
-                        <Link
-                            href="/contact"
-                            className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-                        >
-                            Book Site Inspection
-                        </Link>
-                    </div>
-                </Reveal>
-            </section>
+        <div className="flex flex-row gap-2 ">
+            <Link
+                href="/contact"
+                className="btn-animate inline-block max-[600px]:text-[10px] px-8 py-3 max-[600px]:px-2 bg-[#2E5C8A] rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+            >
+                Request Free Site Survey
+            </Link>
+            <Link
+                href="/contact"
+                className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+            >
+                Get Solar Quotation
+            </Link>
+            <Link
+                href="/contact"
+                className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+            >
+                Talk to Our Solar Engineer
+            </Link>
+        </div>
+    </Reveal>
+</section>
         </MepLayout>
     );
 }

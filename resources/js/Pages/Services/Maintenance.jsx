@@ -10,35 +10,38 @@ function getYouTubeId(url) {
   );
   return match ? match[1] : null;
 }
-function SolarServicesCarousel() {
+
+// Fallback content used only when the admin hasn't added any maintenance service items yet
+const DEFAULT_MAINTENANCE_SERVICES = [
+  {
+    title: "General Inspection",
+    points: ["Visual inspection of indoor and outdoor units", "Check operating condition", "Check abnormal vibration and noise", "Inspect electrical components"],
+  },
+  {
+    title: "Professional Cleanings",
+    points: ["Clean evaporator coil", "Clean condenser coil", "Clean air filters", "Clean drain pipe", "Clean drainage tray", "Remove dust and debris"],
+  },
+  {
+    title: "Performance Testing",
+    points: ["Temperature measurement", "Refrigerant pressure check", "Electrical current testing", "Compressor inspection", "Fan motor inspection", "Airflow testing"],
+  },
+  {
+    title: "Preventive Maintenance",
+    points: ["Tighten electrical connections", "Lubricate moving components (where applicable)", "Check refrigerant leakage", "Inspect insulation", "Verify system safety"],
+  },
+  {
+    title: "Service Report",
+    points: ["Inspection checklist", "Performance report", "Recommended repairs (if required)", "Photos before and after service", "Maintenance history"],
+  },
+];
+
+function SolarServicesCarousel({ services = DEFAULT_MAINTENANCE_SERVICES }) {
   const scrollRef = useRef(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollStart = useRef(0);
 
-
-  const solarServices = [
-    {
-      title: "General Inspection",
-      points: ["Visual inspection of indoor and outdoor units", "Check operating condition", "Check abnormal vibration and noise", "Inspect electrical components"],
-    },
-    {
-      title: "Professional Cleaning",
-      points: ["Clean evaporator coil", "Clean condenser coil", "Clean air filters", "Clean drain pipe", "Clean drainage tray", "Remove dust and debris"],
-    },
-    {
-      title: "Performance Testing",
-      points: ["Temperature measurement", "Refrigerant pressure check", "Electrical current testing", "Compressor inspection", "Fan motor inspection", "Airflow testing"],
-    },
-    {
-      title: "Preventive Maintenance",
-      points: ["Tighten electrical connections", "Lubricate moving components (where applicable)", "Check refrigerant leakage", "Inspect insulation", "Verify system safety"],
-    },
-    {
-      title: "Service Report",
-      points: ["Inspection checklist", "Performance report", "Recommended repairs (if required)", "Photos before and after service", "Maintenance history"],
-    },
-  ];
+  const solarServices = services.length > 0 ? services : DEFAULT_MAINTENANCE_SERVICES;
 
   const scroll = (direction) => {
     if (!scrollRef.current) return;
@@ -101,24 +104,33 @@ function SolarServicesCarousel() {
         onPointerCancel={stopDragging}
         className="flex gap-4 sm:gap-5 overflow-x-auto scroll-smooth snap-x snap-mandatory px-10 sm:px-12 pb-2 cursor-grab select-none touch-pan-y [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
       >
-        {solarServices.map((service, i) => (
-          <div
-            key={i}
-            className="snap-start shrink-0 w-[75%] sm:w-[45%] md:w-[31%] bg-[#EAF3FC] rounded-2xl p-3 sm:p-4"
-          >
-            <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
-              {/* Replace with actual image */}
+        {solarServices.map((service, i) => {
+          const points = Array.isArray(service.points)
+            ? service.points
+            : (service.points || "").split("\n").map((s) => s.trim()).filter(Boolean);
+          const imageSrc = service.image ? `/storage/${service.image}` : null;
+
+          return (
+            <div
+              key={i}
+              className="snap-start shrink-0 w-[75%] sm:w-[45%] md:w-[31%] bg-[#EAF3FC] rounded-2xl p-3 sm:p-4"
+            >
+              <div className="w-full aspect-[4/3] rounded-xl bg-gray-300 mb-4 overflow-hidden pointer-events-none">
+                {imageSrc && (
+                  <img src={imageSrc} alt={service.title} className="w-full h-full object-cover" />
+                )}
+              </div>
+              <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
+                {service.title}
+              </h3>
+              <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5">
+                {points.map((p, j) => (
+                  <li key={j}>• {p}</li>
+                ))}
+              </ul>
             </div>
-            <h3 className="text-orange-500 font-bold text-sm sm:text-base mb-3">
-              {service.title}
-            </h3>
-            <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5">
-              {service.points.map((p, j) => (
-                <li key={j}>• {p}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Right arrow */}
@@ -218,15 +230,23 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
   const [contractOpen, setContractOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [selectedContract, setSelectedContract] = useState(null);
-  const heroSecImage = "/HeroSection/heroSection.png";
 
-
+  // Hero background is dynamic (admin-uploaded service.image -> heroImage prop -> static fallback);
+  // title and tagline remain static for this page
+  const heroSecImage = service?.image
+    ? `/storage/${service.image}`
+    : (heroImage || "/HeroSection/heroSection.png");
 
   const bgImage = service?.image ? `/storage/${service.image}` : heroImage;
-  const heroTitle = service?.title ?? DEFAULTS.title;
-  const heroDesc = service?.description ?? DEFAULTS.description;
+  const heroTitle = DEFAULTS.title;
+  const heroDesc = DEFAULTS.description;
   const displayItems = serviceItems.length > 0 ? serviceItems : STATIC_ITEMS;
   const displayHighlights = keyHighlights.length > 0 ? keyHighlights : highlights;
+
+  // "Our Maintenance Services" carousel content — sourced from serviceItems (built by ServiceController::show()
+  // from service.items, which is exactly what the admin "Service Items (grid cards)" editor manages, image included),
+  // falls back to DEFAULT_MAINTENANCE_SERVICES only if no items have been added yet
+  const displayMaintenanceServices = serviceItems.length > 0 ? serviceItems : DEFAULT_MAINTENANCE_SERVICES;
 
   // Dynamic Service Packages, sourced from services.items (falls back to defaults)
   const packages = (service?.items?.length > 0) ? service.items : DEFAULT_PACKAGES;
@@ -277,9 +297,10 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center" style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
-                }}>
+        backgroundImage: `url(${heroSecImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center"
+      }}>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
           <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
@@ -317,10 +338,12 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
             Overview
           </h2>
           <p className="text-orange-500 font-bold text-xs sm:text-sm md:text-base mb-3 sm:mb-4">
-            Smart Solar Energy Solutions for Every Building
+            Keep Your Air Conditioning System Running at Peak Performance
           </p>
           <p className="text-xs sm:text-sm md:text-base text-gray-700 leading-relaxed">
-            Master MEP Solution specializes in designing and installing customized solar photovoltaic (PV) systems that help reduce electricity costs while supporting sustainable energy goals. Whether you need an on-grid system for lower utility bills, an off-grid solution for remote locations, or a hybrid system with battery backup, our experienced engineers deliver reliable, efficient, and long-lasting solar installations.
+
+
+            Master MEP Solution's Annual Maintenance Service (AMS) is a preventive maintenance program designed for commercial buildings, offices, factories, hotels, hospitals, schools, retail stores, and industrial facilities. Our certified technicians perform scheduled inspections, professional cleaning, system testing, and preventive maintenance to minimize unexpected breakdowns while maximizing operational efficiency.
           </p>
         </Reveal>
       </section>
@@ -399,7 +422,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
       </section>
 
 
-      {/* Our Maintenance Services */}
+      {/* Our Maintenance Services — now dynamic, sourced from maintenanceServices prop (fallback to DEFAULT_MAINTENANCE_SERVICES) */}
       <section
         className="py-12 sm:py-16 px-4 md:px-6 relative overflow-hidden"
         style={{ background: "linear-gradient(90deg, #0C2D4F 0%, #1E5BA8 100%)" }}
@@ -415,11 +438,11 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
           </Reveal>
         </div>
 
-        <SolarServicesCarousel />
+        <SolarServicesCarousel services={displayMaintenanceServices} />
       </section>
 
 
-      {/* Service Packages — now dynamic from service.items (fallback to DEFAULT_PACKAGES) */}
+      {/* Service Packages */}
       <section className="py-16 px-4 md:px-6 max-w-6xl mx-auto">
         <Reveal>
           <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] text-center mb-10">
@@ -427,44 +450,91 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
           </h2>
         </Reveal>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 md:gap-6">
-          {packages.map((pkg, index) => {
-            const suitableFor = parseLines(pkg.description);
-            const includes = parseLines(pkg.points);
-            const orderNumber = String(index + 1).padStart(2, "0");
-            return (
-              <Reveal key={index} delay={index * 100}>
-                <div
-                  className={`border-2 border-[#2E9BD6] rounded-2xl p-3 sm:p-5 md:p-6 h-full hover-lift ${
-                    index === 2 ? "col-span-2 md:col-span-1" : ""
-                  }`}
-                >
-                  <div className="flex justify-between items-start mb-2 sm:mb-3">
-                    <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">
-                      {pkg.title}
-                    </h3>
-                    <span className="text-xl sm:text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">
-                      {orderNumber}
-                    </span>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+          <Reveal delay={0}>
+            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 md:p-6 h-full hover-lift">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">Basic Package</h3>
+                <span className="text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">01</span>
+              </div>
 
-                  <p className="text-[10px] sm:text-xs text-[#2E9BD6] font-medium mb-3 sm:mb-4 leading-snug">
-                    Service Frequency<br />{pkg.subtitle}
-                  </p>
+              <p className="text-xs text-[#2E9BD6] font-medium mb-4 leading-snug">
+                Service Frequency<br />Every 6 months
+              </p>
 
-                  <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
-                  <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside mb-3 sm:mb-4">
-                    {suitableFor.map((s, i) => <li key={i}>{s}</li>)}
-                  </ul>
+              <p className="text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside mb-4">
+                <li>Small offices</li>
+                <li>Retail shops</li>
+                <li>Residential Villas</li>
+              </ul>
 
-                  <p className="text-[10px] sm:text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
-                  <ul className="text-[10px] sm:text-xs text-gray-700 space-y-0.5 sm:space-y-1 list-disc list-inside">
-                    {includes.map((inc, i) => <li key={i}>{inc}</li>)}
-                  </ul>
-                </div>
-              </Reveal>
-            );
-          })}
+              <p className="text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                <li>General Inspection</li>
+                <li>Air Conditioner Cleaning</li>
+                <li>Maintenance Report</li>
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={100}>
+            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 md:p-6 h-full hover-lift">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">Standard Package</h3>
+                <span className="text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">02</span>
+              </div>
+
+              <p className="text-xs text-[#2E9BD6] font-medium mb-4 leading-snug">
+                Service Frequency<br />Every 4 months
+              </p>
+
+              <p className="text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside mb-4">
+                <li>Medium-sized offices</li>
+                <li>Restaurants</li>
+                <li>Clinics</li>
+                <li>Schools</li>
+              </ul>
+
+              <p className="text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                <li>Everything in Basic</li>
+                <li>More frequent inspections</li>
+                <li>Priority scheduling</li>
+              </ul>
+            </div>
+          </Reveal>
+
+          <Reveal delay={200}>
+            <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 md:p-6 h-full hover-lift">
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-base md:text-lg font-bold text-[#1A3A5C] leading-snug">Premium Package</h3>
+                <span className="text-3xl md:text-4xl font-extrabold text-orange-500 shrink-0">03</span>
+              </div>
+
+              <p className="text-xs text-[#2E9BD6] font-medium mb-4 leading-snug">
+                Service Frequency<br />Every 3 months
+              </p>
+
+              <p className="text-xs font-bold text-[#1A3A5C] mb-1">Suitable for:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside mb-4">
+                <li>Factories</li>
+                <li>Hotels</li>
+                <li>Hospitals</li>
+                <li>Data centers</li>
+                <li>Commercial buildings</li>
+              </ul>
+
+              <p className="text-xs font-bold text-[#1A3A5C] mb-1">Includes:</p>
+              <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                <li>Maximum preventive maintenance</li>
+                <li>Priority technical support</li>
+                <li>Detailed performance reporting</li>
+                <li>Reduced risk of system failure</li>
+              </ul>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -558,7 +628,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                 Customer Information
               </p>
 
-              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {[
                   { field: "Company Name", placeholder: "e.g. Master MEP Solution Co., Ltd." },
                   { field: "Contact Person", placeholder: "e.g. Sokha Chan" },
@@ -568,14 +638,14 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   { field: "Office Address", placeholder: "e.g. St. 271, Phnom Penh" },
                   { field: "Billing Address", placeholder: "e.g. Same as office address" },
                 ].map((item, i) => (
-                  <div key={i} className="bg-white rounded-2xl px-3 sm:px-4 py-2 sm:py-2.5">
-                    <label className="text-[10px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-1">
+                  <div key={i}>
+                    <label className="text-[11px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
                       {item.field}
                     </label>
                     <input
                       type="text"
                       placeholder={item.placeholder}
-                      className="w-full text-[9px] sm:text-[11px] text-[#1A3A5C] placeholder-[#1A3A5C]/40 bg-transparent border-0 border-b border-[#CFE7F6] focus:outline-none focus:border-[#1A3A5C] pb-1"
+                      className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
                     />
                   </div>
                 ))}
@@ -601,14 +671,14 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   { field: "Site Address", placeholder: "e.g. St. 271, Phnom Penh" },
                   { field: "Operating Hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
                 ].map((item, i) => (
-                  <div key={i} className="bg-[#CFE7F6] rounded-2xl px-4 sm:px-5 py-3 sm:py-4">
-                    <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-2">
+                  <div key={i}>
+                    <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
                       {item.field}
                     </label>
                     <input
                       type="text"
                       placeholder={item.placeholder}
-                      className="w-full text-[11px] sm:text-xs text-[#1A3A5C] placeholder-[#1A3A5C]/40 bg-transparent border-0 focus:outline-none"
+                      className="w-full bg-[#CFE7F6] rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
                     />
                   </div>
                 ))}
@@ -642,23 +712,23 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                 Choose Your Service Package
               </h3>
               <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
-                {packages.map((pkg, i) => (
+                {["Basic", "Standard", "Premium"].map((title, i) => (
                   <li key={i}>
                     <button
-                      onClick={() => setSelectedPackage(selectedPackage === pkg.title ? null : pkg.title)}
+                      onClick={() => setSelectedPackage(selectedPackage === title ? null : title)}
                       className="flex items-center gap-2"
                     >
                       <span
-                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === pkg.title ? "bg-[#1A3A5C]" : "bg-transparent"
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${selectedPackage === title ? "bg-[#1A3A5C]" : "bg-transparent"
                           }`}
                       >
-                        {selectedPackage === pkg.title && (
+                        {selectedPackage === title && (
                           <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                           </svg>
                         )}
                       </span>
-                      {pkg.title}
+                      {title}
                     </button>
                   </li>
                 ))}
@@ -709,14 +779,14 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
           {[
-            "Experienced solar engineers",
-            "Customized system design",
-            "High-quality solar components",
-            "Professional installation team",
-            "Compliance with electrical safety standards",
-            "After-sales maintenance and technical support",
-            "Energy-efficient and cost-effective solutions",
-            "One-stop engineering, procurement, and installation services",
+            "Certified HVAC engineers",
+            "Professional maintenance procedures",
+            "Fast response support",
+            "Transparent reporting",
+            "Commercial maintenance specialists",
+            "Flexible maintenance schedules",
+            "Genuine spare parts support",
+            "Reliable long-term service partner",
           ].map((label, i) => (
             <Reveal delay={i * 60} key={i}>
               <div className="border-2 border-[#2E9BD6] rounded-2xl p-5 sm:p-6 text-center hover-lift min-h-[120px] sm:min-h-[150px] lg:min-h-[160px] flex flex-col items-center justify-center">

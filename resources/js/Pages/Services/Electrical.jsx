@@ -148,8 +148,9 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
             <section
                 className="relative min-h-[90vh] flex items-center"
                 style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
+                    backgroundImage: `url(${bgImage || heroSecImage})`,
+                    backgroundPosition: "center center",
+                    backgroundSize: "cover"
                 }}
             >
                 <div className="absolute inset-0 bg-black/55" />
@@ -157,14 +158,14 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
                     <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
                     <Reveal delay={100}>
-                        <h1 className="text-3xl md:text-5xl font-bold mb-4">Electrical & ELV System</h1>
+                        <h1 className="text-3xl md:text-5xl font-bold mb-4">{heroTitle}</h1>
                     </Reveal>
                     <Reveal delay={260}>
                         <p className="text-[15px] font-semibold opacity-100 mb-8 max-w-xl mx-auto">
                             Electrical & ELV System Installation Services in Cambodia
                         </p>
                         <p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">
-                            Master MEP provides professional electrical engineering and ELV system installation including MDB systems, lighting systems, CCTV, fire alarm systems, LAN cabling, BMS systems, and power distribution solutions for commercial and industrial projects.
+                            {heroDesc}
                         </p>
                     </Reveal>
                     <Reveal delay={340}>
@@ -186,7 +187,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
 
             {/* Core Services Overview — layout matches reference image */}
 
-        {/*   Our Electrical & ELV Services Include  */}
+            {/*   Our Electrical & ELV Services Include  */}
             <section id="services-grid" className="py-16 px-4 md:px-6 max-w-7xl mx-auto">
                 <Reveal>
                     <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-8 text-left pl-14">
@@ -254,21 +255,49 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                 </Reveal>
             </section>
 
-            {/* Why Choose Us — dynamic from DB (key_highlights table, type=electrical) */}
+            {/* Why Choose Us — Electrical */}
             <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
                 <Reveal>
-                    <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-1 text-center">Why Choose Us</h2>
-                    <p className="text-orange-500 text-sm font-medium mb-8 text-center">Why Choose Master MEP for Electrical Engineering?</p>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-2 text-center">Why Choose Us</h2>
+                    <p className="text-orange-500 text-base font-bold mb-10 text-center">Why Choose Master MEP for Electrical Engineering?</p>
                 </Reveal>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {displayHighlights.map((item, i) => (
-                        <Reveal key={item.id ?? item.number} delay={i * 70}>
-                            <div className="hover-lift border-2 border-[#2E5C8A] rounded-xl p-6 text-center">
-                                <p className="text-4xl font-extrabold text-orange-500 mb-2">{item.number}</p>
-                                <p className="text-sm font-medium text-[#1A3A5C]">{item.title ?? item.label}</p>
-                            </div>
-                        </Reveal>
-                    ))}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    <Reveal delay={0}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">01</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Experienced electrical engineers</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={70}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">02</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">International safety standards</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={140}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">03</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Structured project management</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={210}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">04</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Quality installation materials</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={280}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">05</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Reliable testing & commissioning</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={350}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">06</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Strong after-sales support</p>
+                        </div>
+                    </Reveal>
                 </div>
             </section>
 
@@ -385,16 +414,26 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                     </Reveal>
 
                     <div className="flex flex-wrap justify-center gap-x-6 gap-y-10">
-                        {steps.map((step, i) => (
+                        {[
+                            { number: 1, label: "Site Survey" },
+                            { number: 2, label: "Electrical Load Calculation" },
+                            { number: 3, label: "System Design" },
+                            { number: 4, label: "Quotation & BOQ" },
+                            { number: 5, label: "Installation" },
+                            { number: 6, label: "Testing & Commissioning" },
+                            { number: 7, label: "Maintenance Support" },
+                        ].map((step, i) => (
                             <Reveal key={step.number} delay={i * 60}>
                                 <div
                                     className="relative bg-[#CFE7F6] rounded-2xl pt-10 pb-6 px-3 text-center hover-lift
-                                                w-[160px] sm:w-[190px] md:w-[200px]"
+                                   w-[160px] sm:w-[190px] md:w-[200px]
+                                   min-h-[130px] sm:min-h-[140px] md:min-h-[150px]
+                                   flex items-center justify-center"
                                 >
                                     <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0C2D4F] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
                                         {step.number}
                                     </div>
-                                    <p className="text-sm font-medium text-[#1A3A5C]">{step.label}</p>
+                                    <p className="text-sm font-medium text-[#039BE5]">{step.label}</p>
                                 </div>
                             </Reveal>
                         ))}

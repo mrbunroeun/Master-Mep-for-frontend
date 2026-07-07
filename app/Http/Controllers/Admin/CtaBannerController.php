@@ -1,64 +1,85 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use App\Models\CtaBanner;
+use App\Models\CategoryGallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
-
-class CtaBannerController extends Controller
+class CategoryGalleryController extends Controller
 {
+    private const CATEGORIES = [
+        'Commercial Buildings',
+        'Hospitals',
+        'Banks',
+        'Restaurants & Cafés',
+        'Luxury Villas',
+        'Fitness Centers',
+        'Fuel & Industrial Projects',
+    ];
+    /**
+     * Show all categories with their current 5 image slots, for the
+     * admin "Category Galleries" page.
+     */
     public function index()
     {
-        return Inertia::render('Admin/CtaBanner/Index', [
-            'ctaBanners' => CtaBanner::latest()->get(),
+        $galleries = CategoryGallery::all()->keyBy('category');
+        $data = collect(self::CATEGORIES)->map(function ($category) use ($galleries) {
+            $gallery = $galleries->get($category);
+            $slots = $gallery->images ?? [];
+            $slots = array_pad(array_slice($slots, 0, 5), 5, null);
+            return [
+                'category' => $category,
+                'images'   => array_map(
+                    fn ($path) => $path ? '/storage/' . $path : null,
+                    $slots
+                ),
+            ];
+        });
+        return Inertia::render('Admin/CategoryGallery/Index', [
+            'galleries' => $data,
         ]);
     }
-    public function create()
+    /**
+     * Update the 5 image slots for a single category. Each slot in the
+     * `images` array from the form is one of:
+     *  - an UploadedFile  -> store it, replacing whatever was in that slot
+     *  - the string "REMOVE" -> clear that slot (delete the old file)
+     *  - null/missing     -> leave that slot untouched
+     *
+     * Called from CategoryGalleryEditor.jsx, embedded inside the
+     * Admin/Project Create and Edit pages — so this redirects back to
+     * whichever page it was called from, not to a standalone gallery page.
+     */
+    public function update(Request $request, string $category)
     {
-        return Inertia::render('Admin/CtaBanner/Create');
-    }
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'button_text' => 'nullable|string',
-            'button_link' => 'nullable|string',
-            'image'       => 'nullable|image|max:2048',
-            'is_active'   => 'boolean',
+        abort_unless(in_array($category, self::CATEGORIES, true), 404);
+        $request->validate([
+            'images'   => 'nullable|array|max:5',
+            'images.*' => 'nullable', // each slot validated individually below since it can be a file, "REMOVE", or absent
         ]);
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('cta', 'public');
+        $gallery = CategoryGallery::firstOrCreate(
+            ['category' => $category],
+            ['images' => []]
+        );
+        $slots = $gallery->images ?? [];
+        // Normalize to exactly 5 slots
+        $slots = array_pad(array_slice($slots, 0, 5), 5, null);
+        foreach (range(0, 4) as $i) {
+            if ($request->hasFile("images.$i")) {
+                $request->validate(["images.$i" => 'image|max:51200']);
+                if (! empty($slots[$i])) {
+                    Storage::disk('public')->delete($slots[$i]);
+                }
+                $slots[$i] = $request->file("images.$i")->store('category-galleries', 'public');
+            } elseif ($request->input("images.$i") === 'REMOVE') {
+                if (! empty($slots[$i])) {
+                    Storage::disk('public')->delete($slots[$i]);
+                }
+                $slots[$i] = null;
+            }
+            // otherwise: leave slot untouched
         }
-        CtaBanner::create($validated);
-        return redirect()->route('admin.cta-banner.index')->with('success', 'CTA Banner created.');
-    }
-    public function edit(CtaBanner $ctaBanner)
-    {
-        return Inertia::render('Admin/CtaBanner/Edit', ['ctaBanner' => $ctaBanner]);
-    }
-    public function update(Request $request, CtaBanner $ctaBanner)
-    {
-        $validated = $request->validate([
-            'title'       => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'button_text' => 'nullable|string',
-            'button_link' => 'nullable|string',
-            'image'       => 'nullable|image|max:2048',
-            'is_active'   => 'boolean',
-        ]);
-        if ($request->hasFile('image')) {
-            if ($ctaBanner->image) Storage::disk('public')->delete($ctaBanner->image);
-            $validated['image'] = $request->file('image')->store('cta', 'public');
-        }
-        $ctaBanner->update($validated);
-        return redirect()->route('admin.cta-banner.index')->with('success', 'CTA Banner updated.');
-    }
-    public function destroy(CtaBanner $ctaBanner)
-    {
-        if ($ctaBanner->image) Storage::disk('public')->delete($ctaBanner->image);
-        $ctaBanner->delete();
-        return redirect()->route('admin.cta-banner.index')->with('success', 'CTA Banner deleted.');
+        $gallery->update(['images' => array_values(array_filter($slots))]);
+        return back()->with('success', "\"$category\" gallery updated.");
     }
 }

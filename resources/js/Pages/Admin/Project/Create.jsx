@@ -1,8 +1,19 @@
 import { Head, useForm, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { ArrowLeft, Save, Play } from "lucide-react";
+import { ArrowLeft, Save } from "lucide-react";
+import CategoryGalleryEditor from "@/Components/Admin/CategoryGalleryEditor";
 
-export default function Create({ auth }) {
+const CATEGORIES = [
+    "Commercial Buildings",
+    "Banks",
+    "Restaurants & Cafés",
+    "Hospitals",
+    "Fuel & Industrial Projects",
+    "Luxury Villas",
+    "Fitness Centers",
+];
+
+export default function Create({ auth, categoryGalleries = {} }) {
     const { data, setData, post, processing, errors, progress } = useForm({
         title:       "",
         description: "",
@@ -11,7 +22,6 @@ export default function Create({ auth }) {
         category:    "Commercial Buildings",
         location:    "",
         timeline:    "",
-        video_url:   "",
         order:       0,
         is_active:   true,
     });
@@ -20,16 +30,6 @@ export default function Create({ auth }) {
         e.preventDefault();
         post(route("admin.project.store"), { forceFormData: true });
     };
-
-    const getYouTubeId = (url) => {
-        if (!url) return null;
-        const match = url.match(
-            /(?:youtube\.com\/(?:watch\?v=|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-        );
-        return match ? match[1] : null;
-    };
-
-    const ytId = getYouTubeId(data.video_url);
 
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -62,16 +62,18 @@ export default function Create({ auth }) {
                         <select value={data.category}
                             onChange={(e) => setData("category", e.target.value)}
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A3A5C] bg-white">
-                            <option value="Commercial Buildings">Commercial Buildings</option>
-                            <option value="Banks">Banks</option>
-                            <option value="Restaurants & Cafés">Restaurants &amp; Cafés</option>
-                            <option value="Hospitals">Hospitals</option>
-                            <option value="Fuel & Industrial Projects">Fuel &amp; Industrial Projects</option>
-                            <option value="Luxury Villas">Luxury Villas</option>
-                            <option value="Fitness Centers">Fitness Centers</option>
+                            {CATEGORIES.map((cat) => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
                         </select>
                         {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                     </div>
+
+                    {/* Category Gallery — embedded directly in the project form */}
+                    <CategoryGalleryEditor
+                        category={data.category}
+                        initialImages={categoryGalleries[data.category] || []}
+                    />
 
                     {/* Scope */}
                     <div>
@@ -112,52 +114,6 @@ export default function Create({ auth }) {
                                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]"
                                 placeholder="2025" />
                         </div>
-                    </div>
-
-                    {/* Video URL */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            YouTube Video URL
-                            <span className="text-gray-400 font-normal ml-1">(optional)</span>
-                        </label>
-                        <input
-                            type="text"
-                            value={data.video_url}
-                            onChange={(e) => setData("video_url", e.target.value.trim())}
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]"
-                            placeholder="https://www.youtube.com/watch?v=xxxxxxxxxx" />
-
-                        {ytId && (
-                            <div className="mt-3 flex items-center gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                                <div className="relative flex-shrink-0">
-                                    <img
-                                        src={`https://img.youtube.com/vi/${ytId}/mqdefault.jpg`}
-                                        alt="YouTube thumbnail"
-                                        className="w-28 h-16 object-cover rounded-md bg-gray-200" />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="w-8 h-8 rounded-full bg-black/50 flex items-center justify-center">
-                                            <Play size={12} fill="white" className="text-white ml-0.5" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="flex flex-col gap-1.5">
-                                    <p className="text-xs font-medium text-green-700">✓ Valid YouTube link detected</p>
-                                    <p className="text-xs text-gray-500">Video preview will show on the projects page.</p>
-                                    <a href={data.video_url} target="_blank" rel="noreferrer"
-                                        className="inline-flex items-center gap-1 text-xs font-medium text-red-600 hover:underline">
-                                        <Play size={10} fill="currentColor" />
-                                        Open on YouTube ↗
-                                    </a>
-                                </div>
-                            </div>
-                        )}
-
-                        {data.video_url && !ytId && (
-                            <p className="text-xs text-red-400 mt-1">
-                                ✗ Could not detect YouTube video ID. Paste a full YouTube link.
-                            </p>
-                        )}
-                        {errors.video_url && <p className="text-red-500 text-xs mt-1">{errors.video_url}</p>}
                     </div>
 
                     {/* Image + Order */}

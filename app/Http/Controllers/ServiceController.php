@@ -4,34 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use App\Models\Project;
+use App\Models\KeyHighlight;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ServiceController extends Controller
 {
-    public function show(string $type)
-{
-    $allowed = ['mechanical', 'electrical', 'plumbing', 'maintenance', 'solasystem'];
-
-    if (!in_array($type, $allowed)) {
-        abort(404);
-    }
-
-    $service = Service::where('type', $type)->where('is_active', true)->first();
-
-    $projects = Project::where('is_active', true)
-        ->where('category', 'like', '%' . ucfirst($type) . '%')
-        ->latest()
-        ->take(3)
-        ->get();
-
-    if ($projects->isEmpty()) {
-        $projects = Project::where('is_active', true)
-            ->latest()
-            ->take(3)
-            ->get();
-    }
-
-    $pageMap = [
+    /**
+     * Map each service "type" (stored on the Service model) to the
+     * Inertia page component that renders it.
+     *
+     * Adjust these component paths to match wherever your files actually
+     * live under resources/js/Pages (e.g. "Electrical" if the file is
+     * resources/js/Pages/Electrical.jsx, or "Services/Electrical" if it's
+     * nested in a Services folder).
+     */
+    private const TYPE_COMPONENT_MAP = [
         'mechanical'  => 'Services/Mechanical',
         'electrical'  => 'Services/Electrical',
         'plumbing'    => 'Services/Plumbing',
@@ -39,11 +28,47 @@ class ServiceController extends Controller
         'solasystem'  => 'Services/SolaSystem',
     ];
 
-    return Inertia::render($pageMap[$type], [
-        'service'      => $service,
-        'serviceItems' => $service?->items ?? [],
-        'projects'     => $projects,
-        'heroImage'    => '/images/hero.jpg',
-    ]);
-}
+    public function show(Request $request, string $type)
+    {
+        if (! array_key_exists($type, self::TYPE_COMPONENT_MAP)) {
+            throw new NotFoundHttpException();
+        }
+
+        $service = Service::where('type', $type)
+            ->where('is_active', true)
+            ->first();
+
+        // items are stored as a JSON array on the service itself
+        // (see admin ServiceController::processItems) — each row already
+        // has title / points / image, which is exactly what the page expects.
+        $serviceItems = collect($service->items ?? [])
+            ->map(function ($item, $index) {
+                return array_merge($item, ['id' => $item['id'] ?? $index]);
+            })
+            ->values()
+            ->all();
+
+        $projects = Project::where('is_active', true)
+            // If you add a column linking projects to a service type
+            // (e.g. `service_type`), filter here instead of showing all:
+            // ->where('service_type', $type)
+            ->latest()
+            ->get();
+
+        $keyHighlights = KeyHighlight::where('is_active', true)
+            // Same idea — filter by type once/if you add that column:
+            // ->where('type', $type)
+            ->orderBy('order')
+            ->get();
+
+        $heroImage = heroImageFor("/services/{$type}");
+
+        return Inertia::render(self::TYPE_COMPONENT_MAP[$type], [
+            'service'       => $service,
+            'serviceItems'  => $serviceItems,
+            'projects'      => $projects,
+            'keyHighlights' => $keyHighlights,
+            'heroImage'     => $heroImage,
+        ]);
+    }
 }

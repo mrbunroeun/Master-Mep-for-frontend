@@ -21,47 +21,54 @@ class AboutController extends Controller
     }
 
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'title'       => 'required|string|max:255',
-        'description' => 'required|string',
-        'video'       => 'nullable|mimes:mp4,mov,avi|max:51200',
-        'is_active'   => 'boolean',
-    ]);
+    {
+        ini_set('upload_max_filesize', '50M');
+        ini_set('post_max_size', '55M');
 
-    // Default to active unless explicitly turned off by the admin
-    $validated['is_active'] = $request->boolean('is_active', true);
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'video'       => 'nullable|mimes:mp4,mov,avi|max:51200',
+            'is_active'   => 'boolean',
+        ]);
 
-    if ($request->hasFile('video')) {
-        $validated['video'] = $request->file('video')->store('about/videos', 'public');
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('video')) {
+            $validated['video'] = $request->file('video')->store('about/videos', 'public');
+        }
+
+        About::create($validated);
+        return redirect()->route('admin.about.index')->with('success', 'About created.');
     }
-     About::create($validated);
-    return redirect()->route('admin.about.index')->with('success', 'About created.');
-}
+
     public function edit(About $about)
     {
         return Inertia::render('Admin/About/Edit', ['about' => $about]);
     }
 
     public function update(Request $request, About $about)
-{
-    $validated = $request->validate([
-        'title'       => 'required|string|max:255',
-        'description' => 'required|string',
-        'video'       => 'nullable|mimes:mp4,mov,avi|max:51200',
-        'is_active'   => 'boolean',
-    ]);
+    {
+        ini_set('upload_max_filesize', '50M');
+        ini_set('post_max_size', '55M');
 
-    // Default to active unless explicitly turned off by the admin
-    $validated['is_active'] = $request->boolean('is_active', true);
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string',
+            'video'       => 'nullable|mimes:mp4,mov,avi|max:51200',
+            'is_active'   => 'boolean',
+        ]);
 
-    if ($request->hasFile('video')) {
-        if ($about->video) Storage::disk('public')->delete($about->video);
-        $validated['video'] = $request->file('video')->store('about/videos', 'public');
-    } else {
-        unset($validated['video']);
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        if ($request->hasFile('video')) {
+            if ($about->video) Storage::disk('public')->delete($about->video);
+            $validated['video'] = $request->file('video')->store('about/videos', 'public');
+        } else {
+            unset($validated['video']);
+        }
+
+        $about->update($validated);
+        return redirect()->route('admin.about.index')->with('success', 'About updated.');
     }
-    $about->update($validated);
-    return redirect()->route('admin.about.index')->with('success', 'About updated.');
-   }
 }

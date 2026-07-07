@@ -37,25 +37,25 @@ const staticServices = [
         align: "right",
     },
     {
-        title: "Electrical & ELV Services",
-        eyebrow: "Electrical & ELV\nSystem Services",
+        title: "Air Conditioner Maintenance",
+        eyebrow: " Air Conditioner\nMaintenance",
         icon: <Zap size={42} className="text-white/90" />,
         gradient: "linear-gradient(135deg, #1A3A5C 0%, #2E6BAA 100%)",
-        description: "Complete LV & ELV systems including CCTV, fire alarm, LAN, WiFi, solar, automation, and smart lighting.",
-        button: "Explore Electrical\nServices",
-        href: "/services/electrical",
-        type: "electrical",
+        description: "Preventive air conditioning maintenance, professional cleaning, system inspections, and performance testing to improve efficiency, reduce breakdowns, and extend equipment lifespan.",
+        button: "Learn More",
+        href: "/services/maintenance",
+        type: "maintenance",
         align: "left",
     },
-        {
-        title: "Plumbing Services",
-        eyebrow: "Plumbing\nSystem Services",
+    {
+        title: "Solar System Installation",
+        eyebrow: "Solar System\nInstallation",
         icon: <Droplets size={42} className="text-white/90" />,
         gradient: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)",
-        description: "Water supply, drainage, sewage, rainwater systems, water treatment, and tank installation services.",
-        button: "View Plumbing\nSolutions",
-        href: "/services/plumbing",
-        type: "plumbing",
+        description: "Design, supply, and installation of On-Grid, Off-Grid, and Hybrid solar systems for homes, businesses, and industrial facilities to reduce energy costs and improve energy independence.",
+        button: "Learn More",
+        href: "/services/solasystem",
+        type: "solasystem",
         align: "right",
     },
 ];
@@ -107,14 +107,16 @@ export default function Services({ services = [], pageHeader = null }) {
                                     {/* Image — alternates left/right based on align */}
                                     <div className={isRight ? "md:order-2" : "md:order-1"}>
                                         {/* Outer padded gray "frame" card, matches reference design */}
-                                        <div className="bg-gray-200/60 rounded-2xl p-4 h-[320px] flex items-center justify-center">
-                                            <div className="group relative overflow-hidden rounded-xl w-full h-full shadow-lg">
+                                        <div className={`p-4 h-[320px] flex items-center justify-center ${isRight ? "rounded-tr-[3rem]" : "rounded-tl-[3rem]"
+                                            }`}>
+                                            <div className={`group relative overflow-hidden w-full h-full shadow-lg ${isRight ? "rounded-tr-[2.5rem]" : "rounded-tl-[2.5rem]"
+                                                }`}>
 
                                                 {service.image ? (
                                                     <img
                                                         src={service.image}
                                                         alt={service.title}
-                                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                                        className="w-full h-full object-cover bg-[#d7d7d7] transition-transform duration-500 group-hover:scale-110"
                                                     />
                                                 ) : (
                                                     <div

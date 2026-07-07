@@ -3,64 +3,12 @@ import MepLayout from "@/Layouts/MepLayout";
 import { Head, Link } from "@inertiajs/react";
 import FadeIn from "@/Components/FadeIn";
 
-const ACTIVITIES = [
-    {
-        id: 1,
-        category: "Project Update",
-        date: "June 2026",
-        title: "Completed Electrical Installation for New Commercial Tower",
-        excerpt:
-            "Our team successfully completed the full electrical and ELV system installation for a 12-story commercial building in Phnom Penh, including MDB, fire alarm, and CCTV systems.",
-    },
-    {
-        id: 2,
-        category: "Company News",
-        date: "May 2026",
-        title: "Master MEP Expands Solar Installation Services",
-        excerpt:
-            "We're excited to announce the expansion of our solar PV installation services, now offering on-grid, off-grid, and hybrid systems for residential and industrial clients.",
-    },
-    {
-        id: 3,
-        category: "Training",
-        date: "April 2026",
-        title: "Technical Team Completes Advanced HVAC Certification",
-        excerpt:
-            "Our engineering team completed advanced training on modern HVAC and VRF system design, strengthening our technical capacity for large-scale projects.",
-    },
-    {
-        id: 4,
-        category: "Site Visit",
-        date: "March 2026",
-        title: "Free Site Survey Program Launched for AMS Customers",
-        excerpt:
-            "We launched a free site survey program to help businesses assess their air conditioning maintenance needs before enrolling in our Annual Maintenance Service.",
-    },
-    {
-        id: 5,
-        category: "Project Update",
-        date: "February 2026",
-        title: "Fire Alarm System Upgrade for Industrial Client",
-        excerpt:
-            "Completed a full fire alarm and life safety system upgrade for a fuel storage facility, ensuring compliance with the latest safety standards.",
-    },
-    {
-        id: 6,
-        category: "Community",
-        date: "January 2026",
-        title: "Master MEP Sponsors Local Technical Training Workshop",
-        excerpt:
-            "We supported a technical skills workshop for young engineers in Phnom Penh, sharing knowledge on MEP design and installation best practices.",
-    },
-];
-
-export default function LatestActivities() {
+export default function LatestActivities({ activities = [], heroImage }) {
     const [filter, setFilter] = useState("All");
-    const categories = ["All", ...new Set(ACTIVITIES.map((a) => a.category))];
+    const categories = ["All", ...new Set(activities.map((a) => a.category))];
     const filtered =
-        filter === "All" ? ACTIVITIES : ACTIVITIES.filter((a) => a.category === filter);
+        filter === "All" ? activities : activities.filter((a) => a.category === filter);
     const heroSecImage = "/HeroSection/heroSection.png";
-
 
     return (
         <MepLayout>
@@ -126,9 +74,16 @@ export default function LatestActivities() {
                     {filtered.map((item, i) => (
                         <FadeIn key={item.id} delay={i * 80}>
                             <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 h-full flex flex-col">
-                                {/* Image placeholder — waiting for backend */}
-                                <div className="w-full aspect-[4/3] bg-gray-200 flex items-center justify-center">
-                                    <span className="text-gray-400 text-xs font-medium">Image coming soon</span>
+                                <div className="w-full aspect-[4/3] bg-gray-200 flex items-center justify-center overflow-hidden">
+                                    {item.image ? (
+                                        <img
+                                            src={item.image}
+                                            alt={item.title}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <span className="text-gray-400 text-xs font-medium">Image coming soon</span>
+                                    )}
                                 </div>
 
                                 <div className="p-4 sm:p-5 flex flex-col flex-1">
@@ -152,10 +107,10 @@ export default function LatestActivities() {
             </section>
 
             {/* CTA */}
-            <section className="relative py-16 sm:py-20 text-center bg-[#CFE7F6]"  style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
-                }} >
+            <section className="relative py-16 sm:py-20 text-center bg-[#CFE7F6]" style={{
+                backgroundImage: `url(${heroSecImage})`,
+                backgroundPosition: "center center"
+            }}>
                 <div className="absolute inset-0 bg-black/55" />
 
                 <FadeIn className="relative z-10 max-w-2xl mx-auto px-6">

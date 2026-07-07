@@ -8,12 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('maintenance_contracts', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('subtitle')->nullable();
-            $table->text('description')->nullable();
-            $table->text('points')->nullable(); // newline-separated list
+            $table->string('category');
+            $table->date('activity_date');
+            $table->text('excerpt')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
@@ -22,6 +22,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('maintenance_contracts');
+        Schema::dropIfExists('activities');
     }
 };

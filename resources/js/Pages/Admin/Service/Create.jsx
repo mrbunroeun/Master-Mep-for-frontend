@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Head, Link, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import BackToDashboard from "@/Components/BackToDashboard";
@@ -16,22 +17,33 @@ export default function Create() {
         tagline: "",
         title: "",
         description: "",
-        image: null,
         button_text: "",
         benefits_title: "",
         benefits_points: "",
         order: 0,
         is_active: true,
-        items: [{ title: "", points: "", imageFile: null }],
+        items: [{ title: "", points: "" }], // no file in here anymore
     });
 
-    const updateItem = (i, field, value) => {
-        const updated = [...data.items];
-        updated[i][field] = value;
-        setData("items", updated);
+    const [heroImage, setHeroImage] = useState(null);
+    const [itemImages, setItemImages] = useState([null]); // index-aligned with data.items
+    const [showMore, setShowMore] = useState(false);
+
+    const updateItem = (i, field, value) =>
+        setData("items", data.items.map((it, idx) => (idx === i ? { ...it, [field]: value } : it)));
+
+    const setItemImage = (i, file) =>
+        setItemImages((prev) => prev.map((f, idx) => (idx === i ? file : f)));
+
+    const addItem = () => {
+        setData("items", [...data.items, { title: "", points: "" }]);
+        setItemImages((prev) => [...prev, null]);
     };
-    const addItem = () => setData("items", [...data.items, { title: "", points: "", imageFile: null }]);
-    const removeItem = (i) => setData("items", data.items.filter((_, idx) => idx !== i));
+
+    const removeItem = (i) => {
+        setData("items", data.items.filter((_, idx) => idx !== i));
+        setItemImages((prev) => prev.filter((_, idx) => idx !== i));
+    };
 
     transform((formData) => {
         const fd = new FormData();
@@ -44,12 +56,12 @@ export default function Create() {
         fd.append("benefits_points", formData.benefits_points || "");
         fd.append("order", formData.order || 0);
         fd.append("is_active", formData.is_active ? "1" : "0");
-        if (formData.image) fd.append("image", formData.image);
+        if (heroImage instanceof File) fd.append("image", heroImage);
 
         formData.items.forEach((item, i) => {
             fd.append(`items[${i}][title]`, item.title || "");
             fd.append(`items[${i}][points]`, item.points || "");
-            if (item.imageFile) fd.append(`items[${i}][image]`, item.imageFile);
+            if (itemImages[i] instanceof File) fd.append(`items[${i}][image]`, itemImages[i]);
         });
 
         return fd;
@@ -57,7 +69,12 @@ export default function Create() {
 
     const submit = (e) => {
         e.preventDefault();
-        post("/admin/service", { forceFormData: true });
+        post("/admin/service", {
+            forceFormData: true,
+            onError: (errors) => {
+                console.log("VALIDATION ERRORS:", errors);
+            },
+        });
     };
 
     return (
@@ -83,51 +100,67 @@ export default function Create() {
                         {errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
                     </div>
 
-                    {/* <div>
+                    <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                         <input type="text" value={data.title} onChange={(e) => setData("title", e.target.value)}
                             placeholder="e.g. Plumbing System"
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
                         {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
-                    </div> */}
+                    </div>
 
-                    {/* <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
-                        <input type="text" value={data.tagline} onChange={(e) => setData("tagline", e.target.value)}
-                            placeholder="e.g. What We Do"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
-                    </div> */}
+                    <div>
+                        <button
+                            type="button"
+                            onClick={() => setShowMore((prev) => !prev)}
+                            className="text-sm font-medium text-[#1A3A5C] hover:underline"
+                        >
+                            {showMore ? "− Hide more options" : "+ Show more options"}
+                        </button>
+                    </div>
 
-                    {/* <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea rows={4} value={data.description} onChange={(e) => setData("description", e.target.value)}
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm resize-none" />
-                    </div> */}
+                    {showMore && (
+                        <div className="space-y-5 border border-gray-200 rounded-lg p-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+                                <input type="text" value={data.tagline} onChange={(e) => setData("tagline", e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
+                                {errors.tagline && <p className="text-red-500 text-xs mt-1">{errors.tagline}</p>}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <textarea rows={3} value={data.description} onChange={(e) => setData("description", e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
+                                {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Button Text</label>
+                                <input type="text" value={data.button_text} onChange={(e) => setData("button_text", e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Benefits Title</label>
+                                <input type="text" value={data.benefits_title} onChange={(e) => setData("benefits_title", e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Benefits Points</label>
+                                <textarea rows={3} value={data.benefits_points} onChange={(e) => setData("benefits_points", e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
+                            </div>
+                        </div>
+                    )}
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Hero Image</label>
-                        <input type="file" accept="image/*" onChange={(e) => setData("image", e.target.files[0])}
+                        <input type="file" accept="image/*" onChange={(e) => setHeroImage(e.target.files[0] || null)}
                             className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
+                        {errors.image && <p className="text-red-500 text-xs mt-1">{errors.image}</p>}
                     </div>
 
-                    {/* <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Button Text</label>
-                        <input type="text" value={data.button_text} onChange={(e) => setData("button_text", e.target.value)}
-                            placeholder="View Plumbing Solutions"
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm" />
-                    </div> */}
-
-                    {/* <div className="border border-gray-200 rounded-lg p-4 space-y-3 bg-gray-50">
-                        <p className="text-sm font-semibold">Benefits Section</p>
-                        <input type="text" placeholder="Benefits title" value={data.benefits_title}
-                            onChange={(e) => setData("benefits_title", e.target.value)}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
-                        <textarea rows={4} placeholder="One benefit per line" value={data.benefits_points}
-                            onChange={(e) => setData("benefits_points", e.target.value)}
-                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" />
-                    </div> */}
-
-                    {/* Items (3 grid cards) */}
                     <div>
                         <div className="flex items-center justify-between mb-2">
                             <label className="block text-sm font-medium">Service Items (grid cards)</label>
@@ -151,7 +184,7 @@ export default function Create() {
                                     <div>
                                         <label className="block text-xs font-medium mb-1">Item Image</label>
                                         <input type="file" accept="image/*"
-                                            onChange={(e) => updateItem(i, "imageFile", e.target.files[0])} />
+                                            onChange={(e) => setItemImage(i, e.target.files[0] || null)} />
                                     </div>
                                 </div>
                             ))}

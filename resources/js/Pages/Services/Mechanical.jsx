@@ -139,8 +139,9 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
             <section
                 className="relative min-h-[90vh] flex items-center"
                 style={{
-                    backgroundImage: `url(${heroSecImage})`,
-                    backgroundPosition: "center center"
+                    backgroundImage: `url(${bgImage || heroSecImage})`,
+                    backgroundPosition: "center center",
+                    backgroundSize: "cover"
                 }}
             >
                 <div className="absolute inset-0 bg-black/55" />
@@ -148,14 +149,14 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                     <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
                     <p className="text-[10px] sm:text-xs tracking-[0.5em] sm:tracking-[1em] text-[#96DCFF] mb-6 sm:mb-8">SOLUTION</p>
                     <Reveal delay={100}>
-                        <h1 className="text-3xl md:text-5xl font-bold mb-4">Mechanical / HVAC System</h1>
+                        <h1 className="text-3xl md:text-5xl font-bold mb-4">{heroTitle}</h1>
                     </Reveal>
                     <Reveal delay={260}>
                         <p className="text-[15px] font-semibold opacity-100 mb-8 max-w-xl mx-auto">
                             Professional HVAC & Mechanical Engineering Services in Cambodia
                         </p>
                         <p className="text-sm opacity-80 mb-8 max-w-xl mx-auto">
-                            Master MEP Solution Co., Ltd provides professional HVAC installation, ventilation systems, VRV/VRF systems, chilled water systems, ducting systems, and mechanical engineering solutions for commercial buildings, villas, restaurants, hospitals, and industrial facilities across Cambodia.
+                            {heroDesc}
                         </p>
                     </Reveal>
                     <Reveal delay={340}>
@@ -249,78 +250,120 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
             {/* Why Choose Us — dynamic from DB (key_highlights table, type=mechanical) */}
             <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
                 <Reveal>
-                    <h2 className="text-2xl md:text-3xl font-bold text-[#1A3A5C] mb-2 text-center">Why Choose Us</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold text-[#039BE5] mb-2 text-center">Why Choose Us</h2>
                     <p className="text-orange-500 text-base font-bold mb-10 text-center">Why Choose Master MEP for HVAC Services?</p>
                 </Reveal>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {displayHighlights.map((item, i) => (
-                        <Reveal key={item.id ?? item.number} delay={i * 70}>
-                            <div className="hover-lift border-2 border-[#2E5C8A] rounded-xl p-6 text-center">
-                                <p className="text-4xl font-extrabold text-orange-500 mb-2">{item.number}</p>
-                                <p className="text-sm font-medium text-[#1A3A5C]">{item.title ?? item.label}</p>
-                            </div>
-                        </Reveal>
-                    ))}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    <Reveal delay={0}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">01</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Experienced HVAC engineering team</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={70}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">02</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Energy-efficient system solutions</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={140}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">03</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">International engineering standards</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={210}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">04</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Fast installation & project execution</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={280}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">05</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Reliable maintenance support</p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={350}>
+                        <div className="hover-lift border-2 border-[#039BE5] rounded-xl p-4 md:p-6 text-center h-full">
+                            <p className="text-2xl md:text-4xl font-extrabold text-orange-500 mb-2">06</p>
+                            <p className="text-xs md:text-sm font-medium text-[#039BE5] min-h-[2.5rem] md:min-h-[2.75rem] flex items-center justify-center">Quality workmanship & testing</p>
+                        </div>
+                    </Reveal>
                 </div>
             </section>
 
             {/* Featured Projects */}
-            {featuredProject && (
+            {projects.length > 0 && (
                 <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
                     <Reveal>
                         <h2 className="text-xl md:text-2xl font-bold text-[#1A3A5C] mb-1">Featured Projects</h2>
                         <p className="text-orange-500 text-sm font-medium mb-8">Featured HVAC Projects</p>
                     </Reveal>
-                    <Reveal>
-                        <Link
-                            href={`/projects?category=${encodeURIComponent(featuredProject.category || "")}`}
-                            className="block text-white rounded-2xl overflow-hidden shadow-md flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
-                            style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}
-                        >
-                            <div className="w-full h-52 sm:h-60 md:h-auto md:w-2/5 flex-shrink-0 p-3 sm:p-4">
-                                <div className="relative w-full h-full rounded-2xl overflow-hidden">
-                                    {featuredBg ? (
-                                        <img src={featuredBg} alt={featuredProject.title} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full min-h-[200px] flex flex-col items-center justify-center gap-3"
-                                            style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
-                                            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
-                                                <ThermometerSun size={32} className="text-white/40" />
+
+                    <div className="space-y-6">
+                        {projects.map((project, i) => {
+                            const ytId = getYouTubeId(project.video_url);
+                            const thumb = ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : null;
+                            const bg = thumb || (project.image ? `/storage/${project.image}` : null);
+                            const scopeItems = Array.isArray(project.scope)
+                                ? project.scope
+                                : (project.scope || project.description || "").split("\n").map(s => s.trim()).filter(Boolean);
+
+                            return (
+                                <Reveal key={project.id} delay={i * 80}>
+                                    <Link
+                                        href={`/projects?category=${encodeURIComponent(project.category || "")}`}
+                                        className="block text-white rounded-2xl overflow-hidden shadow-md flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                                        style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}
+                                    >
+                                        <div className="w-full h-52 sm:h-60 md:h-auto md:w-2/5 flex-shrink-0 p-3 sm:p-4">
+                                            <div className="relative w-full h-full rounded-2xl overflow-hidden">
+                                                {bg ? (
+                                                    <img src={bg} alt={project.title} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className="w-full h-full min-h-[200px] flex flex-col items-center justify-center gap-3"
+                                                        style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
+                                                        <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center">
+                                                            <ThermometerSun size={32} className="text-white/40" />
+                                                        </div>
+                                                        <p className="text-white/30 text-xs font-medium tracking-wide uppercase">No Image Yet</p>
+                                                    </div>
+                                                )}
+                                                {ytId && (
+                                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                                        <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center">
+                                                            <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="ml-0.5"><path d="M8 5v14l11-7z" /></svg>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
-                                            <p className="text-white/30 text-xs font-medium tracking-wide uppercase">No Image Yet</p>
                                         </div>
-                                    )}
-                                    {featuredYtId && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-                                            <div className="w-14 h-14 rounded-xl bg-white/20 backdrop-blur-sm border border-white/40 flex items-center justify-center">
-                                                <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="ml-0.5"><path d="M8 5v14l11-7z" /></svg>
+                                        <div className="flex-1 p-5 sm:p-6 flex flex-col justify-between">
+                                            <div>
+                                                <h3 className="text-sm sm:text-base font-bold mb-4 leading-snug">{project.title}</h3>
+                                                <p className="text-sm font-semibold mb-1">Scope of work:</p>
+                                                <div className="text-xs sm:text-sm opacity-85 space-y-0.5 mb-5">
+                                                    {scopeItems.length > 0 ? scopeItems.map((s, i) => (
+                                                        <p key={i}>{s}</p>
+                                                    )) : (
+                                                        <p>{project.description || "MEP Engineering"}</p>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-col gap-0.5 mb-5 text-xs opacity-70">
+                                                    {project.location && <p>Location : {project.location}</p>}
+                                                    {project.timeline && <p>Timeline: {project.timeline}</p>}
+                                                </div>
                                             </div>
+                                            <span className="self-end inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-[#1A3A5C] rounded-xl text-xs font-semibold transition-all duration-200">
+                                                View All Projects →
+                                            </span>
                                         </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex-1 p-5 sm:p-6 flex flex-col justify-between">
-                                <div>
-                                    <h3 className="text-sm sm:text-base font-bold mb-4 leading-snug">{featuredProject.title}</h3>
-                                    <p className="text-sm font-semibold mb-1">Scope of work:</p>
-                                    <div className="text-xs sm:text-sm opacity-85 space-y-0.5 mb-5">
-                                        {featuredScopeItems.length > 0 ? featuredScopeItems.map((s, i) => (
-                                            <p key={i}>{s}</p>
-                                        )) : (
-                                            <p>{featuredProject.description || "MEP Engineering"}</p>
-                                        )}
-                                    </div>
-                                    <div className="flex flex-col gap-0.5 mb-5 text-xs opacity-70">
-                                        {featuredProject.location && <p>Location : {featuredProject.location}</p>}
-                                        {featuredProject.timeline && <p>Timeline: {featuredProject.timeline}</p>}
-                                    </div>
-                                </div>
-                                <span className="self-end inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-[#1A3A5C] rounded-xl text-xs font-semibold transition-all duration-200">
-                                    View All Projects →
-                                </span>
-                            </div>
-                        </Link>
-                    </Reveal>
+                                    </Link>
+                                </Reveal>
+                            );
+                        })}
+                    </div>
                 </section>
             )}
 
@@ -336,13 +379,15 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                         {steps.map((step, i) => (
                             <Reveal key={step.number} delay={i * 60}>
                                 <div
-                                    className="relative bg-[#CFE7F6] rounded-2xl pt-10 pb-6 px-3 text-center hover-lift
-                                               w-[160px] sm:w-[190px] md:w-[200px]"
+                                    className="relative bg-[#CBE5F3] rounded-2xl pt-10 pb-6 px-3 text-center hover-lift
+                                   w-[160px] sm:w-[190px] md:w-[200px]
+                                   min-h-[130px] sm:min-h-[140px] md:min-h-[150px]
+                                   flex items-center justify-center"
                                 >
                                     <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-[#0C2D4F] rounded-full flex items-center justify-center text-white font-bold text-lg shadow-md">
                                         {step.number}
                                     </div>
-                                    <p className="text-sm font-medium text-[#1A3A5C]">{step.label}</p>
+                                    <p className="text-sm font-medium text-[#0167CC]">{step.label}</p>
                                 </div>
                             </Reveal>
                         ))}

@@ -18,10 +18,16 @@ export default function Index({ auth, projects }) {
                         <h1 className="text-2xl font-bold text-[#1A3A5C]">Projects</h1>
                         <p className="text-gray-400 text-sm mt-0.5">{projects.length} project(s)</p>
                     </div>
-                    <Link href="/admin/project/create"
-                        className="px-4 py-2 bg-[#1A3A5C] text-white rounded-lg text-sm font-medium hover:bg-[#2E5C8A] transition">
-                        + Add Project
-                    </Link>
+                    <div className="flex gap-2">
+                        <Link href={route("admin.category-gallery.index")}
+                            className="px-4 py-2 border border-[#1A3A5C] text-[#1A3A5C] rounded-lg text-sm font-medium hover:bg-[#1A3A5C]/5 transition">
+                            Category Galleries
+                        </Link>
+                        <Link href="/admin/project/create"
+                            className="px-4 py-2 bg-[#1A3A5C] text-white rounded-lg text-sm font-medium hover:bg-[#2E5C8A] transition">
+                            + Add Project
+                        </Link>
+                    </div>
                 </div>
 
                 <div className="space-y-4">
@@ -46,12 +52,6 @@ export default function Index({ auth, projects }) {
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 flex-wrap">
                                     <h2 className="font-bold text-[#1A3A5C] truncate">{project.title}</h2>
-                                    {project.video_url && (
-                                        <a href={project.video_url} target="_blank" rel="noreferrer"
-                                            className="inline-flex items-center gap-1 text-xs bg-red-50 text-red-500 px-2 py-0.5 rounded-full hover:bg-red-100 transition">
-                                            ▶ Video
-                                        </a>
-                                    )}
                                 </div>
                                 <div className="flex items-center gap-2 mt-1 flex-wrap">
                                     <span className="text-xs text-orange-500 font-medium">{project.category}</span>

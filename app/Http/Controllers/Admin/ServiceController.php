@@ -31,7 +31,7 @@ class ServiceController extends Controller
             'tagline'             => 'nullable|string|max:255',
             'title'               => 'required|string|max:255',
             'description'         => 'nullable|string',
-            'image'               => 'nullable|image|max:10240',
+            'image'               => 'nullable|image|max:51200',
             'button_text'         => 'nullable|string|max:100',
             'benefits_title'      => 'nullable|string|max:255',
             'benefits_points'     => 'nullable|string',
@@ -42,19 +42,41 @@ class ServiceController extends Controller
             'items.*.subtitle'    => 'nullable|string|max:255',
             'items.*.description' => 'nullable|string',
             'items.*.points'      => 'nullable|string',
-            'items.*.image'       => 'nullable|image|max:10240',
+            'items.*.image'       => 'nullable|image|max:51200',
         ]);
     }
 
+    /**
+     * Process the incoming `items` array, storing any newly uploaded
+     * item images and deleting the old file when an image is replaced.
+     */
     private function processItems(Request $request, array $existingItems = []): array
     {
         $items = $request->input('items', []);
 
         foreach ($items as $i => $item) {
+            $oldImage = $existingItems[$i]['image'] ?? null;
+
             if ($request->hasFile("items.$i.image")) {
+                // A new image was uploaded for this item — store it, then
+                // delete the previous file (if any) now that it's replaced.
                 $items[$i]['image'] = $request->file("items.$i.image")->store('services/items', 'public');
-            } elseif (isset($existingItems[$i]['image'])) {
-                $items[$i]['image'] = $existingItems[$i]['image'];
+
+                if ($oldImage) {
+                    Storage::disk('public')->delete($oldImage);
+                }
+            } elseif ($oldImage) {
+                // No new upload — keep the existing image reference.
+                $items[$i]['image'] = $oldImage;
+            }
+        }
+
+        // Any items that existed before but were removed from the form
+        // (e.g. user deleted a row) should have their images cleaned up too.
+        $newCount = count($items);
+        foreach ($existingItems as $i => $old) {
+            if ($i >= $newCount && ! empty($old['image'])) {
+                Storage::disk('public')->delete($old['image']);
             }
         }
 
@@ -106,7 +128,19 @@ class ServiceController extends Controller
 
     public function destroy(Service $service)
     {
-        if ($service->image) Storage::disk('public')->delete($service->image);
+        if ($service->image) {
+            Storage::disk('public')->delete($service->image);
+        }
+
+        // Clean up every item image too, not just the main hero image.
+        if (is_array($service->items)) {
+            foreach ($service->items as $item) {
+                if (! empty($item['image'])) {
+                    Storage::disk('public')->delete($item['image']);
+                }
+            }
+        }
+
         $service->delete();
 
         return redirect()->route('admin.service.index')->with('success', 'Service deleted.');

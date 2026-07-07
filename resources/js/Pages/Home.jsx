@@ -7,19 +7,19 @@ import Whychooseus from "@/Components/Home/Whychooseus";
 import Keyhighlights from "@/Components/Home/Keyhighlights";
 import Projects from "@/Components/Home/Projects";
 import Faqs from "@/Components/Home/Faqs";
+import Partners from "@/Components/Home/Partners";
 import Ctabanner from "@/Components/Home/Ctabanner";
 
 export default function Home({
-    about,
     services,
     servicesHeader,
     serviceItems = [],
     projects,
     faqs,
-    keyHighlights,
     ctaBanner,
     heroImage,
-    whyChooseUs
+    whyChooseUs,
+    partners,
 }) {
     return (
         <MepLayout>
@@ -34,6 +34,7 @@ export default function Home({
             <Keyhighlights />
             <Projects projects={projects} />
             <Faqs faqs={faqs} />
+            <Partners partners={partners} />
             <Ctabanner ctaBanner={ctaBanner} heroImage={heroImage} />
         </MepLayout>
     );
