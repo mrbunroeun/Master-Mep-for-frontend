@@ -244,6 +244,12 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const required = ["contract_duration", "company_name", "contact_person", "position", "phone_number", "email_address", "office_address", "site_name", "site_address", "operating_hours", "service_package"];
+    const missing = required.filter((key) => !data[key] || String(data[key]).trim() === "");
+    if (missing.length > 0) {
+      alert("Please fill in all required fields and select both Contract Duration and Service Package.");
+      return;
+    }
     post("/ams-registration", {
       onSuccess: () => {
         reset();
@@ -599,14 +605,17 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
 
       {/* Contract Duration, Customer Registration, Service Location & Service Package */}
-   <section id="contract-duration" className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
+
+
+
+      <section id="contract-duration" className="py-12 sm:py-16 px-4 md:px-6 max-w-6xl mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="bg-[#CFE7F6] rounded-2xl md:rounded-3xl p-5 sm:p-7 md:p-9 flex flex-col gap-8 sm:gap-10">
 
             <Reveal delay={0}>
               <div className="flex flex-col">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6">
-                  Contract Duration
+                  Contract Duration <span className="text-red-600">*</span>
                 </h3>
 
                 <button
@@ -693,14 +702,15 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   ].map((item, i) => (
                     <div key={i}>
                       <label className="text-[11px] sm:text-xs md:text-sm font-medium text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
-                        {item.field}
+                        {item.field} <span className="text-red-600">*</span>
                       </label>
                       <input
                         type="text"
                         value={data[item.key]}
                         onChange={(e) => setData(item.key, e.target.value)}
                         placeholder={item.placeholder}
-                        className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
+                        required
+                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${!data[item.key] || String(data[item.key]).trim() === "" ? "ring-2 ring-red-500/40" : ""}`}
                       />
                       {errors[item.key] && (
                         <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
@@ -725,19 +735,20 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                       { field: "Operating Hours", key: "operating_hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
                     ].map((item, i) => (
                       <div key={i}>
-                        <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
-                          {item.field}
-                        </label>
-                        <input
-                          type="text"
-                          value={data[item.key]}
-                          onChange={(e) => setData(item.key, e.target.value)}
-                          placeholder={item.placeholder}
-                          className="w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30"
-                        />
-                        {errors[item.key] && (
-                          <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
-                        )}
+                      <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
+                        {item.field} <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={data[item.key]}
+                        onChange={(e) => setData(item.key, e.target.value)}
+                        placeholder={item.placeholder}
+                        required
+                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${!data[item.key] || String(data[item.key]).trim() === "" ? "ring-2 ring-red-500/40" : ""}`}
+                      />
+                      {errors[item.key] && (
+                        <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
+                      )}
                       </div>
                     ))}
                   </div>
@@ -747,7 +758,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
               <Reveal delay={0}>
                 <div>
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
-                    Choose Your Service Package
+                    Choose Your Service Package <span className="text-red-600">*</span>
                   </h3>
                   <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
                     {["Basic", "Standard", "Premium"].map((title, i) => (
