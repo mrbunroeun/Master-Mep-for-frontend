@@ -99,6 +99,15 @@ export default function LatestActivities({ activities = [], heroImage }) {
                                     <p className="text-xs sm:text-sm text-gray-600 leading-relaxed flex-1">
                                         {item.excerpt}
                                     </p>
+                                    <Link
+                                        href={`/latestactivities/${item.id}`}
+                                        className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#1A3A5C] text-white rounded-lg text-xs font-medium hover:bg-[#0C2D4F] transition-colors w-fit"
+                                    >
+                                        View Detail
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </Link>
                                 </div>
                             </div>
                         </FadeIn>

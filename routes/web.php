@@ -116,6 +116,20 @@ Route::get('/latestactivities', function () {
     ]);
 })->name('latestactivities');
 
+Route::get('/latestactivities/{id}', function ($id) {
+    $activity = Activity::where('is_active', true)->findOrFail($id);
+    return Inertia::render('LatestActivities/Show', [
+        'activity' => [
+            'id'       => $activity->id,
+            'category' => $activity->category,
+            'date'     => $activity->activity_date->format('F Y'),
+            'title'    => $activity->title,
+            'excerpt'  => $activity->excerpt,
+            'image'    => $activity->image ? "/storage/{$activity->image}" : null,
+        ],
+    ]);
+})->name('latestactivities.show');
+
 Route::get('/insights',        [InsightController::class, 'index'])->name('insights');
 Route::get('/insights/{slug}', [InsightController::class, 'show'])->name('insights.show');
 
