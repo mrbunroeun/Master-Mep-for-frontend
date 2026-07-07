@@ -283,7 +283,7 @@ export default function Projects({ projects = [], heroImage = null, categoryGall
               </p>
             </FadeIn>
             <FadeIn delay={450}>
-              <div className="flex flex-col xs:flex-row sm:flex-row gap-3 justify-center">
+              <div className="flex flex-row gap-3 justify-center">
                 <Link href="/contact" className="inline-block px-8 py-3 bg-blue-900 rounded-xl hover:bg-blue-800 transition font-medium text-sm">
                   Request Quotation
                 </Link>
@@ -295,38 +295,38 @@ export default function Projects({ projects = [], heroImage = null, categoryGall
           </div>
         </div>
       </section>
-{/* CATEGORY FILTER */}
-<FadeIn>
-  <section
-    className="relative z-10 -mt-10 mx-3 sm:mx-6 md:mx-10 lg:mx-16 rounded-2xl shadow-xl py-10 px-6 sm:px-10"
-    style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
-    <h2 className="text-white text-center font-bold text-sm sm:text-base mb-8 tracking-wide">
-      Featured MEP Projects
-    </h2>
-    <div className="grid grid-cols-4 gap-4 max-w-3xl mx-auto">
-      <button
-        onClick={() => handleCategory("All")}
-        className={`flex flex-col items-center justify-center gap-3 rounded-2xl py-5 px-2 transition-all duration-200 hover:scale-105 active:scale-95
+      {/* CATEGORY FILTER */}
+      <FadeIn>
+        <section
+          className="relative z-10 -mt-10 mx-3 sm:mx-6 md:mx-10 lg:mx-16 rounded-2xl shadow-xl py-10 px-6 sm:px-10"
+          style={{ background: "linear-gradient(135deg, #0C2D4F 0%, #1E5BA8 100%)" }}>
+          <h2 className="text-white text-center font-bold text-sm sm:text-base mb-8 tracking-wide">
+            Featured MEP Projects
+          </h2>
+          <div className="grid grid-cols-4 gap-4 max-w-3xl mx-auto">
+            <button
+              onClick={() => handleCategory("All")}
+              className={`flex flex-col items-center justify-center gap-3 rounded-2xl py-5 px-2 transition-all duration-200 hover:scale-105 active:scale-95
           ${activeCategory === "All" ? "bg-white text-[#1A3A5C] shadow-md" : "bg-white/10 text-white hover:bg-white/20"}`}
-      >
-        <LayoutGrid size={26} />
-        <span className="text-xs font-medium text-center leading-tight">All</span>
-      </button>
+            >
+              <LayoutGrid size={26} />
+              <span className="text-xs font-medium text-center leading-tight">All</span>
+            </button>
 
-      {CATEGORY_META.map((cat) => (
-        <button
-          key={cat.label}
-          onClick={() => handleCategory(cat.label)}
-          className={`flex flex-col items-center justify-center gap-3 rounded-2xl py-5 px-2 transition-all duration-200 hover:scale-105 active:scale-95
+            {CATEGORY_META.map((cat) => (
+              <button
+                key={cat.label}
+                onClick={() => handleCategory(cat.label)}
+                className={`flex flex-col items-center justify-center gap-3 rounded-2xl py-5 px-2 transition-all duration-200 hover:scale-105 active:scale-95
             ${activeCategory === cat.label ? "bg-white text-[#1A3A5C] shadow-md" : "bg-white/10 text-white hover:bg-white/20"}`}
-        >
-          {cat.icon}
-          <span className="text-xs font-medium text-center leading-tight">{cat.label}</span>
-        </button>
-      ))}
-    </div>
-  </section>
-</FadeIn>
+              >
+                {cat.icon}
+                <span className="text-xs font-medium text-center leading-tight">{cat.label}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      </FadeIn>
 
       {/* PROJECT LISTINGS */}
       <section className="py-12 sm:py-16 px-4 sm:px-6 max-w-5xl mx-auto space-y-12 sm:space-y-16">

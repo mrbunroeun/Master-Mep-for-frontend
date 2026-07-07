@@ -31,7 +31,7 @@ export default function MepFooter() {
               className="underline hover:text-[#96DCFF] min-w-[400px] transition break-all"
             >
               <img
-                src="/logo.png"
+                src="/master mep logo footer.svg"
                 alt="Master MEP Solution"
                 className="w-20 h-20 sm:w-28 sm:h-28 lg:w-36 lg:h-36 object-contain shrink-0"
               />
@@ -120,12 +120,27 @@ export default function MepFooter() {
             <li><Link href="/about" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">About Us</Link></li>
             <li>
               <Link href="/services/mechanical" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Services</Link>
-              <ul className="flex flex-col gap-2 sm:gap-3 mt-2 sm:mt-3 pl-4 text-xs sm:text-sm text-white/85">
-                <li><Link href="/services/mechanical" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Mechanical / HVAC</Link></li>
-                <li><Link href="/services/electrical" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Electrical & ELV</Link></li>
-                <li><Link href="/services/plumbing" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Plumbing</Link></li>
-                <li><Link href="/services/maintenance" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Maintenance</Link></li>
-                <li><Link href="/services/solasystem" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Solar System</Link></li>
+              <ul className="flex flex-col gap-2 sm:gap-3 mt-2 sm:mt-3 text-xs sm:text-sm text-white/80">
+                <li className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-white/60 shrink-0" />
+                  <Link href="/services/mechanical" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Mechanical / HVAC</Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-white/60 shrink-0" />
+                  <Link href="/services/electrical" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Electrical & ELV</Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-white/60 shrink-0" />
+                  <Link href="/services/plumbing" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Plumbing</Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-white/60 shrink-0" />
+                  <Link href="/services/maintenance" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Maintenance</Link>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1 h-1 rounded-full bg-white/60 shrink-0" />
+                  <Link href="/services/solasystem" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Solar System</Link>
+                </li>
               </ul>
             </li>
             <li><Link href="/projects" className="relative inline-block after:content-[''] after:absolute after:left-0 after:-bottom-0.5 after:h-[1px] after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full">Projects</Link></li>
@@ -156,7 +171,7 @@ export default function MepFooter() {
               <p className="shrink-0 font-bold">Phone Number:</p><p>017 55 22 38</p>
             </div>
 
-            
+
             <div className="min-w-[300px] ">
               <p className="font-bold mb-2">Business Hours</p>
               <p>

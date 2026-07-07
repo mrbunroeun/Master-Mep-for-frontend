@@ -6,7 +6,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[90vh] bg-cover bg-no-repeat flex items-start sm:items-center justify-center text-white max-[430px]:pt-4 min-[431px]:pt-20 sm:pt-0"
+      className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[90vh] bg-cover bg-no-repeat flex items-start sm:items-center justify-center text-white max-[430px]:pt-24 min-[431px]:pt-20 sm:pt-0"
       style={{
         backgroundImage: `url('${image}')`,
         backgroundPosition: "center center"
