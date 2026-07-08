@@ -166,7 +166,7 @@ const highlights = [
 const DEFAULT_SOLAR_TYPES = [
 {
     title: "On-Grid Solar System (No Battery)",
-    description: "\nHomes, offices, commercial buildings, schools, factories, and businesses with reliable electricity from the national grid.\nHow It Works:\nAn On-Grid Solar System generates electricity during the day to power your building. Any additional electricity can be exported to the utility grid (subject to local regulations), helping reduce your monthly electricity bills.",
+    description: "\nHomes, offices, commercial buildings, schools, factories, and businesses with reliable electricity from the national grid.\n\nAn On-Grid Solar System generates electricity during the day to power your building. Any additional electricity can be exported to the utility grid (subject to local regulations), helping reduce your monthly electricity bills.",
     points: "Lower electricity costs\nNo battery maintenance\nHigher energy efficiency\nLower installation cost\nEnvironmentally friendly\nIdeal for daytime electricity usage",
     image: null,
 },
