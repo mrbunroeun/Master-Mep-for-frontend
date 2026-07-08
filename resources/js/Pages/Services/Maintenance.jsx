@@ -244,10 +244,10 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const required = ["contract_duration", "company_name", "contact_person", "position", "phone_number", "email_address", "office_address", "site_name", "site_address", "operating_hours", "service_package"];
+    const required = ["company_name", "contact_person", "position", "phone_number", "email_address", "office_address", "site_name", "site_address", "operating_hours", "service_package"];
     const missing = required.filter((key) => !data[key] || String(data[key]).trim() === "");
     if (missing.length > 0) {
-      alert("Please fill in all required fields and select both Contract Duration and Service Package.");
+      alert("Please fill in all required fields and select a Service Package.");
       return;
     }
     post("/ams-registration", {
@@ -628,8 +628,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   </span>
                   <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-[#1A3A5C] flex items-center justify-center shrink-0">
                     <svg
-                      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-white transition-transform duration-300 ${contractOpen ? "rotate-90" : ""
-                        }`}
+                      className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-white transition-transform duration-300 ${contractOpen ? "rotate-90" : ""}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
