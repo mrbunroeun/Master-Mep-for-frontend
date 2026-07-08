@@ -644,34 +644,13 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   style={{ maxHeight: contractOpen ? "220px" : "0px" }}
                 >
                   <div className="bg-white/70 rounded-2xl px-4 sm:px-5 py-3 sm:py-4 mb-3 sm:mb-4">
-                    <ul className="text-xs sm:text-sm text-[#1A3A5C] space-y-2 sm:space-y-2.5">
+                    <ul className="text-xs sm:text-sm text-[#1A3A5C] space-y-2 sm:space-y-2.5 list-disc list-inside">
                       {["1-Year Contract", "2-Year Contract", "3-Year Contract"].map((label, i) => (
-                        <li key={i}>
-                          <button
-                            type="button"
-                            onClick={() => setData("contract_duration", data.contract_duration === label ? "" : label)}
-                            className="flex items-center gap-2"
-                          >
-                            <span
-                              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 border-2 border-[#1A3A5C] rounded-sm shrink-0 flex items-center justify-center transition-colors ${data.contract_duration === label ? "bg-[#1A3A5C]" : "bg-transparent"
-                                }`}
-                            >
-                              {data.contract_duration === label && (
-                                <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                              )}
-                            </span>
-                            {label}
-                          </button>
-                        </li>
+                        <li key={i}>{label}</li>
                       ))}
                     </ul>
                   </div>
                 </div>
-                {errors.contract_duration && (
-                  <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors.contract_duration}</p>
-                )}
 
                 <p className="text-[11px] sm:text-xs md:text-sm text-[#1A3A5C]/80 leading-relaxed">
                   Longer contracts provide better maintenance planning and operational stability.
@@ -735,20 +714,20 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                       { field: "Operating Hours", key: "operating_hours", placeholder: "e.g. Mon–Sat, 8:00 AM – 6:00 PM" },
                     ].map((item, i) => (
                       <div key={i}>
-                      <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
-                        {item.field} <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={data[item.key]}
-                        onChange={(e) => setData(item.key, e.target.value)}
-                        placeholder={item.placeholder}
-                        required
-                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${!data[item.key] || String(data[item.key]).trim() === "" ? "ring-2 ring-red-500/40" : ""}`}
-                      />
-                      {errors[item.key] && (
-                        <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
-                      )}
+                        <label className="text-xs sm:text-sm font-bold text-[#1A3A5C] block mb-0.5 pl-3 sm:pl-4">
+                          {item.field} <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={data[item.key]}
+                          onChange={(e) => setData(item.key, e.target.value)}
+                          placeholder={item.placeholder}
+                          required
+                          className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${!data[item.key] || String(data[item.key]).trim() === "" ? "ring-2 ring-red-500/40" : ""}`}
+                        />
+                        {errors[item.key] && (
+                          <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
+                        )}
                       </div>
                     ))}
                   </div>
