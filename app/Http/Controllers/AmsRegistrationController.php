@@ -26,7 +26,7 @@ class AmsRegistrationController extends Controller
         $body = $this->buildEmailBody($validated);
 
         Mail::html($body, function ($message) {
-            $message->to('broroeunemm@gmail.com')
+            $message->to('lensamoun68@gmail.com')
                 ->subject('New AMS Registration Submitted');
         });
 

@@ -228,6 +228,7 @@ function Reveal({ children, className = "", delay = 0 }) {
 export default function Maintenance({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
   const [open, setOpen] = useState(null);
   const [contractOpen, setContractOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const { data, setData, post, processing, errors, reset } = useForm({
     contract_duration: "",
     company_name: "",
@@ -257,6 +258,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSubmitted(true);
     const required = ["company_name", "contact_person", "position", "phone_number", "email_address", "office_address", "site_name", "site_address", "operating_hours", "service_package"];
     const firstInvalid = required.find((key) => getFieldError(key, data[key]));
     if (firstInvalid) {
@@ -266,6 +268,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
     post("/ams-registration", {
       onSuccess: () => {
         reset();
+        setSubmitted(false);
         alert("Registration submitted successfully! Our team will contact you shortly.");
       },
     });
@@ -701,8 +704,13 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                         onChange={(e) => setData(item.key, e.target.value)}
                         placeholder={item.placeholder}
                         required
-                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${getFieldError(item.key, data[item.key]) ? "ring-2 ring-red-500/40" : ""}`}
+                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${submitted && getFieldError(item.key, data[item.key]) ? "ring-2 ring-red-500/40" : ""}`}
                       />
+                      {(submitted && getFieldError(item.key, data[item.key])) && (
+                        <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">
+                          {!data[item.key]?.trim() ? "This field is required" : "Invalid format"}
+                        </p>
+                      )}
                       {errors[item.key] && (
                         <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
                       )}
@@ -735,8 +743,13 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                           onChange={(e) => setData(item.key, e.target.value)}
                           placeholder={item.placeholder}
                           required
-                          className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${getFieldError(item.key, data[item.key]) ? "ring-2 ring-red-500/40" : ""}`}
+                          className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${submitted && getFieldError(item.key, data[item.key]) ? "ring-2 ring-red-500/40" : ""}`}
                         />
+                        {(submitted && getFieldError(item.key, data[item.key])) && (
+                          <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">
+                            {!data[item.key]?.trim() ? "This field is required" : "Invalid format"}
+                          </p>
+                        )}
                         {errors[item.key] && (
                           <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
                         )}
@@ -751,7 +764,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
                     Choose Your Service Package <span className="text-red-600">*</span>
                   </h3>
-                  <ul className={`text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3 ${!data.service_package ? "ring-2 ring-red-500/40 rounded-2xl p-2" : ""}`}>
+                  <ul className={`text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3 ${submitted && !data.service_package ? "ring-2 ring-red-500/40 rounded-2xl p-2" : ""}`}>
                     {["Basic", "Standard", "Premium"].map((title, i) => (
                       <li key={i}>
                         <button
@@ -774,7 +787,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                       </li>
                     ))}
                   </ul>
-                  {(errors.service_package || !data.service_package) && (
+                  {(errors.service_package || (submitted && !data.service_package)) && (
                     <p className="text-red-600 text-[11px] mt-1">{errors.service_package || "Please select a service package."}</p>
                   )}
                 </div>
