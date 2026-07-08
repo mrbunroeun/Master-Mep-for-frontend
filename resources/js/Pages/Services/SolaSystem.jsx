@@ -14,7 +14,7 @@ function getYouTubeId(url) {
 // Fallback content used only when no serviceItems have been added yet
 const DEFAULT_SOLAR_SERVICES = [
     {
-        title: "Solar System Design",
+        title: "On-Grid Solar System (No Battery)",
         points: ["Energy consumption analysis", "Site assessment", "System sizing", "ROI calculation"],
     },
     {
@@ -164,12 +164,12 @@ const highlights = [
 // description = two paragraphs separated by a blank line: Best For, then How It Works
 // points = benefits list (one per line)
 const DEFAULT_SOLAR_TYPES = [
-    {
-        title: "On-Grid Solar System (No Battery)",
-        description: "Homes, offices, commercial buildings, schools, factories, and businesses with reliable electricity from the national grid.\n\nAn On-Grid Solar System generates electricity during the day to power your building. Any additional electricity can be exported to the utility grid (subject to local regulations), helping reduce your monthly electricity bills.",
-        points: "Lower electricity costs\nNo battery maintenance\nHigher energy efficiency\nLower installation cost\nEnvironmentally friendly\nIdeal for daytime electricity usage",
-        image: null,
-    },
+{
+    title: "On-Grid Solar System (No Battery)",
+    description: "\nHomes, offices, commercial buildings, schools, factories, and businesses with reliable electricity from the national grid.\nHow It Works:\nAn On-Grid Solar System generates electricity during the day to power your building. Any additional electricity can be exported to the utility grid (subject to local regulations), helping reduce your monthly electricity bills.",
+    points: "Lower electricity costs\nNo battery maintenance\nHigher energy efficiency\nLower installation cost\nEnvironmentally friendly\nIdeal for daytime electricity usage",
+    image: null,
+},
     {
         title: "Off-Grid Solar System (Battery Storage)",
         description: "Remote villages, farms, construction sites, telecommunication stations, resorts, and locations without access to the electricity grid.\n\nAn Off-Grid Solar System stores solar energy in batteries, allowing electricity to be used day and night without relying on the national power grid.",
@@ -229,6 +229,8 @@ function Reveal({ children, className = "", delay = 0 }) {
 }
 
 export default function SolaSystem({ service, serviceItems = [], projects = [], heroImage = null, keyHighlights = [] }) {
+    serviceItems = []; // TEMP: ignore backend-managed items, always use hardcoded defaults
+
     const [open, setOpen] = useState(null);
     const heroSecImage = "/HeroSection/heroSection.png";
 
@@ -238,11 +240,6 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
     const displayItems = serviceItems.length > 0 ? serviceItems : STATIC_ITEMS;
     const displayHighlights = keyHighlights.length > 0 ? keyHighlights : highlights;
 
-    // Solar System Type cards are static (admin items only carry title/points/image,
-    // not the Best For / How It Works paragraphs this section needs)
-    // Solar System Type cards: Best For / How It Works text stays static (admin
-    // doesn't have those fields), but title, points, and image now pull from
-    // admin-managed serviceItems when available (matched by index)
     const solarTypes = DEFAULT_SOLAR_TYPES.map((defaultItem, index) => {
         const adminItem = serviceItems[index];
         return {
@@ -303,10 +300,10 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
 
             {/* Hero */}
             <section className="relative min-h-[90vh] flex items-center" style={{
-                    backgroundImage: `url(${bgImage || heroSecImage})`,
-                    backgroundPosition: "center center",
-                    backgroundSize: "cover"
-                }}>
+                backgroundImage: `url(${bgImage || heroSecImage})`,
+                backgroundPosition: "center center",
+                backgroundSize: "cover"
+            }}>
                 <div className="absolute inset-0 bg-black/55" />
                 <div className="relative z-10 px-6 max-w-3xl mx-auto w-full text-white text-center">
                     <p className="text-3xl sm:text-4xl md:text-[50px] tracking-[0.1em] font-semibold text-white mb-1">MASTER MEP</p>
@@ -416,7 +413,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 <SolarServicesCarousel services={displaySolarServices} />
             </section>
 
-          
+
 
             {/* Applications */}
             <section className="py-16 px-4 md:px-6 bg-white">
@@ -478,7 +475,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                     ))}
                 </div>
             </section>
-              {/* Featured Projects */}
+            {/* Featured Projects */}
             {featuredProjects.length > 0 && (
                 <section className="py-16 px-4 md:px-6 max-w-5xl mx-auto">
                     <Reveal>
@@ -575,7 +572,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                                 href="/projects"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A3A5C] hover:bg-[#0C2D4F] text-white rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
                             >
-                                View All Projects →
+                                Request Quotation
                             </Link>
                         </div>
                     </Reveal>
@@ -610,7 +607,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 </div>
             </section>
 
-           {/* FAQs */}
+            {/* FAQs */}
             <section className="py-16 px-4 md:px-6">
                 <div className="max-w-5xl mx-auto">
                     <div className="bg-[#CFE7F6] rounded-3xl p-6 sm:p-8 md:p-10">
@@ -677,7 +674,7 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                     </h2>
 
                     <ul className="text-xs sm:text-sm text-[#2E5C8A] space-y-1.5 sm:space-y-2 list-disc list-inside">
-                         <li>
+                        <li>
                             <Link href="/services/mechanical" className="hover:underline">
                                 Mechanical /HVAC System
                             </Link>
@@ -692,10 +689,10 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                                 Plumbing Services
                             </Link>
                         </li>
-                       
+
                         <li>
                             <Link href="/services/maintenance" className="hover:underline">
-                                 Annual Maintenance Service
+                                Annual Maintenance Service
                             </Link>
                         </li>
                         <li>
@@ -707,27 +704,27 @@ export default function SolaSystem({ service, serviceItems = [], projects = [], 
                 </Reveal>
             </section>
 
-          {/* CTA */}
-<section className="relative py-20 text-white text-center"
-    style={heroSecImage
-        ? { backgroundImage: `url('${heroSecImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
-        : { background: "linear-gradient(135deg, #0C1F3F 0%, #1E5BA8 100%)" }
-    }>
-    <div className="absolute inset-0 bg-black/55" />
-    <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
-        <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
-        <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
+            {/* CTA */}
+            <section className="relative py-20 text-white text-center"
+                style={heroSecImage
+                    ? { backgroundImage: `url('${heroSecImage}')`, backgroundSize: "cover", backgroundPosition: "center" }
+                    : { background: "linear-gradient(135deg, #0C1F3F 0%, #1E5BA8 100%)" }
+                }>
+                <div className="absolute inset-0 bg-black/55" />
+                <Reveal className="relative z-10 max-w-2xl mx-auto px-6">
+                    <h2 className="text-2xl md:text-4xl font-bold mb-4">{DEFAULTS.ctaTitle}</h2>
+                    <p className="text-sm opacity-80 mb-8">{DEFAULTS.ctaDescription}</p>
 
-        <div className="flex justify-center ">
-            <Link
-                href="/contact"
-                className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
-            >
-                Get Solar Quotation
-            </Link>
-        </div>
-    </Reveal>
-</section>
+                    <div className="flex justify-center ">
+                        <Link
+                            href="/contact"
+                            className="btn-animate max-[600px]:text-[10px]  inline-block px-8 py-3 bg-[#2E5C8A] max-[600px]:px-2 rounded-xl hover:bg-[#1A3A5C] transition-colors font-medium text-sm"
+                        >
+                            Get Solar Quotation
+                        </Link>
+                    </div>
+                </Reveal>
+            </section>
         </MepLayout>
     );
 }

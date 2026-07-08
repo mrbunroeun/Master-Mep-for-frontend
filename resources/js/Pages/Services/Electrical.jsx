@@ -398,7 +398,7 @@ export default function Electrical({ service, serviceItems = [], projects = [], 
                                 href="/projects"
                                 className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A3A5C] hover:bg-[#0C2D4F] text-white rounded-xl text-sm font-semibold transition-all duration-200 hover:scale-105 active:scale-95"
                             >
-                                View All Projects →
+                                Request Quotation
                             </Link>
                         </div>
                     </Reveal>

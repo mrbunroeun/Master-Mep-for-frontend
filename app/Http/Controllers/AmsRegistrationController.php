@@ -28,7 +28,7 @@ class AmsRegistrationController extends Controller
         // Optional: save to DB here first
         // AmsRegistration::create($validated);
 
-        Mail::to('bunroeunhas@gmail.com')->send(new AmsRegistrationMail($validated));
+        Mail::to('bunroeunhas889@gmail.com')->send(new AmsRegistrationMail($validated));
 
         return redirect()->back();
     }

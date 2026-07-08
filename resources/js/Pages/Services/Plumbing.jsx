@@ -369,7 +369,7 @@ export default function Plumbing({ service, serviceItems = [], projects = [], he
                                         </div>
 
                                         <span className="self-end mt-6 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-[#1A3A5C] rounded-xl text-xs font-semibold transition-all duration-200">
-                                            View All Projects →
+                                            Request Quotation
                                         </span>
                                     </div>
                                 </div>

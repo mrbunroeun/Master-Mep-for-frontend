@@ -356,7 +356,7 @@ export default function Mechanical({ service, serviceItems = [], projects = [], 
                                                 </div>
                                             </div>
                                             <span className="self-end inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-[#1A3A5C] rounded-xl text-xs font-semibold transition-all duration-200">
-                                                View All Projects →
+                                                Request Quotation
                                             </span>
                                         </div>
                                     </Link>
