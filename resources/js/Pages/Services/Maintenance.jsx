@@ -242,12 +242,25 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
     service_package: "",
   });
 
+  const getFieldError = (key, value) => {
+    const val = value?.trim();
+    if (!val) return true;
+    switch (key) {
+      case 'email_address':
+        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+      case 'phone_number':
+        return !/^\+?[\d\s\-()]{7,15}$/.test(val);
+      default:
+        return val.length < 2;
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const required = ["company_name", "contact_person", "position", "phone_number", "email_address", "office_address", "site_name", "site_address", "operating_hours", "service_package"];
-    const missing = required.filter((key) => !data[key] || String(data[key]).trim() === "");
-    if (missing.length > 0) {
-      alert("Please fill in all required fields and select a Service Package.");
+    const firstInvalid = required.find((key) => getFieldError(key, data[key]));
+    if (firstInvalid) {
+      alert("Please fill in all required fields with valid information.");
       return;
     }
     post("/ams-registration", {
@@ -688,7 +701,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                         onChange={(e) => setData(item.key, e.target.value)}
                         placeholder={item.placeholder}
                         required
-                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${!data[item.key] || String(data[item.key]).trim() === "" ? "ring-2 ring-red-500/40" : ""}`}
+                        className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${getFieldError(item.key, data[item.key]) ? "ring-2 ring-red-500/40" : ""}`}
                       />
                       {errors[item.key] && (
                         <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
@@ -722,7 +735,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                           onChange={(e) => setData(item.key, e.target.value)}
                           placeholder={item.placeholder}
                           required
-                          className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${!data[item.key] || String(data[item.key]).trim() === "" ? "ring-2 ring-red-500/40" : ""}`}
+                          className={`w-full bg-white rounded-full px-4 sm:px-5 py-2.5 sm:py-3 text-sm sm:text-base text-[#1A3A5C] placeholder-[#1A3A5C]/40 border-0 focus:outline-none focus:ring-2 focus:ring-[#1A3A5C]/30 ${getFieldError(item.key, data[item.key]) ? "ring-2 ring-red-500/40" : ""}`}
                         />
                         {errors[item.key] && (
                           <p className="text-red-600 text-[11px] mt-1 pl-3 sm:pl-4">{errors[item.key]}</p>
@@ -738,7 +751,7 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                   <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1A3A5C] mb-4 sm:mb-6 leading-snug">
                     Choose Your Service Package <span className="text-red-600">*</span>
                   </h3>
-                  <ul className="text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3">
+                  <ul className={`text-xs sm:text-sm font-semibold text-[#1A3A5C] space-y-2 sm:space-y-3 ${!data.service_package ? "ring-2 ring-red-500/40 rounded-2xl p-2" : ""}`}>
                     {["Basic", "Standard", "Premium"].map((title, i) => (
                       <li key={i}>
                         <button
@@ -761,8 +774,8 @@ export default function Maintenance({ service, serviceItems = [], projects = [],
                       </li>
                     ))}
                   </ul>
-                  {errors.service_package && (
-                    <p className="text-red-600 text-[11px] mt-1">{errors.service_package}</p>
+                  {(errors.service_package || !data.service_package) && (
+                    <p className="text-red-600 text-[11px] mt-1">{errors.service_package || "Please select a service package."}</p>
                   )}
                 </div>
               </Reveal>
